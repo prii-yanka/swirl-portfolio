@@ -1,0 +1,18 @@
+.app {
+  height: 100vh;
+}
+
+.sections {
+  width: 100%;
+  height: calc(100vh - 72px);
+  position: relative;
+  top: 72px;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+}
+
+.sections > * {
+  width: 100%;
+  height: calc(100vh - 72px);
+  scroll-snap-align: start;
+}
