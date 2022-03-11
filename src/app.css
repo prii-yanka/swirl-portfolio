@@ -8,6 +8,7 @@
   position: relative;
   top: 72px;
   overflow-y: scroll;
+  scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
 }
 
