@@ -1,0 +1,19 @@
+.main {
+  height: 100vh;
+}
+
+.parts {
+  width: 100%;
+  height: calc(100vh - 72px);
+  position: relative;
+  top: 72px;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+}
+
+.parts > * {
+  width: 100%;
+  height: calc(100vh - 72px);
+  scroll-snap-align: start;
+}
