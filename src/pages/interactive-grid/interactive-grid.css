@@ -1,3 +1,7 @@
 .interactive-grid {
   background-color: #e8a7c5;
 }
+
+.canvas {
+  height: 80vh;
+}
