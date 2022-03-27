@@ -2,11 +2,12 @@ nav {
   width: 100%;
   z-index: 10;
   top: 0;
-  padding: 1.2em 0;
+  padding: 2px 0;
   color: black;
-  max-height: 4em;
-  height: 72px;
+  height: 68px;
   position: fixed;
+  background-color: white;
+  display: flex;
 }
 
 nav span {
@@ -15,7 +16,7 @@ nav span {
   transition: border-bottom 0.2s ease;
   transition-delay: 0.25s;
   margin: 1em;
-  padding-bottom: 0.3em;
+  display: inline-flex;
 }
 
 nav span:hover {

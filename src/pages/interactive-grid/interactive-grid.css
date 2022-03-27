@@ -1,7 +1,4 @@
 .interactive-grid {
-  background-color: #e8a7c5;
-}
-
-.canvas {
-  height: 80vh;
+  margin: 0;
+  background-color: pink;
 }

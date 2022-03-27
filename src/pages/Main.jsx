@@ -4,7 +4,6 @@ import { Contact, Education, Experience, InteractiveGrid, Intro, Portfolio, Skil
 
 const Main = () => (
 	<main className="parts">
-		<InteractiveGrid />
 		<Intro />
 		<Education />
 		<Experience />

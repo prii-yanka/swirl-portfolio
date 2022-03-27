@@ -1,5 +1,4 @@
 export const navLinks = [
-    { navLinkId: 'InteractiveGrid', scrollToId: 'interactiveGridContainer' },
     { navLinkId: 'Intro', scrollToId: 'introContainer' },
     { navLinkId: 'Education', scrollToId: 'educationContainer' },
     { navLinkId: 'Experience', scrollToId: 'experienceContainer' },

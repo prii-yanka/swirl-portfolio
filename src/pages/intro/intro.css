@@ -1,3 +1,32 @@
 .intro {
-  background-color: #ffed81;
+  margin: 0;
+  background-color: red;
+  height: calc(2 * (100vh - 72px)) !important;
+  overflow: hidden;
+  display: inline-flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  scroll-snap-stop: normal;
+}
+
+.container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  position: relative;
+}
+
+.image-container {
+  margin: 0;
+  width: 100%;
+  height: calc(100vh - 72px);
+  position: absolute;
+  top: 0;
+}
+
+img {
+  width: 100%;
+  height: calc(100vh - 72px);
+  object-fit: cover;
 }
