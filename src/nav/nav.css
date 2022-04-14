@@ -1,37 +1,77 @@
 nav {
-  width: 100%;
-  z-index: 10;
+  z-index: 100;
+  margin-top: 1rem;
+  margin-left: 1rem;
   top: 0;
-  padding: 2px 0;
   color: black;
-  height: 68px;
+  /* height: 68px; */
   position: fixed;
-  background-color: white;
-  display: flex;
+  /* background-color: black; */
+  /* display: flex; */
 }
 
-nav span {
-  font-size: 18px;
-  border-bottom: 1px solid transparent;
-  transition: border-bottom 0.2s ease;
-  transition-delay: 0.25s;
+.center {
+  height: 6rem;
+  width: 6rem;
+  border-radius: 50%;
+  background-color: #fed46e;
+}
+
+.logo-container {
+  pointer-events: none;
+  margin-top: 2.6rem;
+  margin-left: 2.6rem;
+  z-index: 200;
+  position: fixed;
+  width: 50px;
+  height: auto;
+  color:#EF8181;
+}
+
+.logo-container img {
+  width: 3rem;
+  object-fit: contain;
+  /* object-position: 100% 0; */
+}
+
+nav .nav-items{
+  font-size: 1rem;
   margin: 1em;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  background-color: #fed46e;
+  transition: background-color 0.2s ease;
+  transition-delay: 0.2s;
+  cursor: pointer;
+  /* border-bottom: 1px solid white; */
+}
+
+/* .menu-item {
+  height: 65px;
+  max-width: 65px;
+  border-radius: 50%;
+  background-color: #f2c36b;
+  cursor: pointer;
+  border-bottom: 1px solid white;
+} */
+
+.icons {
+  z-index: 101;
   display: inline-flex;
 }
 
-nav span:hover {
-  cursor: pointer;
-  border-bottom: 1px solid white;
+nav div .nav-items:hover {
+  background-color: #8FE1F3;
 }
 
-nav span:hover i {
-  color: gold;
+.nav-items.activeClass {
+  /* border-bottom-color: var(--lightAccent); */
+  background-color: #EF8181;
 }
 
-nav span.activeClass i {
-  color: gold;
-}
-
-nav span.activeClass {
-  border-bottom-color: var(--lightAccent);
-}

@@ -1,15 +1,12 @@
 .main {
-  height: 100vh;
   margin: 0;
-  position: absolute;
-  top: 72px;
 }
 
 .parts {
   width: 100%;
-  height: calc(100vh - 72px);
-  position: absolute;
-  top: 72px;
+  height: 500vh;
+  /* position: absolute; */
+  display: inline-block;
   /* overflow-y: scroll;
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory; */
@@ -17,6 +14,48 @@
 
 .parts > * {
   width: 100%;
-  height: calc(100vh - 72px);
+  height: 100vh;
   /* scroll-snap-align: start; */
 }
+
+.main-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+/* .line-container {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+  z-index: 1000; 
+}  */
+
+/* svg {
+  display: inline-block;
+  height: 100%;
+} */
+
+/* path {
+  fill: none;
+  stroke: black;
+  stroke-width: 3;
+  stroke-dasharray: 2566;
+  stroke-dashoffset: 2566;
+  animation: cloud 5s linear alternate infinite;
+}
+@keyframes cloud {
+  from {
+    stroke-dashoffset: 2566;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+} */
+

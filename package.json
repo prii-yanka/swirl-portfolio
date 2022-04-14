@@ -3,18 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
+    "@material-ui/icons": "^4.11.2",
+    "@mui/icons-material": "^5.5.1",
     "@react-three/drei": "^8.16.6",
     "@react-three/postprocessing": "^2.2.6",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",
     "drie": "^2.0.0",
+    "framer-motion": "^6.2.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-parallax": "^3.3.0",
+    "react-planet": "^1.0.1-ie11",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
+    "react-simple-typewriter": "^3.0.1",
+    "react-spring": "^9.4.4",
     "react-three-fiber": "^6.0.13",
     "styled-components": "^5.3.5",
     "three": "^0.138.3",
@@ -43,5 +51,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
   }
 }

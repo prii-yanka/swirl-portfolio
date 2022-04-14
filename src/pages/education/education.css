@@ -1,4 +1,44 @@
 .education {
-  background-color: #80ccee;
-  padding-top: 72px;
+  margin: 0;
+  background-color: white;
+  color: black;
+}
+
+.container {
+  display: inline-flex;
+  flex-direction: row;
+  /* height: 100vh;
+  width: 100%; */
+}
+
+.education-illustration-container {
+  width: 50vw;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  position: relative;
+}
+
+.image-container {
+
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+}
+
+.education img {
+  width: 50vw;
+  height: 100vh;
+  object-fit: contain;
+  /* object-position: 1% 0; */
+}
+
+.about-education {
+  width: 50vw;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  position: relative;
 }
