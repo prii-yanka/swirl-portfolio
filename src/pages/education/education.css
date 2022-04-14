@@ -37,8 +37,33 @@
 .about-education {
   width: 50vw;
   display: inline-flex;
+  flex-direction: column;
+  text-align: left;
   align-items: center;
   justify-content: center;
   margin: 0;
   position: relative;
+}
+
+.about-education h1 {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.about-education .graduation {
+  margin-bottom: 25px;
+}
+
+.about-education ul {
+  margin: 10px;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-education ul li {
+  text-align: left;
+  width: 400px;
+  margin: 5px 5px;
 }

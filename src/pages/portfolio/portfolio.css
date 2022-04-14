@@ -40,11 +40,32 @@
 }
 
 .portfolio-header {
+  display: inline-flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+  align-items: center;
+  justify-content: center;
+}
+
+.portfolio-header h1 {
   font-size: 50px;
   margin-bottom: 25px;
 }
 
-ul {
+.portfolio-header .specialize {
+  margin-bottom: 20px;
+}
+
+.portfolio-header span {
+  font-weight: 700;
+}
+
+.portfolio-header ul li {
+  text-align: center;
+  width: 300px;
+}
+
+.portfolio ul {
   margin: 10px;
   padding: 0;
   list-style: none;

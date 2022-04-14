@@ -9,7 +9,7 @@ const Nav = () => {
   return (
     <div>
       <div className='logo-container'>
-        <img src="/images/logo.png" className="logo" />
+        <img src="images/logo.png" className="logo" />
         {/* <div> Menu </div> */}
       </div>
 

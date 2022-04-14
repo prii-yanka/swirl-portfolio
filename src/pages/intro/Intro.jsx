@@ -47,45 +47,15 @@ const Intro = () => {
               delaySpeed={1000}
             />
           </div>
+          <div> Creative computer science student seeking opportunities in designing and developing experiences that will let humans interact with computers in novel ways.</div>
+          <div> Tackling problems from the perspective of a programmer as well as an artist creates puzzles and challenges that make me excited to be in my field. It gives me the ability to think critically and analyze the problem from different angles.</div>
         </div>
         <div className="table-container" ref={table_ref}>
           <div className="image-container">
-            <img src="/images/intro@72x.png" className="intro-bg" />
+            <img src="images/intro@72x.png" className="intro-bg" />
           </div>
           {/* <div className="image-container">
             <img src="/images/base@72x.png" className="base" />
-          </div>
-          <div className="image-container"
-            style={{ transform: `translateX(${offsetY * 0.1}px)` }}>
-            <img src="/images/folders@72x.png" className="folders" />
-          </div>
-          <div className="image-container"
-            style={{ transform: `translateX(-${offsetY * 0.1}px)` }}>
-            <img src="/images/color-cards@72x.png" className="color-cards" />
-          </div>
-          <div className="image-container"
-            style={{ transform: `translateX(-${offsetY * 0.1}px)` }}>
-            <img src="/images/tablet@72x.png" className="tablet" />
-          </div>
-          <div className="image-container"
-            style={{ transform: `translateX(${offsetY * 0.1}px)` }}>
-            <img src="/images/camera@72x.png" className="camera" />
-          </div>
-          <div className="image-container"
-            style={{ transform: `translateX(-${offsetY * 0.1}px)` }}>
-            <img src="/images/phone@72x.png" className="phone" />
-          </div>
-          <div className="image-container"
-            style={{ transform: `translateX(-${offsetY * 0.1}px)` }}>
-            <img src="/images/ruler@72x.png" className="ruler" />
-          </div>
-          <div className="image-container"
-            style={{ transform: `translateX(${offsetY * 0.1}px)` }}>
-            <img src="/images/marker@72x.png" className="marker" />
-          </div>
-          <div className="image-container"
-            style={{ transform: `translateX(${offsetY * 0.1}px)` }}>
-            <img src="/images/book@72x.png" className="book" />
           </div> */}
         </div>
       </div>

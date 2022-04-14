@@ -93,7 +93,9 @@ const Portfolio = () => {
 
   return (
     <section className='portfolio' ref={portfolioRef} id='portfolioContainer'>
-      <div className='portfolio-header'>Portfolio</div>
+      <div className='portfolio-header'>
+        <h1>Portfolio </h1>
+      </div>
       <Modal
         open={open}
         onClose={handleClose}>
@@ -107,7 +109,7 @@ const Portfolio = () => {
         </div>
 
       </Modal>
-      <ul>
+      <ul >
         {list.map((item) => (
           <PortfolioList
             title={item.title}
