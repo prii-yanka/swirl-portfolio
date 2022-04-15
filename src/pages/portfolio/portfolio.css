@@ -4,7 +4,7 @@
   color: black;
   /* background: url(../../../public/images/table_top@72x.png); */
   overflow: hidden;
-  height: 100vh;
+  /* height: 100vh; */
   width: 100%;
   display: flex;
   flex-direction: column;

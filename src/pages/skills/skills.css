@@ -14,7 +14,7 @@
   background: url(../../../public/images/intro_bg.png);
   background-repeat: no-repeat;
   background-position: right center; */
-  height: 100vh;
+  /* height: 100vh; */
   width: 100%;
 }
 
@@ -61,7 +61,7 @@
 .about-skills .content {
   display: inline-flex;
   flex-direction: row;
-  /* justify-content: space-around; */
+  justify-content: space-around;
 
 }
 
@@ -120,7 +120,7 @@
 }
 
 .skills-illustration-container {
-  width: 40vw;
+  width: 50vw;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -139,7 +139,7 @@
 }
 
 .skills img {
-  width: 30vw;
+  width: 40vw;
   height: auto;
   object-fit: contain;
   /* object-position: 100% 0; */
