@@ -12,13 +12,203 @@ const Skills = () => {
       <div className="skills-container">
         <div className="about-skills">
           <h1> Skills </h1>
-          <div className="specialize"> I specialize in building experiences that are:</div>
-          <ul>
-            <li><span>Fast:</span><br /> Fast load times and lag free interaction, my highest priority.</li>
-            <li><span>Responsive:</span><br /> My layouts will work on any device, big or small.</li>
-            <li><span>Intuitive:</span><br /> Strong preference for easy to use, intuitive UX/UI.</li>
-            <li><span>Dynamic:</span>:<br /> Websites don't have to be static, I love making pages come to life.</li>
-          </ul>
+          <div className="content">
+            <div className="development-skills">
+              <h4> Development</h4>
+              <div className="skill-item main-item">
+                <p> HTML </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+              </div>
+              <div className="skill-item main-item">
+                <p> CSS </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+              </div>
+              <div className="skill-item main-item">
+                <p> JavaScript </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+                <div className="related">
+                  <div className="skill-item">
+                    <p> React </p>
+                    <div className="skill-level">
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot empty"> </div>
+                    </div>
+                  </div>
+                  <div className="skill-item">
+                    <p> Node </p>
+                    <div className="skill-level">
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot empty"> </div>
+                      <div className="dot empty"> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="skill-item main-item">
+                <p> Databases </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+                <div className="related">
+                  <div className="skill-item">
+                    <p> MySQL </p>
+                    <div className="skill-level">
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot empty"> </div>
+                    </div>
+                  </div>
+                  <div className="skill-item">
+                    <p> MongoDB </p>
+                    <div className="skill-level">
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot empty"> </div>
+                      <div className="dot empty"> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="skill-item main-item">
+                <p> Machine Learning </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+                <div className="related">
+                  <div className="skill-item">
+                    <p> R/RStudio </p>
+                    <div className="skill-level">
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot empty"> </div>
+                      <div className="dot empty"> </div>
+                    </div>
+                  </div>
+                  <div className="skill-item">
+                    <p> Python </p>
+                    <div className="skill-level">
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot empty"> </div>
+                      <div className="dot empty"> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="design-skills">
+              <h4> Design </h4>
+              <div className="skill-item main-item">
+                <p> Adobe Photoshop </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+              </div>
+              <div className="skill-item main-item">
+                <p> Adobe Illustrator </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+              </div>
+              <div className="skill-item main-item">
+                <p> Adobe Premiere </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+              </div>
+              <div className="skill-item main-item">
+                <p> Blender (3D + animation) </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+              </div>
+              <div className="skill-item main-item">
+                <p> Wireframing and Prototyping </p>
+                <div className="skill-level">
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot filled"> </div>
+                  <div className="dot empty"> </div>
+                </div>
+                <div className="related">
+                  <div className="skill-item">
+                    <p> AdobeXD </p>
+                    <div className="skill-level">
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot empty"> </div>
+                    </div>
+                  </div>
+                  <div className="skill-item">
+                    <p> Figma </p>
+                    <div className="skill-level">
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot filled"> </div>
+                      <div className="dot empty"> </div>
+                      <div className="dot empty"> </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="other"> It is safe to assume I have worked with:<br /> Java | C/C++ | Git & GitHub | Linux Environment | SCRUM <br /> as part of my projects and classes</div>
         </div>
         <div className='skills-illustration-container'>
           <div className="image-container">

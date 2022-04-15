@@ -2,7 +2,7 @@
   "name": "react-portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://priyanka72.github.io/react-portfolio",
+  "homepage": "http://priyanka72.github.io",
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
@@ -59,3 +59,4 @@
     "gh-pages": "^3.2.3"
   }
 }
+

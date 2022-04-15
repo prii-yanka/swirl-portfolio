@@ -20,7 +20,7 @@ const Education = () => {
         <div className="about-education">
           <h1> Education </h1>
           <h3> Purdue University </h3>
-          <div> Graduation: December 2022 </div>
+          <div className="graduation"> Graduation: December 2022 </div>
           <div className='education-item'>
             <div>Computer Science Major</div>
             <ul>
@@ -40,8 +40,8 @@ const Education = () => {
           <div className='education-item'>
             <div>Enrepreneurship Certificate</div>
             <ul>
-              <li> ENTR 200: Introduction to Entrepreneurship and Innovation </li>
-              <li> ENTR 310: Marketing and Management for New Ventrues </li>
+              <li> ENTR 200: Intro to Entrepreneurship & Innovation </li>
+              <li> ENTR 310: Marketing & Management for New Ventrues </li>
             </ul>
           </div>
           <div className='education-item'>

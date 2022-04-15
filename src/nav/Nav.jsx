@@ -2,18 +2,54 @@ import React from 'react';
 import NavLink from './NavLink';
 import { navLinks } from './navLinks';
 import './nav.css';
+import { motion } from 'framer-motion';
 
 import { Planet } from 'react-planet';
+
+let textVariants = {
+  initial: {
+    opacity: 1,
+    // scale: 0
+    // pathLength: 0
+  },
+  final: {
+    opacity: 0,
+    // scale: 1,
+    // pathLength: 1,
+    transition: {
+      duration: 3,
+      ease: "easeInOut"
+    }
+  }
+}
+
+// let navVariants = {
+//   initial: {
+//     opacity: 1,
+//     // scale: 0
+//     // pathLength: 0
+//   },
+//   final: {
+//     // scale: 1,
+//     // pathLength: 1,
+
+//     transition: {
+//       duration: 0.2,
+//       ease: "easeInOut"
+//     }
+//   }
+// }
 
 const Nav = () => {
   return (
     <div>
       <div className='logo-container'>
         <img src="images/logo.png" className="logo" />
+        <motion.div style={{ color: "#000000" }} variants={textVariants} initial="initial" animate="final"> Click Me </motion.div>
         {/* <div> Menu </div> */}
       </div>
 
-      <nav>
+      <motion.nav animate={{ x: [0, 15, -15, 0] }} >
         <Planet
           centerContent={
             <div className='center'
@@ -41,8 +77,9 @@ const Nav = () => {
           ))}
 
         </Planet>
-      </nav>
-    </div>
+      </motion.nav>
+
+    </div >
   );
 };
 

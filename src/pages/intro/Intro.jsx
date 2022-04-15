@@ -34,8 +34,8 @@ const Intro = () => {
       <div className="container">
 
         <div className="about-me">
-          <div> hello, I am Priyanka</div>
-          <div style={{ color: 'red', fontWeight: 'bold' }}>
+          <h1> hello, I am Priyanka</h1>
+          <div className="type">
             {/* Style will be inherited from the parent element */}
             <Typewriter
               words={[' Front-End Developer', ' UX Designer', ' UI Engineer']}
@@ -47,10 +47,10 @@ const Intro = () => {
               delaySpeed={1000}
             />
           </div>
-          <div> Creative computer science student seeking opportunities in designing and developing experiences that will let humans interact with computers in novel ways.</div>
-          <div> Tackling problems from the perspective of a programmer as well as an artist creates puzzles and challenges that make me excited to be in my field. It gives me the ability to think critically and analyze the problem from different angles.</div>
+          <div className="content"> Creative computer science student seeking opportunities in designing and developing experiences that will let humans interact with computers in novel ways.</div>
+          <div className="content"> Tackling problems from the perspective of a programmer as well as an artist creates puzzles and challenges that make me excited to be in my field. It gives me the ability to think critically and analyze the problem from different angles.</div>
         </div>
-        <div className="table-container" ref={table_ref}>
+        <div className="intro-illustration-container" ref={table_ref}>
           <div className="image-container">
             <img src="images/intro@72x.png" className="intro-bg" />
           </div>

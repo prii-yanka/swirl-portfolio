@@ -20,10 +20,11 @@
 
 .about-skills {
   width: 50vw;
+  padding: 5vw;
   display: inline-flex;
   flex-direction: column;
   /* display: block; */
-  align-items: center;
+  align-items: left;
   justify-content: center;
   margin: 0;
   position: relative;
@@ -32,10 +33,11 @@
 .about-skills h1 {
   font-size: 50px;
   margin-bottom: 25px;
+  text-align: center;
 }
 
 .about-skills .specialize {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .about-skills span {
@@ -43,7 +45,7 @@
 }
 
 .about-skills ul {
-  margin: 10px;
+  margin: 5px 0px 5px 0px;
   padding: 0;
   list-style: none;
   display: flex;
@@ -51,31 +53,96 @@
 }
 
 .about-skills ul li {
+  text-align: left;
+  width: 200px;
+  margin: 5px 10px 5px 0px;
+}
+
+.about-skills .content {
+  display: inline-flex;
+  flex-direction: row;
+  /* justify-content: space-around; */
+
+}
+
+.about-skills .other {
   text-align: center;
-  width: 300px;
-  margin: 10px 5px;
+  margin-top: 20px;
+}
+
+.development-skills {
+  display: inline-flex;
+  flex-direction: column;
+  padding-right: 20px;
+}
+
+.design-skills {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.skill-item {
+  display: inline-flex;
+  flex-direction: column;
+  margin: 10px 0px;
+}
+
+.skill-item.main-item {
+  border-bottom: 1px solid #EF8181;
+}
+
+.related .skill-item {
+  margin: 4px 10px 0px 10px;
+}
+
+.related {
+  margin: 3px 10px 0px 15px;
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.skill-level {
+  display: inline-flex;
+  flex-direction: row;
+}
+
+.dot {
+  display: inline-flex;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid #8FE1F3;
+  margin: 3px 3px 3px 0px 
+}
+
+.filled {
+  background-color: #8FE1F3;
 }
 
 .skills-illustration-container {
-  width: 50vw;
+  width: 40vw;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   margin: 0;
   position: relative;
 }
 
-.image-container {
-  width: 100%;
+.skills .image-container {
+  padding: 0vw 5vw;
+  width: auto;
   height: 100vh;
   position: absolute;
-  overflow: visible;
+  display: flex;
+  justify-content: center;
+  /* overflow: visible; */
 }
 
 .skills img {
-  width: 50vw;
-  height: 100vh;
+  width: 30vw;
+  height: auto;
   object-fit: contain;
-  object-position: 100% 0;
+  /* object-position: 100% 0; */
   /* transform: rotate(5deg); */
 }
 

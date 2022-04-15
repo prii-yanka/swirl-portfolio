@@ -8,13 +8,12 @@ import {
 } from "framer-motion";
 import styled from 'styled-components';
 
-
 const ProgressContainer = styled(motion.div)`
     pointer-events: none;    
     position: absolute;
     top: 0;
     zIndex: 1000;
-    width: 100vh;
+    width: 106vh;
     text-align: center;   
 `;
 
@@ -45,7 +44,7 @@ export const ScrollAnimation = () => {
     }, [currentPrecent])
 
     return (
-        <ProgressContainer>
+        <ProgressContainer className="progress-container">
             <svg className="progress-icon" viewBox="0 0 823.1 3845.19">
                 <motion.path
                     fill="none"
