@@ -208,7 +208,7 @@ const Skills = () => {
               </div>
             </div>
           </div>
-          <div className="other"> It is safe to assume I have worked with:<br /> Java | C/C++ | Git & GitHub | Linux Environment | SCRUM <br /> as part of my projects and classes</div>
+          <div className="other"> I have also worked with:<br /> Java | C/C++ | Git & GitHub | Linux Environment | SCRUM <br /> as part of my projects and classes</div>
         </div>
         <div className='skills-illustration-container'>
           <div className="image-container">

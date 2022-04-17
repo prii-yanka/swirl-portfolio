@@ -12,7 +12,9 @@ const Contact = props => {
     <section className='contact' ref={contactRef} id='contactContainer'>
       <div className="contact-container">
         <div className="contact-illustration-container">
-          <img src="images/contact@72x.png" className="contact-illustration" />
+          <div className="image-container">
+            <img src="images/contact@72x.png" className="contact-illustration" />
+          </div>
         </div>
         <div className="about-contact">
           <h1> Contact</h1>

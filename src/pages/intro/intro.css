@@ -65,6 +65,7 @@
 
 .intro img {
   width: 40vw;
+  height: auto;
   /* height: 100vh; */
   object-fit: contain;
   /* object-position: 100% 0; */

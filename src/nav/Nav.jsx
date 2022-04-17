@@ -55,7 +55,7 @@ const Nav = () => {
             <div className='center'
             />
           }
-          close
+          open
           autoClose
           hideOrbit
           bounceOnClose
