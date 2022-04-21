@@ -46,6 +46,34 @@
   margin: 10px 0px;
 }
 
+.about-me .specialize {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-me .specialize .ugh {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.about-me .specialize .specialize-item{
+  width: 225px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin: 15px 0px 0px 0px;
+  border: 1px solid #8FE1F3;
+  border-radius: 15px;
+  padding: 5px
+}
+
+.about-me .specialize div span {
+  font-weight: 700;
+}
+
 .intro-illustration-container {
   width: 50vw;
   display: inline-flex;

@@ -34,6 +34,7 @@ const Intro = () => {
       <div className="container">
 
         <div className="about-me">
+          <br /> <br />
           <h1> hello, I am Priyanka</h1>
           <div className="type">
             {/* Style will be inherited from the parent element */}
@@ -49,6 +50,15 @@ const Intro = () => {
           </div>
           <div className="content"> Creative computer science student seeking opportunities in designing and developing experiences that will let humans interact with computers in novel ways.</div>
           <div className="content"> Tackling problems from the perspective of a programmer as well as an artist creates puzzles and challenges that make me excited to be in my field. It gives me the ability to think critically and analyze the problem from different angles.</div>
+          <div className="content specialize">
+            <div >I specialize in building experiences that are: </div>
+            <div className="ugh">
+              <div className="specialize-item"><span>Fast:</span> Fast load times and lag free interaction, my highest priority.</div>
+              <div className="specialize-item"><span>Dynamic:</span> Websites don't have to be static, I love making pages come to life.</div>
+              <div className="specialize-item"><span>Responsive:</span> My layouts will work on any device, big or small.</div>
+              <div className="specialize-item"><span>Intuitive:</span> Strong preference for easy to use, intuitive UX/UI.</div>
+            </div>
+          </div>
         </div>
         <div className="intro-illustration-container" ref={table_ref}>
           <div className="image-container">
