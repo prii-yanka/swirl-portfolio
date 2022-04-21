@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+#server/ google password
+.env
+
 # testing
 /coverage
 

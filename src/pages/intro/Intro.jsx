@@ -38,7 +38,7 @@ const Intro = () => {
           <div className="type">
             {/* Style will be inherited from the parent element */}
             <Typewriter
-              words={[' Front-End Developer', ' UX Designer', ' UI Engineer']}
+              words={['Front-End Developer', 'UX Designer', 'UX/UI Engineer']}
               loop
               cursor
               cursorStyle='_'

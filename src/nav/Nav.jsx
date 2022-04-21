@@ -61,9 +61,9 @@ const Nav = () => {
           bounceOnClose
           orbitRadius={130}
           rotation={30}
-          mass={4}
-          tension={500}
-          friction={19}
+          mass={2}
+          tension={200}
+          friction={10}
         >
           <div />
           <div />

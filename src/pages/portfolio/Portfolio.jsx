@@ -14,17 +14,17 @@ import {
 import Modal from '@mui/material/Modal';
 
 
-const modalStyle = {
-  position: 'absolute',
-  margin: '5vh',
-  top: '0',
-  left: '50%',
-  transform: 'translate(-50%, 0)',
-  width: '80vw',
-  height: '90vh',
-  backgroundColor: 'white',
-  borderRadius: '10px'
-}
+// const modalStyle = {
+//   position: 'absolute',
+//   margin: '5vh 10vw',
+//   top: '0',
+//   // left: '50%',
+//   // transform: 'translate(-50%, 0)',
+//   width: '80vw',
+//   height: '90vh',
+//   backgroundColor: 'white',
+//   borderRadius: '10px'
+// }
 
 const Portfolio = () => {
   const [open, setOpen] = useState(false);
@@ -37,7 +37,7 @@ const Portfolio = () => {
     // console.log("title " + d.title);
     // console.log("img " + d.img);
     setId(d.id);
-    setImg(d.img)
+    setImg(d.img[0])
     setTitle(d.title);
   }
   const handleClose = () => setOpen(false);
@@ -99,12 +99,16 @@ const Portfolio = () => {
       <Modal
         open={open}
         onClose={handleClose}>
-        <div className='portfolio-modal' style={modalStyle}>Modal
+        <div className='portfolio-modal' >Modal
+          {/* style={modalStyle} */}
           <div>{id}</div>
-          <img
+          {/* <img
             src={img}
             alt=""
-          />
+          /> */}
+          {/* {img.map((image) => {
+
+          })} */}
           <div> {title}</div>
         </div>
 
@@ -123,7 +127,7 @@ const Portfolio = () => {
         {data.map((d) => (
           <div className="item" onClick={() => handleOpen(d)}>
             <img
-              src={d.img}
+              src={d.img[0]}
               alt=""
             />
             <h3>{d.title}</h3>
