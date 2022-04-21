@@ -62,7 +62,7 @@ const ContactForm = () => {
             message: messageText,
         };
         console.log("details: " + details.name + " " + details.email + " " + details.message);
-        let response = await fetch("http://localhost:5000/contact", {
+        let response = await fetch("https://vast-inlet-81736.herokuapp.com/contact", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
