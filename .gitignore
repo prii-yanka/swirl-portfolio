@@ -5,6 +5,14 @@
 *.so
 *.dylib
 
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+#server/ google password
+.env
+
 # Test binary, built with `go test -c`
 *.test
 
