@@ -91,11 +91,41 @@ const Portfolio = () => {
 
   const portfolioRef = useNav('Portfolio')
 
+  const [projects, setProjects] = useState([]);
+  
+  // This method fetches the records from the database.
+  useEffect(() => {
+    async function getProjects() {
+      const response = await fetch(`http://localhost:5001/projects/`);
+  
+      if (!response.ok) {
+        const message = `An error occurred: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+  
+      const projects = await response.json();
+      setProjects(projects);
+    }
+  
+    getProjects();
+  
+    return;
+  }, [projects.length]);
+
   return (
     <section className='portfolio' ref={portfolioRef} id='portfolioContainer'>
       <div className='portfolio-header'>
         <h1>Portfolio </h1>
       </div>
+      <ul>
+        {projects.map((project) => (
+          <div key={project._id}>
+            {project.project_name}
+          </div>
+        ))}
+      </ul>
+
       <Modal
         open={open}
         onClose={handleClose}>
@@ -138,4 +168,4 @@ const Portfolio = () => {
   )
 }
 
-export default Portfolio
+export default Portfolio;
