@@ -51,14 +51,14 @@ const Portfolio = () => {
   const [webProjects, setWebProjects] = useState([]);
   const [mobileProjects, setMobileProjects] = useState([]);
   const [designProjects, setDesignProjects] = useState([]);
-  const [loading, setLoading] = useState(projects ? false : true);
-  const [selected, setSelected] = useState("all");
+  // const [loading, setLoading] = useState(projects ? false : true);
+  const [selected, setSelected] = useState("");
   const [data, setData] = useState([]);
   const list = [
-    // {
-    //   id: "all",
-    //   title: "All",
-    // },
+    {
+      id: "",
+      title: "All",
+    },
     {
       id: "featured",
       title: "Featured",
@@ -81,33 +81,53 @@ const Portfolio = () => {
     // },
   ];
 
-    const getProjects = async() => {
-      try {
-        const response = await fetch("http://localhost:5001")
-        const json = await response.json();
-        setProjects(json);
-      } catch (error){
-        const message = `An error occurred: ${error}`;
-        window.alert(message);
-      }
-    }
+
 
   useEffect(() => {
-    // async function getProjects() {
-    //   const response = await fetch(`http://localhost:5001`);
+    async function getProjects() {
+      const response = await fetch(`http://localhost:5001`);
 
-    //   if (!response.ok) {
-    //     const message = `An error occurred: ${response.statusText}`;
+      if (!response.ok) {
+        const message = `An error occurred: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+
+      const projects = await response.json();
+      // console.log(projects);
+      setData(projects);
+    }
+    // const getProjects = async() => {
+    //   try {
+    //     const response = await fetch("http://localhost:5001")
+    //     const json = await response.json();
+    //     setData(json);
+    //   } catch (error){
+    //     const message = `An error occurred: ${error}`;
     //     window.alert(message);
-    //     return;
     //   }
-
-    //   const projects = await response.json();
-    //   setProjects(projects);
     // }
 
     getProjects();
   }, []);
+
+  useEffect(() => {
+    async function getProjects() {
+      const response = await fetch(`http://localhost:5001`);
+
+      if (!response.ok) {
+        const message = `An error occurred: ${response.statusText}`;
+        window.alert(message);
+        return;
+      }
+
+      const projects = await response.json();
+      // console.log(projects);
+      setProjects(projects);
+    }
+
+    getProjects();
+  }, [projects]);
 
   // This method fetches the records from the database.
   useEffect(() => {
@@ -204,11 +224,11 @@ const Portfolio = () => {
       default:
         setData(projects);
     }
-    setLoading(false); //set loading to false once data is set
+    // setLoading(false); //set loading to false once data is set
   }, [selected]);
 
-  if (loading === true) {
-    console.log("NO PROJECTS");
+  if (data.length === 0) {
+      // console.log("NO PROJECTS");
     return (
       <section className="portfolio" ref={portfolioRef} id="portfolioContainer">
         <div className="portfolio-header">
@@ -244,14 +264,14 @@ const Portfolio = () => {
           </div>
         </Modal>
         <ul>
-          <NavLink to={"/"}>
+          {/* <NavLink to={"/"}>
             <PortfolioList
               title="All"
               active={selected === "all"}
               setSelected={setSelected}
               id="all"
             />
-          </NavLink>
+          </NavLink> */}
           {list.map((item) => (
             <NavLink to={"/" + item.id}>
               <PortfolioList
@@ -264,8 +284,8 @@ const Portfolio = () => {
           ))}
         </ul>
         <div className="portfolio-item-container">
-          {console.log(selected)}
-          {console.log(data)}
+          {/* {console.log(selected)} */}
+          {/* {console.log(data)} */}
           <Routes>
             <Route
               exact
