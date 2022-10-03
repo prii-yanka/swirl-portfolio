@@ -12,6 +12,7 @@
 
 #server/ google password
 .env
+config.env
 
 # Test binary, built with `go test -c`
 *.test
