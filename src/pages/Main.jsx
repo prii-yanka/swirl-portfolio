@@ -5,7 +5,9 @@ import { motion, useViewportScroll, useSpring, useTransform } from 'framer-motio
 // import { useSpring, animated } from 'react-spring'
 import styled, { css } from 'styled-components'
 import { ScrollAnimation } from "./ScrollAnimation";
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { TagProvider } from '../context/TagsContext';
+import { BrowserRouter } from "react-router-dom";
 
 const Main = (props) => {
 
@@ -93,10 +95,13 @@ const Main = (props) => {
         <Intro />
         <Education />
         <Skills />
-        <Routes>
-          <Route exact path="/" element={<Portfolio/>} />
-        </Routes>
-        {/* <Portfolio /> */}
+        {/* <Routes>
+            <Route exact path="/" element={<Portfolio/>} />
+        </Routes> */}
+        <BrowserRouter>
+          <Portfolio />
+          {/* <Navigate to="/"/> */}
+        </BrowserRouter>
         <Contact />
       </main>
     </div>
