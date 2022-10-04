@@ -3,13 +3,13 @@ import "./portfolio.css";
 import "../pages.css";
 import { useNav } from "../../customHooks/useNav";
 import PortfolioList from "./PortfolioList";
-import {
-  featuredPortfolio,
-  webPortfolio,
-  mobilePortfolio,
-  designPortfolio,
-  contentPortfolio,
-} from "../../data";
+// import {
+//   featuredPortfolio,
+//   webPortfolio,
+//   mobilePortfolio,
+//   designPortfolio,
+//   contentPortfolio,
+// } from "../../data";
 // import Modal from '../../components/Modal';
 import Modal from "@mui/material/Modal";
 import { TagContext, TagDispatchContext } from "../../context/TagsContext";
@@ -81,11 +81,38 @@ const Portfolio = () => {
     // },
   ];
 
-
-
   useEffect(() => {
+
+    console.log("saving state between refresh:");
+
+    const curr_selection = window.localStorage.getItem("selected");
+    // const featured = window.localStorage.getItem("featuredProjects");
+    // const web = window.localStorage.getItem("webProjects");
+    // const mobile = window.localStorage.getItem("mobileProjects");
+    // const design = window.localStorage.getItem("designProjects");
+
+    if(curr_selection) {
+      setSelected(curr_selection);
+    }
+   
     async function getProjects() {
-      const response = await fetch(`http://localhost:5001`);
+
+      let response;
+
+      if (curr_selection == "featured") {
+        response = await fetch(`http://localhost:5001/featured`);
+      }
+      else if (curr_selection == "web") {
+        response = await fetch(`http://localhost:5001/web`);
+      }
+      else if (curr_selection == "mobile") {
+        response = await fetch(`http://localhost:5001/mobile`);
+      }
+      else if (curr_selection == "design") {
+        response = await fetch(`http://localhost:5001/design`);
+      } else {
+        response = await fetch(`http://localhost:5001`);
+      }
 
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
@@ -96,20 +123,70 @@ const Portfolio = () => {
       const projects = await response.json();
       // console.log(projects);
       setData(projects);
-    }
-    // const getProjects = async() => {
-    //   try {
-    //     const response = await fetch("http://localhost:5001")
-    //     const json = await response.json();
-    //     setData(json);
-    //   } catch (error){
-    //     const message = `An error occurred: ${error}`;
-    //     window.alert(message);
-    //   }
-    // }
 
+    }
     getProjects();
+
   }, []);
+
+  useEffect(() => {
+    // if (selected) 
+    window.localStorage.setItem("selected", selected);
+    // if (featuredProjects) window.localStorage.setItem("featuredProjects", featuredProjects);
+    // if (webProjects) window.localStorage.setItem("webProjects", webProjects);
+    // if (mobileProjects) window.localStorage.setItem("mobileProjects", mobileProjects);
+    // if (designProjects) window.localStorage.setItem("designProjects", designProjects);
+  }, [selected]);
+
+  // }, [selected, featuredProjects, webProjects, mobileProjects, designProjects]);
+
+  // useEffect(() => {
+  //   async function getProjects() {
+
+  //     let response;
+
+  //     if (selected == "featured") {
+  //       response = await fetch(`http://localhost:5001/featured`);
+  //     }
+  //     else if (selected == "web") {
+  //       response = await fetch(`http://localhost:5001/web`);
+  //     }
+  //     else if (selected == "mobile") {
+  //       response = await fetch(`http://localhost:5001/mobile`);
+  //     }
+  //     else if (selected == "design") {
+  //       response = await fetch(`http://localhost:5001/design`);
+  //     } else {
+  //       response = await fetch(`http://localhost:5001`);
+  //     }
+
+  //     if (!response.ok) {
+  //       const message = `An error occurred: ${response.statusText}`;
+  //       window.alert(message);
+  //       return;
+  //     }
+  // 
+  //     const projects = await response.json();
+  //     // console.log(projects);
+  //     setData(projects);
+  //     // setFeaturedProjects(projects);
+  //     // setWebProjects(projects);
+  //     // setMobileProjects(projects);
+  //     // setDesignProjects(projects);
+  //   }
+  //   // const getProjects = async() => {
+  //   //   try {
+  //   //     const response = await fetch("http://localhost:5001")
+  //   //     const json = await response.json();
+  //   //     setData(json);
+  //   //   } catch (error){
+  //   //     const message = `An error occurred: ${error}`;
+  //   //     window.alert(message);
+  //   //   }
+  //   // }
+
+  //   getProjects();
+  // }, []);
 
   useEffect(() => {
     async function getProjects() {
@@ -127,7 +204,7 @@ const Portfolio = () => {
     }
 
     getProjects();
-  }, [projects]);
+  }, [projects.length]);
 
   // This method fetches the records from the database.
   useEffect(() => {
