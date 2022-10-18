@@ -5,7 +5,7 @@ nav {
   top: 0;
   color: black;
   /* height: 68px; */
-  position: fixed;
+  /* position: fixed; */
   /* background-color: black; */
   /* display: flex; */
 }
@@ -75,3 +75,8 @@ nav div .nav-items:hover {
   background-color: #EF8181;
 }
 
+.navButton {
+  position: fixed;
+  top: 0;
+  z-index: 10;
+}

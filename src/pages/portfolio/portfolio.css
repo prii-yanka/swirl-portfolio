@@ -120,6 +120,7 @@
 .portfolio .portfolio-item-container .item h3 {
   position: absolute;
   font-size: 20px;
+  pointer-events: none;
 }
 
 .portfolio .portfolio-item-container .item img {
@@ -131,6 +132,7 @@
 
 .portfolio .portfolio-item-container .item:hover {
   background-color: #8FE1F3;
+  cursor: pointer;
 }
 
 .portfolio .portfolio-item-container .item img:hover {
