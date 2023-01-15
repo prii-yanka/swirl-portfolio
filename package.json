@@ -1,0 +1,31 @@
+{
+  "name": "portfolio-api",
+  "version": "1.0.0",
+  "description": "REST API for Personal Portfolio website that I designed and deployed",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prii-yanka/portfolio-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/prii-yanka/portfolio-api/issues"
+  },
+  "homepage": "https://github.com/prii-yanka/portfolio-api#readme",
+  "dependencies": {
+    "aws-sdk": "^2.1234.0",
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "mongodb": "^4.10.0",
+    "mongoose": "^6.6.5",
+    "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1"
+  }
+}
