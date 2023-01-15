@@ -1,0 +1,144 @@
+.intro {
+  margin: 0;
+  background-color: white;
+  color: black;
+  /* background: url(../../../public/images/table_top@72x.png); */
+  overflow: hidden;
+}
+
+.intro .container {
+  display: inline-flex;
+  flex-direction: row;
+  /* justify-content: center;
+  align-content: center;
+  background: url(../../../public/images/intro_bg.png);
+  background-repeat: no-repeat;
+  background-position: right center; */
+  min-height: 100vh;
+  width: 100%;
+}
+
+.about-me {
+  width: 40vw;
+  display: inline-flex;
+  padding: 5vw;
+  margin: 0;
+  /* display: block; */
+  align-items: left;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.about-me h1 {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+.type {
+  color: #EF8181;
+  font-size: 25px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.about-me .content {
+  margin: 10px 0px;
+}
+
+.about-me .specialize {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-me .specialize .ugh {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.about-me .specialize .specialize-item{
+  width: 225px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  margin: 15px 0px 0px 0px;
+  border: 1px solid #8FE1F3;
+  border-radius: 15px;
+  padding: 5px
+}
+
+.about-me .specialize div span {
+  font-weight: 700;
+}
+
+.intro-illustration-container {
+  width: 50vw;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  position: relative;
+}
+
+.intro .image-container {
+  padding: 5vh 5vw;
+  width: auto;
+  /* height: 100vh; */
+  position: absolute;
+  /* overflow: visible; */
+}
+
+.intro img {
+  width: 40vw;
+  height: auto;
+  /* height: 100vh; */
+  object-fit: contain;
+  /* object-position: 100% 0; */
+  /* transform: rotate(5deg); */
+}
+
+/* .image-container:nth-child(n + 2) {
+  padding-top: 5vh;
+  width: 55vw;
+  height: auto;
+} */
+
+/* .about-me::before {
+  content: '';
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  z-index: 10;
+  background: linear-gradient(to top, #a9763f, transparent);
+  width: 100%;
+  height: 20vh;
+} */
+
+/* Smartphones (portrait) ----------- */
+@media screen and (max-width : 450px) {
+  /* Styles */
+  .intro .container {
+    flex-direction: column;
+    min-height: 80vh;
+  }
+
+  .about-me {
+    width: 100vw;
+  }
+
+  .intro-illustration-container {
+    width: 100vw;
+  }
+
+  .intro .image-container {
+    position: relative;
+  }
+
+  .intro img { 
+    width: 90vw;
+  }
+}
+
