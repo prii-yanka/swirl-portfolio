@@ -30,105 +30,115 @@ const Project = require("../models/project");
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
-
 projectRouter.get("/", async (request, response) => {
   Project.find({}).then((projects) => {
+    console.log(request);
     response.json(projects);
   });
 });
 
-projectRouter.get("/image", async (request, response) => {
-  var params = { Bucket: process.env.S3_BUCKET_NAME, Key: "Add Recipe.png" };
-  s3.getObject(params, function (err, data) {
-    response.writeHead(200, { "Content-Type": "image/png" });
-    // response.write(data.Body);
-    // response.end();
-    response.write(data.Body, "binary");
-    response.end(null, "binary");
-  });
-});
+// projectRouter.get("/::selected/::id", async (request, response) => {
+//   console.log(request.params.id);
+//   let project_name_from_id = "";
+//   let signed_url_array = [];
+//   await Project.findOne(
+//     { _id: ObjectId(request.params.id) },
+//     { project_name: 1 }
+//   ).then((project) => {
+//     project_name_from_id = project.project_name;
+//     console.log(project_name_from_id);
+//   });
 
-projectRouter.get("/featured", async (request, response) => {
-  Project.find({ tags: "Featured" }).then((projects) => {
-    response.json(projects);
-  });
-});
+//   var folder_params = {
+//     Bucket: process.env.S3_BUCKET_NAME /* required */,
+//     // Delimiter: '/',
+//     // Key: project_name_from_id,
+//     Prefix: project_name_from_id /* Can be your folder name */,
+//     // Prefix: `${request.params.selected}/${project_name_from_id}`,  // Can be your folder name
+//     // Expires: 900
+//   };
 
-projectRouter.get("/web", async (request, response) => {
-  Project.find({ tags: "Web App" }).then((projects) => {
-    response.json(projects);
-  });
-});
-
-projectRouter.get("/design", async (request, response) => {
-  Project.find({ tags: "Design" }).then((projects) => {
-    response.json(projects);
-  });
-});
-
-projectRouter.get("/mobile", async (request, response) => {
-  Project.find({ tags: "Mobile App" }).then((projects) => {
-    response.json(projects);
-  });
-});
-
-// projectRoutes.route("/").get(function (req, res) {
-//   let db_connect = dbo.getDb("portfolio");
-//   db_connect
-//     .collection("projects")
-//     .find({})
-//     .toArray(function (err, result) {
-//       if (err) throw err;
-//       res.json(result);
-//     });
-//  });
-
-// // This section will help you get a list of all the records.
-// projectRoutes.route("/featured").get(function (req, res) {
-//  let db_connect = dbo.getDb("portfolio");
-//  db_connect
-//    .collection("projects")
-//    .find({tags: "Featured"})
-//    .toArray(function (err, result) {
-//      if (err) throw err;
-//      res.json(result);
-//    });
+//   s3.listObjectsV2(folder_params, function (err, data) {
+//     if (err) {
+//       console.log(`Error getting prefix/folder ${err}`);
+//     } // an error occurred
+//     else {
+//       console.log("data: " + data); // successful response
+//       data.Contents.map((key) => {
+//         var file_params = {
+//           Bucket: process.env.S3_BUCKET_NAME /* required */,
+//           Key: key.Key,
+//           Expires: 900,
+//         };
+//         s3.getSignedUrl("getObject", file_params, function (err, signed_url) {
+//           if (err) {
+//             console.log(`Error getting image ${err}`);
+//           } // an error occurred
+//           else {
+//             console.log(`the signed url is: ${signed_url}`);
+//             if (signed_url.includes("png")) {
+//               // only add if link has an image
+//               signed_url_array = [...signed_url];
+//             }
+//           }
+//         });
+//       });
+//     }
+//   });
+//   response.json(signed_url_array);
+//   // signed_url_array.shift();
 // });
+projectRouter.get("/::selected", async (request, response) => {
+  let selected = request.params.selected.charAt(0).toUpperCase() + request.params.selected.slice(1);
+  Project.find({ tags: `${selected}` }).then((projects) => {
+    response.json(projects);
+  });
+});
 
-// // This section will help you get a list of all the records.
-// projectRoutes.route("/web").get(function (req, res) {
-//   let db_connect = dbo.getDb("portfolio");
-//   db_connect
-//     .collection("projects")
-//     .find({tags: "Web App"})
-//     .toArray(function (err, result) {
-//       if (err) throw err;
-//       res.json(result);
-//     });
-//  });
-
-//  // This section will help you get a list of all the records.
-// projectRoutes.route("/design").get(function (req, res) {
-//   let db_connect = dbo.getDb("portfolio");
-//   db_connect
-//     .collection("projects")
-//     .find({tags: "Design"})
-//     .toArray(function (err, result) {
-//       if (err) throw err;
-//       res.json(result);
-//     });
-//  });
-
-//  // This section will help you get a list of all the records.
-// projectRoutes.route("/mobile").get(function (req, res) {
-//   let db_connect = dbo.getDb("portfolio");
-//   db_connect
-//     .collection("projects")
-//     .find({tags: "Mobile App"})
-//     .toArray(function (err, result) {
-//       if (err) throw err;
-//       res.json(result);
-//     });
-//  });
+projectRouter.get("/::selected/::id", async (request, response) => {
+  console.log(request.params.id);
+  let project_name_from_id = "";
+  let signed_url_array = [];
+  let project_by_id = await Project.findOneAndUpdate(
+    { _id: ObjectId(request.params.id) },
+    { images: signed_url_array}
+  ).then((project) => {
+    var folder_params = {
+      Bucket: process.env.S3_BUCKET_NAME, /* required */
+      Prefix: project.project_name, /* Can be your folder name */
+    };
+  
+    s3.listObjectsV2(folder_params, function (err, data) {
+      if (err) {
+        console.log(`Error getting prefix/folder ${err}`);
+      } // an error occurred
+      else {
+        console.log("data: " + data); // successful response
+        data.Contents.map((key) => {
+          var file_params = {
+            Bucket: process.env.S3_BUCKET_NAME /* required */,
+            Key: key.Key,
+            Expires: 900,
+          };
+          s3.getSignedUrl("getObject", file_params, function (err, signed_url) {
+            if (err) {
+              console.log(`Error getting image ${err}`);
+            } // an error occurred
+            else {
+              console.log(`the signed url is: ${signed_url}`);
+              if (signed_url.includes("png")) {
+                // only add if link has an image
+                signed_url_array = [...signed_url.toString()];
+                console.log(signed_url_array);
+                response.json(signed_url_array);
+              }
+            }
+          });
+        });
+      }
+    });
+  });
+  // response.json(project_by_id);
+});
 
 module.exports = projectRouter;
