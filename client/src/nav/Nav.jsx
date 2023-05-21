@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NavLink from "./NavLink";
 import { navLinks } from "./navLinks";
 import "./nav.css";
@@ -44,7 +44,7 @@ const Nav = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     // find current scroll position
     const currentScrollPos = window.pageYOffset;
     // set state based on location info (explained in more detail below)
@@ -52,7 +52,7 @@ const Nav = () => {
     setVisible(prevScrollPos > currentScrollPos);
     // set state to new scroll position
     setPrevScrollPos(currentScrollPos);
-  };
+  }, []);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -60,7 +60,7 @@ const Nav = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos, visible, handleScroll]);
   return (
-    <div class="navButton" style={{ transition: "top 0.3s",top: visible ? "0" : "-14rem" }}>
+    <div className="navButton" style={{ transition: "top 0.3s",top: visible ? "0" : "-14rem" }}>
       <div className="logo-container">
         <img src="images/logo.png" className="logo" />
         <motion.div
@@ -94,7 +94,7 @@ const Nav = () => {
           <div />
           <div />
           {navLinks.map(({ navLinkId, scrollToId }, idx) => (
-            <NavLink navLinkId={navLinkId} scrollToId={scrollToId} />
+            <NavLink key={idx} navLinkId={navLinkId} scrollToId={scrollToId} />
           ))}
         </Planet>
       </motion.nav>

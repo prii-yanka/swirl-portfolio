@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Buffer } from "buffer";
+// import { Buffer } from "buffer";
 import "./portfolio.css";
 import "../pages.css";
 import { useNav } from "../../customHooks/useNav";
@@ -13,10 +13,11 @@ import PortfolioList from "./PortfolioList";
 // } from "../../data";
 // import Modal from '../../components/Modal';
 import Modal from "@mui/material/Modal";
-import { TagContext, TagDispatchContext } from "../../context/TagsContext";
+// import { TagContext, TagDispatchContext } from "../../context/TagsContext";
 import { Link, Navigate, NavLink, Route, Routes } from "react-router-dom";
-import { BrowserRouter } from "react-router-dom";
-import axios from "axios";
+import Project from "./Project";
+// import { BrowserRouter } from "react-router-dom";
+// import axios from "axios";
 
 // const modalStyle = {
 //   position: 'absolute',
@@ -32,45 +33,18 @@ import axios from "axios";
 
 const Portfolio = () => {
   const portfolioRef = useNav("Portfolio");
-  const [open, setOpen] = useState(false);
-  const [id, setId] = useState();
-  const [image, setImage] = useState();
-  const [imgs, setImgs] = useState([]);
-  const [projectName, setProjectName] = useState();
-  const [tags, setTags] = useState([]);
-  const [technologies, setTechnologies] = useState([]);
-  const [video, setVideo] = useState();
-  const [description, setDescription] = useState();
-  const [when, setWhen] = useState([]);
-  const [linkTo, setLinkTo] = useState();
 
-  const getBase64StringFromDataURL = (dataURL) =>
-    dataURL.replace('data:', '').replace(/^.+,/, '');
-
-  const handleOpen = (d) => {
-    setOpen(true);
-    // console.log("id " + d.id);
-    // console.log("title " + d.title);
-    // console.log("img " + d.img);
-    setId(d.id);
-    setImgs(d.images);
-    setProjectName(d.project_name);
-    setTags(d.tags);
-    setVideo(d.video);
-    setDescription(d.description);
-    setWhen(d.when);
-    setLinkTo(d.link_to);
-  };
-  const handleClose = () => setOpen(false);
+  // const getBase64StringFromDataURL = (dataURL) =>
+  //   dataURL.replace("data:", "").replace(/^.+,/, "");
 
   const [projects, setProjects] = useState([]);
-  const [featuredProjects, setFeaturedProjects] = useState([]);
-  const [webProjects, setWebProjects] = useState([]);
-  const [mobileProjects, setMobileProjects] = useState([]);
-  const [designProjects, setDesignProjects] = useState([]);
+  // const [featuredProjects, setFeaturedProjects] = useState([]);
+  // const [webProjects, setWebProjects] = useState([]);
+  // const [mobileProjects, setMobileProjects] = useState([]);
+  // const [designProjects, setDesignProjects] = useState([]);
   // const [loading, setLoading] = useState(projects ? false : true);
   const [selected, setSelected] = useState("");
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const list = [
     {
       id: "",
@@ -114,27 +88,21 @@ const Portfolio = () => {
     async function getProjects() {
       let response;
 
-      if (curr_selection == "featured") {
-        response = await fetch(`http://localhost:5001/featured`);
-      } else if (curr_selection == "web") {
-        response = await fetch(`http://localhost:5001/web`);
-      } else if (curr_selection == "mobile") {
-        response = await fetch(`http://localhost:5001/mobile`);
-      } else if (curr_selection == "design") {
-        response = await fetch(`http://localhost:5001/design`);
+      if (curr_selection) {
+        response = await fetch(`http://localhost:5001/:${curr_selection}`);
       } else {
         response = await fetch(`http://localhost:5001`);
       }
 
       if (!response.ok) {
         const message = `An error occurred: ${response.statusText}`;
-        window.alert(message);
+        console.log(message);
         return;
       }
 
       const projects = await response.json();
       // console.log(projects);
-      setData(projects);
+      setProjects(projects);
       <Navigate to={"/" + curr_selection} />;
     }
     getProjects();
@@ -143,98 +111,33 @@ const Portfolio = () => {
   useEffect(() => {
     // if (selected)
     window.localStorage.setItem("selected", selected);
-    // if (featuredProjects) window.localStorage.setItem("featuredProjects", featuredProjects);
-    // if (webProjects) window.localStorage.setItem("webProjects", webProjects);
-    // if (mobileProjects) window.localStorage.setItem("mobileProjects", mobileProjects);
-    // if (designProjects) window.localStorage.setItem("designProjects", designProjects);
+    if (selected) {
+      async function getRelatedProjects() {
+        const response = await fetch(`http://localhost:5001/:${selected}`);
+
+        if (!response.ok) {
+          const message = `An error occurred: ${response.statusText}`;
+          window.alert(message);
+          return;
+        }
+
+        const relatedProjects = await response.json();
+        setProjects(relatedProjects);
+      }
+      getRelatedProjects();
+    }
   }, [selected]);
 
-  // }, [selected, featuredProjects, webProjects, mobileProjects, designProjects]);
-
   // useEffect(() => {
-  //   async function getProjects() {
-
-  //     let response;
-
-  //     if (selected == "featured") {
-  //       response = await fetch(`http://localhost:5001/featured`);
-  //     }
-  //     else if (selected == "web") {
-  //       response = await fetch(`http://localhost:5001/web`);
-  //     }
-  //     else if (selected == "mobile") {
-  //       response = await fetch(`http://localhost:5001/mobile`);
-  //     }
-  //     else if (selected == "design") {
-  //       response = await fetch(`http://localhost:5001/design`);
-  //     } else {
-  //       response = await fetch(`http://localhost:5001`);
-  //     }
-
-  //     if (!response.ok) {
-  //       const message = `An error occurred: ${response.statusText}`;
-  //       window.alert(message);
-  //       return;
-  //     }
-  //
-  //     const projects = await response.json();
-  //     // console.log(projects);
-  //     setData(projects);
-  //     // setFeaturedProjects(projects);
-  //     // setWebProjects(projects);
-  //     // setMobileProjects(projects);
-  //     // setDesignProjects(projects);
+  //   async function getImgs() {
+  //     await fetch(`http://localhost:5001/:${selected}/:${id}`).then((res) =>
+  //       setImgs(res)
+  //     );
   //   }
-  //   // const getProjects = async() => {
-  //   //   try {
-  //   //     const response = await fetch("http://localhost:5001")
-  //   //     const json = await response.json();
-  //   //     setData(json);
-  //   //   } catch (error){
-  //   //     const message = `An error occurred: ${error}`;
-  //   //     window.alert(message);
-  //   //   }
-  //   // }
-
-  //   getProjects();
-  // }, []);
-  useEffect(() => {
-    async function getImage() {
-      await fetch(`http://localhost:5001/image`)
-      .then((res) => res.blob())
-      .then((blob) => {
-          // Read the Blob as DataURL using the FileReader API
-          const reader = new FileReader();
-          reader.onloadend = () => {
-              // console.log(reader.result);
-              // Logs data:image/jpeg;base64,wL2dvYWwgbW9yZ...
-
-              // Convert to Base64 string
-              const base64 = getBase64StringFromDataURL(reader.result);
-              // console.log(base64);
-              if(base64) {
-                setImage(base64);
-
-              }
-              // Logs wL2dvYWwgbW9yZ...
-          };
-          reader.readAsDataURL(blob);
-          // setImage(URL.createObjectURL(blob));
-      });
-
-      // if (!response.ok) {
-      //   const message = `An error occurred: ${response.statusText}`;
-      //   window.alert(message);
-      //   return;
-      // }
-      
-      // const res = response;
-      // console.log(projects);
-      // setProjects(projects);
-    }
-
-    getImage();
-  }, [image]);
+  //   if (imgs.length > 2) {
+  //     getImgs();
+  //   }
+  // }, [selected, id]);
 
   useEffect(() => {
     async function getProjects() {
@@ -254,105 +157,7 @@ const Portfolio = () => {
     getProjects();
   }, [projects.length]);
 
-  // This method fetches the records from the database.
-  useEffect(() => {
-    async function getFeaturedProjects() {
-      const response = await fetch(`http://localhost:5001/featured`);
-
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        window.alert(message);
-        return;
-      }
-
-      const featuredProjects = await response.json();
-      setFeaturedProjects(featuredProjects);
-    }
-    getFeaturedProjects();
-    // setLoading(false);
-    // return;
-  }, [featuredProjects.length]);
-
-  // This method fetches the records from the database.
-  useEffect(() => {
-    async function getWebProjects() {
-      const response = await fetch(`http://localhost:5001/web`);
-
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        window.alert(message);
-        return;
-      }
-
-      const webProjects = await response.json();
-      setWebProjects(webProjects);
-    }
-
-    getWebProjects();
-    return;
-  }, [webProjects.length]);
-
-  // This method fetches the records from the database.
-  useEffect(() => {
-    async function getMobileProjects() {
-      const response = await fetch(`http://localhost:5001/mobile`);
-
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        window.alert(message);
-        return;
-      }
-
-      const mobileProjects = await response.json();
-      setMobileProjects(mobileProjects);
-    }
-
-    getMobileProjects();
-    return;
-  }, [mobileProjects.length]);
-
-  // This method fetches the records from the database.
-  useEffect(() => {
-    async function getDesignProjects() {
-      const response = await fetch(`http://localhost:5001/design`);
-
-      if (!response.ok) {
-        const message = `An error occurred: ${response.statusText}`;
-        window.alert(message);
-        return;
-      }
-
-      const designProjects = await response.json();
-      setDesignProjects(designProjects);
-    }
-
-    getDesignProjects();
-    return;
-  }, [designProjects.length]);
-
-  // }, [projects.length]);
-
-  useEffect(() => {
-    switch (selected) {
-      case "featured":
-        setData(featuredProjects);
-        break;
-      case "web":
-        setData(webProjects);
-        break;
-      case "mobile":
-        setData(mobileProjects);
-        break;
-      case "design":
-        setData(designProjects);
-        break;
-      default:
-        setData(projects);
-    }
-    // setLoading(false); //set loading to false once data is set
-  }, [selected]);
-
-  if (data.length === 0) {
+  if (projects.length === 0) {
     // console.log("NO PROJECTS");
     return (
       <section className="portfolio" ref={portfolioRef} id="portfolioContainer">
@@ -373,29 +178,10 @@ const Portfolio = () => {
       <div className="portfolio-header">
         <h1>Portfolio </h1>
       </div>
-      <Modal open={open} onClose={handleClose}>
-        <div className="portfolio-modal">
-          Modal
-          {/* style={modalStyle} */}
-          <div>{id}</div>
-          {/* {imgs.map((image) => {
-            <img src={image} alt="" />;
-          })} */}
-          <div>
-            <img src={image} alt="image"/>
-          </div>
-          <div> {projectName} </div>
-          <div> {tags} </div>
-          <div> {technologies} </div>
-          <div> {description} </div>
-          <div> {video} </div>
-          <div> {when} </div>
-          <div> {linkTo} </div>
-        </div>
-      </Modal>
+
       <ul>
         {list.map((item) => (
-          <NavLink to={"/" + item.id}>
+          <NavLink to={item.id}>
             <PortfolioList
               title={item.title}
               active={selected === item.id}
@@ -409,29 +195,44 @@ const Portfolio = () => {
         {/* {console.log(selected)} */}
         {/* {console.log(data)} */}
         <Routes>
-          <Route 
+          {/* <Route 
             exact
             path="/image"
             element={<div><img src={"data:image/png;base64," + image} alt="image"/> </div>}
-            />
+            /> */}
           <Route
             exact
             path="/"
-            element={data.map((d) => (
-              <div className="item" onClick={() => handleOpen(d)}>
-                <img src={d.images[0]} alt="" />
-                <h3>Default Route:: {d.project_name}</h3>
-              </div>
+            element={projects.map((d) => (
+              <>
+                <NavLink to={d.id} target="_blank" rel="noopener noreferrer">
+                  <div className="item">
+                    <img src={d.images[0]} alt="" />
+                    <h3> Defualt Route::{d.project_name}</h3>
+                  </div>
+                </NavLink>
+
+                <Routes>
+                  <Route path={`/:id`} element={<Project project_name={d} />} />
+                </Routes>
+              </>
             ))}
           />
           <Route
             exact
-            path={"/" + selected}
-            element={data.map((d) => (
-              <div className="item" onClick={() => handleOpen(d)}>
-                <img src={d.images[0]} alt="" />
-                <h3> Selected Route::{d.project_name}</h3>
-              </div>
+            path={`/:selected/*`}
+            element={projects.map((d) => (
+              <>
+                <NavLink to={d.id} target="_blank" rel="noopener noreferrer">
+                  <div className="item">
+                    <img src={d.images[0]} alt="" />
+                    <h3> Selected Route::{d.project_name}</h3>
+                  </div>
+                </NavLink>
+                <Routes>
+                  <Route path={`/:id`} element={<Project project_name={d} />} />
+                </Routes>
+              </>
             ))}
           />
         </Routes>

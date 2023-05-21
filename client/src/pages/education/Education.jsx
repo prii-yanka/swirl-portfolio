@@ -32,7 +32,9 @@ const Education = () => {
               <li> CS 252: Systems Programming </li>
               <li> CS 307: Software Engineering 1 </li>
               <li> CS 348: Information Systems </li>
+              <li> CS 354: Operating Systems</li>
               <li> CS 373: Data Mining and Machine Learning </li>
+              <li> CS 407: Software Engineering Senior Project </li>
               <li> CS 408: Software Testing </li>
               <li> MA 416: Statistics/Probability </li>
             </ul>
@@ -41,7 +43,7 @@ const Education = () => {
             <div>Enrepreneurship Certificate</div>
             <ul>
               <li> ENTR 200: Intro to Entrepreneurship & Innovation </li>
-              <li> ENTR 310: Marketing & Management for New Ventrues </li>
+              <li> ENTR 310: Marketing & Management for New Ventures </li>
             </ul>
           </div>
           <div className='education-item'>
