@@ -52,7 +52,7 @@ const Nav = () => {
     setVisible(prevScrollPos > currentScrollPos);
     // set state to new scroll position
     setPrevScrollPos(currentScrollPos);
-  }, []);
+  }, [prevScrollPos]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -60,7 +60,7 @@ const Nav = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos, visible, handleScroll]);
   return (
-    <div className="navButton" style={{ transition: "top 0.3s",top: visible ? "0" : "-14rem" }}>
+    <div className="navButton" style={{ transition: "top 0.3s", top: visible ? "0" : "-14rem" }}>
       <div className="logo-container">
         <img src="images/logo.png" className="logo" />
         <motion.div

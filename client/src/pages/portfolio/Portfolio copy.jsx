@@ -4,12 +4,33 @@ import "./portfolio.css";
 import "../pages.css";
 import { useNav } from "../../customHooks/useNav";
 import PortfolioList from "./PortfolioList";
-
+// import {
+//   featuredPortfolio,
+//   webPortfolio,
+//   mobilePortfolio,
+//   designPortfolio,
+//   contentPortfolio,
+// } from "../../data";
+// import Modal from '../../components/Modal';
 import Modal from "@mui/material/Modal";
 // import { TagContext, TagDispatchContext } from "../../context/TagsContext";
 import { Link, Navigate, NavLink, Route, Routes } from "react-router-dom";
 import Project from "./Project";
-// import ProjectThumbnail from "./ProjectThumbnail";
+// import { BrowserRouter } from "react-router-dom";
+// import axios from "axios";
+
+// const modalStyle = {
+//   position: 'absolute',
+//   margin: '5vh 10vw',
+//   top: '0',
+//   // left: '50%',
+//   // transform: 'translate(-50%, 0)',
+//   width: '80vw',
+//   height: '90vh',
+//   backgroundColor: 'white',
+//   borderRadius: '10px'
+// }
+
 const Portfolio = () => {
   const portfolioRef = useNav("Portfolio");
 
@@ -17,7 +38,7 @@ const Portfolio = () => {
   //   dataURL.replace("data:", "").replace(/^.+,/, "");
 
   const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState();
+  const [selectedProject, setSelectedProject] = useState(); 
   // const [featuredProjects, setFeaturedProjects] = useState([]);
   // const [webProjects, setWebProjects] = useState([]);
   // const [mobileProjects, setMobileProjects] = useState([]);
@@ -52,28 +73,6 @@ const Portfolio = () => {
     // },
   ];
 
-  // const getProjects =  async () => {
-  //   let response;
-
-  //   if (selected) {
-  //     response = await fetch(`http://localhost:5001/:${selected}`);
-  //     <Navigate to={"/" + selected} />;
-  //   } else {
-  //     response = await fetch(`http://localhost:5001`);
-  //     <Navigate to="/" />;
-  //   }
-
-  //   if (!response.ok) {
-  //     const message = `An error occurred loading initial: ${response.statusText}`;
-  //     console.log(message);
-  //     return;
-  //   }
-
-  //   const projects = await response.json();
-  //   // console.log(projects);
-  //   setProjects(projects);
-  // }
-
   useEffect(() => {
     console.log("saving state between refresh:");
 
@@ -82,23 +81,24 @@ const Portfolio = () => {
     if (curr_selection) {
       setSelected(curr_selection);
     }
-    const getProjects =  async () => {
+
+    async function getProjects() {
       let response;
-  
-      if (selected) {
-        response = await fetch(`http://localhost:5001/:${selected}`);
-        <Navigate to={"/" + selected} />;
+
+      if (curr_selection) {
+        response = await fetch(`http://localhost:5001/:${curr_selection}`);
+        <Navigate to={"/" + curr_selection} />
       } else {
         response = await fetch(`http://localhost:5001`);
-        <Navigate to="/" />;
+        <Navigate to="/"/>
       }
-  
+
       if (!response.ok) {
         const message = `An error occurred loading initial: ${response.statusText}`;
         console.log(message);
         return;
       }
-  
+
       const projects = await response.json();
       // console.log(projects);
       setProjects(projects);
@@ -156,11 +156,12 @@ const Portfolio = () => {
     getProjects();
   }, [projects.length]);
 
+
   useEffect(() => {
-    if (selectedProject) {
-      <Navigate to={`/:${selected}/:${selectedProject.id}`} />;
+    if(selectedProject) {
+      <Navigate to={`/:${selected}/:${selectedProject.id}`} />
     }
-  }, [selected, selectedProject]);
+  }, [selected, selectedProject])
 
   const openProject = (id) => {
     async function openProjectById() {
@@ -178,7 +179,7 @@ const Portfolio = () => {
     }
 
     openProjectById();
-  };
+  }
 
   if (projects.length === 0) {
     // console.log("NO PROJECTS");
@@ -192,7 +193,7 @@ const Portfolio = () => {
         </div>
       </section>
     );
-  }
+    }
 
   // console.log("projects: " + projects[0].project_name);
 
@@ -215,39 +216,42 @@ const Portfolio = () => {
         ))}
       </ul>
       <div className="portfolio-item-container">
-        {projects &&
-          projects.map((d) => (
-            <NavLink
-              to={`${selected}/${d.id}`}
-              onClick={() => openProject(d.id)}
-            >
-              <div className="item">
-                <img src={d.images[0]} alt="" />
-                <h3> Selected Route::{d.project_name}</h3>
-              </div>
-            </NavLink>
-          ))}
-        {/* <Routes>
-        
-        </Routes> */}
         <Routes>
-          {projects &&
-            projects.map((d) => (
-              <Route
-                key={d.id}
-                path={`/*`}
-                element={<Project project={d} selected={selected}/>}
-              ></Route>
+          <Route
+            exact
+            path="/*"
+            element={projects.map((d) => (
+              <>
+                <NavLink to={d.id} onClick={() => openProject(d.id)}>
+                  <div className="item">
+                    <img src={d.images[0]} alt="" />
+                    <h3> Defualt Route::{d.project_name}</h3>
+                  </div>
+                </NavLink>
+
+                <Routes>
+                  <Route path={`/:id`} element={<Project project={selectedProject} />} />
+                </Routes>
+              </>
             ))}
-          {projects &&
-            projects.map((d) => (
-              <Route
-                key={d.id}
-                exact
-                path={`/:selected/*`}
-                element={<Project project={d} selected={selected} />}
-              ></Route>
+          />
+          <Route
+            exact
+            path={`/:selected/*`}
+            element={projects.map((d) => (
+              <>
+                <NavLink to={d.id} onClick={() => openProject(d.id)} >
+                  <div className="item">
+                    <img src={d.images[0]} alt="" />
+                    <h3> Selected Route::{d.project_name}</h3>
+                  </div>
+                </NavLink>
+                <Routes>
+                  <Route path={`/:id`} element={<Project project={selectedProject} />} />
+                </Routes>
+              </>
             ))}
+          />
         </Routes>
       </div>
     </section>

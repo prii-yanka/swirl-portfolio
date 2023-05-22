@@ -5,7 +5,7 @@ const path = require('path');
 require("dotenv").config({ path: path.resolve(__dirname, "./.env") });
 
 const app = express();
-console.log(process.env);
+// console.log(process.env);
 
 const Project = require("./models/project");
 

@@ -110,7 +110,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: red;
   position: relative;
   transition: all .5s ease;
   cursor: pointer;
