@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: center;
     align-content: center;
-    z-index: 10000;
+    z-index: 1000;
   }
 
   .portfolio-modal {
@@ -24,9 +24,11 @@
     height: 90vh;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
+    overflow-x: scroll;
   } 
   
+  
   .portfolio-modal img {
-    max-width: 500px;
+    max-width: 300px;
     height: auto;
   }

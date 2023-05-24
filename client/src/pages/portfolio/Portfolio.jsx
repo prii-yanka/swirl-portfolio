@@ -18,6 +18,9 @@ const Portfolio = () => {
 
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState();
+  const [openModal, setOpenModal] = useState(false);
+  const [posterImage, setPosterImage] = useState();
+  // const [closeModal, setCloseModal] = useState(true);
   // const [featuredProjects, setFeaturedProjects] = useState([]);
   // const [webProjects, setWebProjects] = useState([]);
   // const [mobileProjects, setMobileProjects] = useState([]);
@@ -77,11 +80,15 @@ const Portfolio = () => {
   useEffect(() => {
     console.log("saving state between refresh:");
 
-    const curr_selection = window.localStorage.getItem("selected");
+    // const curr_selection = window.localStorage.getItem("selected");
 
-    if (curr_selection) {
-      setSelected(curr_selection);
-    }
+    // if (curr_selection) {
+    //   setSelected(curr_selection);
+    // }
+    // else {
+    //   setSelected("");
+    // }
+
     const getProjects =  async () => {
       let response;
   
@@ -100,16 +107,17 @@ const Portfolio = () => {
       }
   
       const projects = await response.json();
-      // console.log(projects);
-      setProjects(projects);
+      // console.log(`----setProjects: ${projects}\n`);
+      setProjects([...projects]);
     }
     getProjects();
   }, []);
 
   useEffect(() => {
     // if (selected)
-    window.localStorage.setItem("selected", selected);
     if (selected) {
+      // window.localStorage.setItem("selected", selected);
+
       async function getRelatedProjects() {
         const response = await fetch(`http://localhost:5001/:${selected}`);
 
@@ -120,7 +128,8 @@ const Portfolio = () => {
         }
 
         const relatedProjects = await response.json();
-        setProjects(relatedProjects);
+        // console.log(`----setProjects: ${relatedProjects}\n`)
+        setProjects([...relatedProjects]);
       }
       getRelatedProjects();
       <Navigate to={"/" + selected} />;
@@ -128,41 +137,42 @@ const Portfolio = () => {
   }, [selected]);
 
   // useEffect(() => {
-  //   async function getImgs() {
-  //     await fetch(`http://localhost:5001/:${selected}/:${id}`).then((res) =>
-  //       setImgs(res)
-  //     );
+  //   const getProjects =  async () => {
+  //     let response;
+  
+  //     if (selected) {
+  //       response = await fetch(`http://localhost:5001/:${selected}`);
+  //       <Navigate to={"/" + selected} />;
+  //     } else {
+  //       response = await fetch(`http://localhost:5001`);
+  //       <Navigate to="/" />;
+  //     }
+  
+  //     if (!response.ok) {
+  //       const message = `An error occurred loading initial: ${response.statusText}`;
+  //       console.log(message);
+  //       return;
+  //     }
+  
+  //     const projects = await response.json();
+  //     // console.log(projects);
+  //     setProjects(projects);
   //   }
-  //   if (imgs.length > 2) {
-  //     getImgs();
-  //   }
-  // }, [selected, id]);
+  //   getProjects();
+  // }, [projects.length]);
 
   useEffect(() => {
-    async function getProjects() {
-      const response = await fetch(`http://localhost:5001`);
+    console.log(projects);
+    
+  }, [projects]);
 
-      if (!response.ok) {
-        const message = `An error occurred getting projects: ${response.statusText}`;
-        window.alert(message);
-        return;
-      }
+  // useEffect(() => {
+  //   if (selectedProject) {
+  //     <Navigate to={`/${selected}/${selectedProject.id}`} />;
+  //   }
+  // }, [selected, selectedProject]);
 
-      const projects = await response.json();
-      // console.log(projects);
-      setProjects(projects);
-    }
-
-    getProjects();
-  }, [projects.length]);
-
-  useEffect(() => {
-    if (selectedProject) {
-      <Navigate to={`/:${selected}/:${selectedProject.id}`} />;
-    }
-  }, [selected, selectedProject]);
-
-  const openProject = (id) => {
+  const openProject = async (id) => {
     async function openProjectById() {
       const response = await fetch(`http://localhost:5001/:${selected}/:${id}`);
 
@@ -177,8 +187,14 @@ const Portfolio = () => {
       setSelectedProject(curr_project);
     }
 
-    openProjectById();
+    await openProjectById();
+    <Navigate to={`/${selected}/${id}`} />    
+    setOpenModal(true);
   };
+
+  useEffect(() => {
+
+  }, [openModal]);
 
   if (projects.length === 0) {
     // console.log("NO PROJECTS");
@@ -187,6 +203,19 @@ const Portfolio = () => {
         <div className="portfolio-header">
           <h1>Portfolio </h1>
         </div>
+
+        {/* <ul>
+        {list.map((item) => (
+          <NavLink to={`/${item.id}`}>
+            <PortfolioList
+              title={item.title}
+              active={selected === item.id}
+              setSelected={setSelected}
+              id={item.id}
+            />
+          </NavLink>
+        ))}
+      </ul> */}
         <div>
           <h1> Loading </h1>
         </div>
@@ -204,10 +233,10 @@ const Portfolio = () => {
 
       <ul>
         {list.map((item) => (
-          <NavLink to={item.id}>
+          <NavLink to={`/${item.id}`}>
             <PortfolioList
               title={item.title}
-              active={selected === item.id}
+              active={selected === item.title}
               setSelected={setSelected}
               id={item.id}
             />
@@ -215,14 +244,26 @@ const Portfolio = () => {
         ))}
       </ul>
       <div className="portfolio-item-container">
-        {projects &&
+      {projects && !selected &&
           projects.map((d) => (
             <NavLink
-              to={`${selected}/${d.id}`}
+              to={`/*`}
               onClick={() => openProject(d.id)}
             >
               <div className="item">
-                <img src={d.images[0]} alt="" />
+                <img src={d.poster_image} alt="" />
+                <h3> Default Route::{d.project_name}</h3>
+              </div>
+            </NavLink>
+          ))}
+        {projects && selected && 
+          projects.map((d) => (
+            <NavLink
+              to={`/${selected}/${d.id}`}
+              onClick={() => openProject(d.id)}
+            >
+              <div className="item">
+                <img src={d.poster_image} alt="" />
                 <h3> Selected Route::{d.project_name}</h3>
               </div>
             </NavLink>
@@ -231,23 +272,36 @@ const Portfolio = () => {
         
         </Routes> */}
         <Routes>
-          {projects &&
+          {/* {projects &&
             projects.map((d) => (
               <Route
                 key={d.id}
                 path={`/*`}
-                element={<Project project={d} selected={selected}/>}
+                element={<Project project={d} selected=""/>}
               ></Route>
-            ))}
-          {projects &&
+            ))} */}
+             {/* <Route
+                path={`/`}
+              > */}
+               { projects &&
             projects.map((d) => (
               <Route
                 key={d.id}
                 exact
-                path={`/:selected/*`}
-                element={<Project project={d} selected={selected} />}
+                path="/*"
+                element={<Project project={d} selected={selected} openModal={openModal} closeModal={(closeValue)=>{setOpenModal(closeValue)}}/>}
               ></Route>
             ))}
+          { projects && selectedProject &&
+            projects.map((d) => (
+              <Route
+                key={d.id}
+                exact
+                path={`/${selected}/*`}
+                element={<Project project={selectedProject} selected={selected} openModal={openModal} closeModal={(closeValue)=>{setOpenModal(closeValue)}}/>}
+              ></Route>
+            ))}
+            {/* </Route> */}
         </Routes>
       </div>
     </section>

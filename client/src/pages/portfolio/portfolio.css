@@ -21,12 +21,10 @@
   height: 100vh;
   width: 100%;
 } */
-.portfolio-modal {
+/* .portfolio-modal {
   position: absolute;
   margin: 5vh 10vw;
   top: 0;
-  /* left: '50%', */
-  /* transform: 'translate(-50%, 0)', */
   width: 80vw;
   height: 90vh;
   background-color: rgb(255, 255, 255);
@@ -36,7 +34,7 @@
 .portfolio-modal img {
   max-width: 500px;
   height: auto;
-}
+} */
 
 .portfolioList {
   font-size: 14px;

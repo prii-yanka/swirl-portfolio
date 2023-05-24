@@ -1,5 +1,4 @@
 const express = require("express");
-
 const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
@@ -14,6 +13,7 @@ const projectRouter = express.Router();
 
 // This will help us connect to the database
 const Project = require("../models/project");
+// const { Promise } = require("mongodb");
 
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
@@ -44,37 +44,70 @@ const getProjectPosterImage = async (project) => {
         if (signed_url.includes("png")) {
           // only add if link has an image
           my_signed_url = `${signed_url}`;
-          // console.log(signed_url);
+          // console.log(my_signed_url);
+          resolve(signed_url);
         }
       }
       // return signed_url;
     });
-
-    resolve(my_signed_url);
   });
 };
 
+//  try #2
 projectRouter.get("/::selected", async (request, response) => {
   let selected =
     request.params.selected.charAt(0).toUpperCase() +
     request.params.selected.slice(1);
-  const projects = await Project.find({ tags: `${selected}` }).then(
-    (projects) => {
-      projects.forEach(async (project) => {
-        await getProjectPosterImage(project).then(async (poster_link) => {
-          console.log(`poster_link: ${poster_link}`);
-          await Project.findOneAndUpdate(
-            { _id: ObjectId(project.project_id) },
-            { poster_image: poster_link }
-          );
-        });
-        // console.log(`posterLink: ${posterLink}`);
-      });
-      // return projects;
-    }
-  );
-  response.json(projects);
+
+  const updated_projects_set = new Set([]);
+
+  await Project.find({ tags: `${selected}` })
+    .then((projects) => {
+      // let mypromise = new Promise();
+      // let results = [];
+      return (projects.map(async (project) => {
+        await getProjectPosterImage(project)
+          .then((poster_link) => {
+            console.log(`poster_link: ${poster_link}`);
+            return Project.findOneAndUpdate(
+              { _id: ObjectId(project._id) },
+              { poster_image: poster_link },
+              { new: true }
+            );
+          })
+      }));
+    })
+
+    const updated_projects = await Project.find({ tags: `${selected}` });
+    response.json(updated_projects);
 });
+
+// Try #3
+// projectRouter.get("/::selected", async (request, response) => {
+//   let selected =
+//     request.params.selected.charAt(0).toUpperCase() +
+//     request.params.selected.slice(1);
+
+//   const projects = await Project.find({ tags: `${selected}` })
+
+//   response.json(Promise.all(projects.map(function(project) {
+//     return new Promise( async (resolve, reject) => {
+
+//       const poster_link = await getProjectPosterImage(project)
+
+//       Project.findOneAndUpdate(
+//         { _id: ObjectId(project._id) },
+//         { poster_image: poster_link },
+//         { new: true }
+//       )
+//       .then(function(projectFetched) {
+//         //  query.text = queryFetched.query;
+//          resolve(projectFetched);
+//       }, reject);
+
+//     });
+//   })));
+// });
 
 const getImagesByProject = async (project) => {
   let signed_url_array = [];
@@ -133,8 +166,10 @@ projectRouter.get("/::selected/::id", async (request, response) => {
   console.log(`imageLinks: ${imageLinks}`);
   const updated_project = await Project.findOneAndUpdate(
     { _id: ObjectId(project_id) },
-    { images: imageLinks }
+    { images: imageLinks },
+    { new: true}
   );
+  console.log(`updated_project: ${updated_project}\n\n`);
   response.json(updated_project);
 });
 
