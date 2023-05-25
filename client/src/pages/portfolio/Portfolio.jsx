@@ -89,7 +89,7 @@ const Portfolio = () => {
       else {
         // response = await fetch(`http://localhost:5001/:all`);
         response = await fetch(`${baseURL}/:all`);
-        <Navigate to="/" />;
+        <Navigate to="/all" />;
       }
   
       if (!response.ok) {
