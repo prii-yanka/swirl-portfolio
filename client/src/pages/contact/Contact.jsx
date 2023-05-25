@@ -34,7 +34,7 @@ const Contact = (props) => {
           <ContactForm />
           <div className='profile-links'>
             <div className='link-container'>
-              <a href="https://github.com/Priyanka72" target="_blank" rel="noreferrer noopener">
+              <a href="https://github.com/prii-yanka" target="_blank" rel="noreferrer noopener">
                 <div className='link-div'>
                   <GitHubIcon fontSize='large' sx={{ color: '#EF8181' }} />
                 </div>

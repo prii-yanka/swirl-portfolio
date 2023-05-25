@@ -61,7 +61,7 @@ projectRouter.get("/::selected", async (request, response) => {
 
   const updated_projects_set = new Set([]);
 
-  await Project.find({ tags: `${selected}` })
+  await Project.find(selected === "all"? {} : { tags: `${selected}` })
     .then((projects) => {
       // let mypromise = new Promise();
       // let results = [];
@@ -78,7 +78,7 @@ projectRouter.get("/::selected", async (request, response) => {
       }));
     })
 
-    const updated_projects = await Project.find({ tags: `${selected}` });
+    const updated_projects = await Project.find(selected === "All"? {} : { tags: `${selected}` });
     response.json(updated_projects);
 });
 

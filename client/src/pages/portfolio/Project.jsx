@@ -19,9 +19,10 @@ const Project = ({ project, selected, openModal, closeModal }) => {
 
   const [open, setOpen] = useState(false);
   const handleClose = () => {
-    <Navigate to={`/${selected}`}/>
+    // <Navigate to={`/${selected}`}/>
+    console.log("handle modal close")
     setOpen(false);
-    closeModal(false);
+    closeModal(true);
   }
 
   useEffect(()=> {
@@ -29,9 +30,10 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     if(openModal) {
       // console.log(`HANDLE OPEN: ${JSON.stringify(project)}`)
       handleOpen();
-    } else {
-      handleClose();
-    }
+    } 
+    // else {
+    //   handleClose();
+    // }
   }, [openModal]); 
 
   const handleOpen = () => {
