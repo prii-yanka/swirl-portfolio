@@ -50,36 +50,18 @@ const Portfolio = () => {
       id: "design",
       title: "Design",
     },
+    {
+      id: "development",
+      title: "Development",
+    },
     // {
     //   id: "content",
     //   title: "Content",
     // },
   ];
 
-  // const getProjects =  async () => {
-  //   let response;
-
-  //   if (selected) {
-  //     response = await fetch(`http://localhost:5001/:${selected}`);
-  //     <Navigate to={"/" + selected} />;
-  //   } else {
-  //     response = await fetch(`http://localhost:5001`);
-  //     <Navigate to="/" />;
-  //   }
-
-  //   if (!response.ok) {
-  //     const message = `An error occurred loading initial: ${response.statusText}`;
-  //     console.log(message);
-  //     return;
-  //   }
-
-  //   const projects = await response.json();
-  //   // console.log(projects);
-  //   setProjects(projects);
-  // }
-
   useEffect(() => {
-    console.log("saving state between refresh:");
+    // console.log("saving state between refresh:");
 
     const curr_selection = window.localStorage.getItem("selected");
 
@@ -97,10 +79,10 @@ const Portfolio = () => {
         response = await fetch(`http://localhost:5001/:${selected}`);
         <Navigate to={"/" + selected} />;
       } 
-      // else {
-      //   response = await fetch(`http://localhost:5001`);
-      //   <Navigate to="/" />;
-      // }
+      else {
+        response = await fetch(`http://localhost:5001/:all`);
+        <Navigate to="/" />;
+      }
   
       if (!response.ok) {
         const message = `An error occurred loading initial: ${response.statusText}`;
@@ -139,44 +121,13 @@ const Portfolio = () => {
     }
   }, [selected]);
 
-  // useEffect(() => {
-  //   const getProjects =  async () => {
-  //     let response;
-  
-  //     if (selected) {
-  //       response = await fetch(`http://localhost:5001/:${selected}`);
-  //       <Navigate to={"/" + selected} />;
-  //     } else {
-  //       response = await fetch(`http://localhost:5001`);
-  //       <Navigate to="/" />;
-  //     }
-  
-  //     if (!response.ok) {
-  //       const message = `An error occurred loading initial: ${response.statusText}`;
-  //       console.log(message);
-  //       return;
-  //     }
-  
-  //     const projects = await response.json();
-  //     // console.log(projects);
-  //     setProjects(projects);
-  //   }
-  //   getProjects();
-  // }, [projects.length]);
-
   useEffect(() => {
     console.log(projects);
     // projects.map((project) => (
     //   setPosterImages({...posterImages, [project.id]: [project.poster_image]})
     // ))
     // console.log(posterImages);
-  }, [projects.length]);
-
-  // useEffect(() => {
-  //   if (selectedProject) {
-  //     <Navigate to={`/${selected}/${selectedProject.id}`} />;
-  //   }
-  // }, [selected, selectedProject]);
+  }, [projects]);
 
   const openProject = async (id) => {
     async function openProjectById() {
@@ -189,7 +140,7 @@ const Portfolio = () => {
       }
 
       const curr_project = await response.json();
-      console.log(curr_project);
+      // console.log(curr_project);
       setSelectedProject(curr_project);
     }
 
@@ -235,7 +186,7 @@ const Portfolio = () => {
 
       <ul>
         {list.map((item) => (
-          <NavLink to={`/${item.id}`}>
+          <NavLink to={`/${item.id}`} key={item.id}>
             <PortfolioList
               title={item.title}
               active={selected === item.id}
@@ -246,31 +197,17 @@ const Portfolio = () => {
         ))}
       </ul>
       <div className="portfolio-item-container">
-      {/* {projects && !selected &&
-          projects.map((d) => (
-            <NavLink
-              to={`/${d.id}`}
-              onClick={() => openProject(d.id)}
-            >
-              <div className="item">
-                <img src={d.poster_image} alt="" />
-                <h3> Default Route::{d.project_name}</h3>
-              </div>
-            </NavLink>
-          ))} */}
-        {projects && projects.map((d) => { 
+        { projects.map((d) => { 
           // console.log(`d.poster_image: ${d.poster_image}`);
-          // const poster_id = d.id
-          // console.log(`posterImages[poster_id]: ${posterImages[poster_id]}`);
-
           return (
             <NavLink
               to={`/${selected}/${d.id}`}
               onClick={() => openProject(d.id)}
+              key={d.id}
             >
               <div className="item">
                 <img src={d.poster_image} alt="" />
-                <h3> Selected Route::{d.project_name}</h3>
+                <h3> {d.project_name}</h3>
               </div>
             </NavLink>
           )})}

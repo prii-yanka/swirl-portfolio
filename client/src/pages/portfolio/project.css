@@ -1,6 +1,6 @@
 .project-container  {
     margin: 0;
-    background-color: red;
+    background-color: rgb(240, 239, 239);
     color: black;
     /* background: url(../../../public/images/table_top@72x.png); */
     overflow: hidden;
@@ -16,11 +16,11 @@
 
   .portfolio-modal {
     position: absolute;
-    margin: 5vh 10vw;
+    margin: 5vh 5vw;
     top: 0;
     /* left: '50%', */
     /* transform: 'translate(-50%, 0)', */
-    width: 80vw;
+    width: 90vw;
     height: 90vh;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
@@ -29,6 +29,41 @@
   
   
   .portfolio-modal img {
-    max-width: 300px;
+    max-width: 250px;
     height: auto;
   }
+
+  .project-container h1 {
+    padding: 1rem;
+  }
+
+  .project-container .images-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 80vw;
+  }
+
+  .project-container .images-container .div {
+    padding: 0.75rem;
+  }
+
+  .tags-container, .technologies-container {
+    background-color: #8FE1F3;
+    display: flex;
+    flex-direction: row;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin: 0.75rem;
+  }
+
+  .tags-container .tags, .technologies-container .technologies {
+    background-color: rgb(240, 239, 239);
+    padding: 0.5rem;
+    margin: 0.5rem;
+    border-radius: 0.5rem;
+  }
+
+  

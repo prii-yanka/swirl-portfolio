@@ -16,7 +16,13 @@ app.use(express.json());
 app.use(require("./routes/project"));
 // get driver connection
 // const dbo = require("./db/conn");
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.resolve(__dirname,'../client/build')));
 
+  app.get('*', (request, response) => {
+    response.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  })
+}
 
 // app.get('/', (req,res) => {
 //   res.sendFile(path.join(__dirname, '../my-app/build/index.html'));

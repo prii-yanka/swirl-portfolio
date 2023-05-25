@@ -108,7 +108,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: red;
+  color: #EF8181;
   position: relative;
   transition: all .5s ease;
   cursor: pointer;
@@ -126,6 +126,7 @@
   height: 100%;
   object-fit: cover;
   z-index: 1;
+  border-radius: 20px;
 }
 
 .portfolio .portfolio-item-container .item:hover {

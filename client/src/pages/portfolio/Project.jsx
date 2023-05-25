@@ -20,64 +20,67 @@ const Project = ({ project, selected, openModal, closeModal }) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     // <Navigate to={`/${selected}`}/>
-    console.log("handle modal close")
+    console.log("handle modal close");
     setOpen(false);
     closeModal(true);
-  }
+  };
 
-  useEffect(()=> {
-
-    if(openModal) {
+  useEffect(() => {
+    if (openModal) {
       // console.log(`HANDLE OPEN: ${JSON.stringify(project)}`)
       handleOpen();
-    } 
+    }
     // else {
     //   handleClose();
     // }
-  }, [openModal]); 
+  }, [openModal]);
 
   const handleOpen = () => {
-    
     // window.location.reload(false);
     setOpen(true);
-    
-  //   // console.log("id " + d.id);
-  //   // console.log("title " + d.title);
-  //   // console.log("img " + d.img);
-  //   setId(project.id);
-  //   setProjectName(project.project_name);
-  //   setTags(project.tags);
-  //   setVideo(project.video);
-  //   setDescription(project.description);
-  //   setWhen(project.when);
-  //   setLinkTo(project.link_to);
+
+    //   // console.log("id " + d.id);
+    //   // console.log("title " + d.title);
+    //   // console.log("img " + d.img);
+    //   setId(project.id);
+    //   setProjectName(project.project_name);
+    //   setTags(project.tags);
+    //   setVideo(project.video);
+    //   setDescription(project.description);
+    //   setWhen(project.when);
+    //   setLinkTo(project.link_to);
   };
 
   useEffect(() => {
     setImages([...project.images]);
-    setImageCompare(project.images[0])
+    setImageCompare(project.images[0]);
     // window.location.reload(false);
   }, [project, imageCompare]);
 
   return (
     <Modal className="portfolio-modal" open={open} onClose={handleClose}>
       <div className="project-container">
-        Modal
-        {/* style={modalStyle} */}
-        <div>{project.id}</div>
-        {images.map((image) => {
-          return(
-            <div>
-            <img src={image} alt="placeholder alt text" />
-          </div>
-          )
+        <h1> {project.project_name} </h1>
+        {/* <div>{project.id}</div> */}
+        <div className="images-container">
+          {images.map((image, idx) => {
+            return (
+              <div key={idx}>
+                <img src={image} alt="placeholder alt text" />
+              </div>
+            );
           })}
-        {/* <div>
-          <img src={images[0]} alt="placeholder alt text" />
-        </div> */}
-        <div> {project.project_name} </div>
-        <div> {project.tags} </div>
-        <div> {project.technologies} </div>
+        </div>
+        <div className="tags-container">
+          {project.tags.map((tag) => (
+            <div className="tags"> {tag} </div>
+          ))}
+        </div>
+        <div className="technologies-container">
+          {project.technologies.map((technology) => (
+            <div className="technologies"> {technology} </div>
+          ))}
+        </div>
         <div> {project.description} </div>
         <div> {project.video} </div>
         <div> {project.when} </div>
