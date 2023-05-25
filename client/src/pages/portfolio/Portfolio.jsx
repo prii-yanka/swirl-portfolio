@@ -15,7 +15,7 @@ const Portfolio = () => {
 
   // const getBase64StringFromDataURL = (dataURL) =>
   //   dataURL.replace("data:", "").replace(/^.+,/, "");
-
+  const [baseURL, setBaseURL] = useState("")
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState();
   const [openModal, setOpenModal] = useState(false);
@@ -63,6 +63,12 @@ const Portfolio = () => {
   useEffect(() => {
     // console.log("saving state between refresh:");
 
+    if(process.env.NODE_ENV == "production") {
+      setBaseURL(process.env.PUBLIC_URL);
+    } else if (process.env.NODE_ENV == "development") {
+      setBaseURL("http://localhost:5001");
+    }
+
     const curr_selection = window.localStorage.getItem("selected");
 
     if (curr_selection) {
@@ -76,11 +82,13 @@ const Portfolio = () => {
       let response;
   
       if (selected) {
-        response = await fetch(`http://localhost:5001/:${selected}`);
+        // response = await fetch(`http://localhost:5001/:${selected}`);
+        response = await fetch(`${baseURL}/:${selected}`);
         <Navigate to={"/" + selected} />;
       } 
       else {
-        response = await fetch(`http://localhost:5001/:all`);
+        // response = await fetch(`http://localhost:5001/:all`);
+        response = await fetch(`${baseURL}/:all`);
         <Navigate to="/" />;
       }
   
@@ -103,7 +111,9 @@ const Portfolio = () => {
       window.localStorage.setItem("selected", selected);
 
       async function getRelatedProjects() {
-        const response = await fetch(`http://localhost:5001/:${selected}`);
+        // const response = await fetch(`http://localhost:5001/:${selected}`);
+        const response = await fetch(`${baseURL}/:${selected}`);
+
 
         if (!response.ok) {
           const message = `An error occurred getting selected projects: ${response.statusText}`;
@@ -131,7 +141,7 @@ const Portfolio = () => {
 
   const openProject = async (id) => {
     async function openProjectById() {
-      const response = await fetch(`http://localhost:5001/:${selected}/:${id}`);
+      const response = await fetch(`${baseURL}/:${selected}/:${id}`);
 
       if (!response.ok) {
         const message = `An error occurred opening project: ${response.statusText}`;
