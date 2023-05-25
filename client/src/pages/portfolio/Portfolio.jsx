@@ -225,7 +225,7 @@ const Portfolio = () => {
               <Route
                 exact
                 path={`/`}
-                element={<Navigate to={`/${selected}`}/>}
+                element={<Navigate to={`all`}/>}
               ></Route>
           { projects && 
             projects.map((d) => (
