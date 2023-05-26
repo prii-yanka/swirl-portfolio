@@ -7,6 +7,7 @@ import {
     AnimatePresence
 } from "framer-motion";
 import styled from 'styled-components';
+import "./main.css";
 
 const ProgressContainer = styled(motion.div)`
     pointer-events: none;    

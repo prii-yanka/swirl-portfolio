@@ -38,11 +38,6 @@
   z-index: 1000; 
 }  */
 
-/* svg {
-  display: inline-block;
-  height: 100%;
-} */
-
 /* path {
   fill: none;
   stroke: black;
@@ -60,3 +55,12 @@
   }
 } */
 
+@media screen and (max-width : 450px) {
+  /* Styles */
+  svg {
+    /* display: inline-block; */
+    /* height: 100%; */
+    height: 650vh;
+    /* align-self: center; */
+  }
+}

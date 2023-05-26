@@ -138,3 +138,10 @@
   opacity: 0.2;
   z-index: 0;
 }
+
+@media screen and (max-width : 450px) {
+  /* Styles */
+  .portfolio .portfolio-item-container {
+    flex-direction: column;
+  }
+}
