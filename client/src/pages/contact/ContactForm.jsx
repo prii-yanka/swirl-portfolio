@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 //import LoadingButton from '@mui/lab/LoadingButton';
@@ -38,6 +38,7 @@ const ContactForm = () => {
     const [emailText, setEmailText] = useState('');
     const [messageText, setMessageText] = useState('');
     const [emailSent, setEmailSent] = useState(false);
+    const [baseURL, setBaseURL] = useState("")
 
     // const submit = () => {
     //     if (name && email && message) {
@@ -62,7 +63,7 @@ const ContactForm = () => {
             message: messageText,
         };
         console.log("details: " + details.name + " " + details.email + " " + details.message);
-        let response = await fetch("https://vast-inlet-81736.herokuapp.com/contact", {
+        let response = await fetch(`${baseURL}/contact`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json;charset=utf-8",
@@ -78,12 +79,23 @@ const ContactForm = () => {
         setEmailSent(true);
     };
 
+    useEffect(() => {
+        if(process.env.NODE_ENV == "production") {
+            setBaseURL(process.env.PUBLIC_URL);
+          } else if (process.env.NODE_ENV == "development") {
+            setBaseURL("http://localhost:5001");
+          }
+    }, []);
+   
+
     return (
         <>
             {/* <input type="text" placeholder="Your Name" value={name} onChange={e => setName(e.target.value)} />
             <input type="email" placeholder="Your email address" value={email} onChange={e => setEmail(e.target.value)} />
             <textarea placeholder="Your message" value={message} onChange={e => setMessage(e.target.value)}></textarea>
             <button onClick={submit}>Send Message</button> */}
+            { !emailSent && 
+            <> 
             <CssTextField
                 required
                 fullWidth
@@ -118,6 +130,8 @@ const ContactForm = () => {
                 onChange={(e) => setMessageText(e.target.value)}
             />
             <CssButton sx={{ margin: "10px" }} disableElevation variant="contained" onClick={handleSubmit}>Submit</CssButton>
+            </> 
+            }
             {/* <span className={emailSent ? 'visible' : null}>Thank you for your message</span> */}
             {emailSent && <span>Thank you for your message</span>
             }

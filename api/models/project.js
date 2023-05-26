@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const url = process.env.ATLAS_URI;
-console.log(process.env)
+// console.log(process.env)
 
 const conn = mongoose.connect(url, { useNewUrlParser: true })
   .then(result => {
