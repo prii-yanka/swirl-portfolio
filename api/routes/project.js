@@ -18,12 +18,12 @@ const Project = require("../models/project");
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
-projectRouter.get("/", async (request, response) => {
-  Project.find({}).then((projects) => {
-    console.log(request);
-    response.json(projects);
-  });
-});
+// projectRouter.get("/", async (request, response) => {
+//   Project.find({}).then((projects) => {
+//     console.log(request);
+//     response.json(projects);
+//   });
+// });
 
 const getProjectPosterImage = async (project) => {
   return new Promise((resolve, reject) => {
