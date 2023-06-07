@@ -72,17 +72,45 @@ const Project = ({ project, selected, openModal, closeModal }) => {
           })}
         </div>
         <div className="tags-container">
+          <div className="label">
+            {" "}
+            <div>Tags: </div>{" "}
+          </div>
           {project.tags.map((tag) => (
             <div className="tags"> {tag} </div>
           ))}
         </div>
         <div className="technologies-container">
+          <div className="label">
+            {" "}
+            <div> Technologies: </div>{" "}
+          </div>
           {project.technologies.map((technology) => (
             <div className="technologies"> {technology} </div>
           ))}
         </div>
-        <div> {project.description} </div>
-        <div> {project.video} </div>
+        <div className="description">
+          <div className="label">
+            {" "}
+            <div>
+              {" "}
+              Description: <br /> <br />{" "}
+            </div>{" "}
+          </div>
+          <div> {project.description} </div>
+        </div>
+        <div>
+          <div className="label">
+            {" "}
+            <div>
+              {" "}
+              Video: <br /> <br />{" "}
+            </div>{" "}
+          </div>
+          <video src={project.video} width="100%">
+            {/* <source  type="video/mp4" /> */}
+          </video>
+        </div>
         <div> {project.when} </div>
         <div> {project.linkTo} </div>
       </div>

@@ -13,9 +13,12 @@ const ProgressContainer = styled(motion.div)`
     pointer-events: none;    
     position: absolute;
     top: 0;
-    zIndex: 1000;
+    zIndex: 100;
     width: 106vh;
-    text-align: center;   
+    text-align: center; 
+    @media screen and (max-width : 450px) {
+        height: 650vh;
+    }  
 `;
 
 export const ScrollAnimation = () => {
@@ -23,13 +26,13 @@ export const ScrollAnimation = () => {
     const [currentProgressColor, setCurrentProgressColor] = useState(null)
     const [scrollPercentage, setScrollPercentage] = useState(0);
     const { scrollYProgress } = useViewportScroll();
-    const yRange = useTransform(scrollYProgress, [0, 1], [0, 100]);
+    const yRange = useTransform(scrollYProgress, [0, 1], [0, 100], { clamp: false });
     const pathLength = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
 
     useEffect(
         () =>
             yRange.onChange((v) => {
-                // console.log(Math.trunc(yRange.current))
+                console.log(Math.trunc(yRange.current))
                 setCurrentPercent(Math.trunc(yRange.current))
             }),
         [yRange]

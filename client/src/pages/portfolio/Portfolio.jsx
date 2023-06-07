@@ -54,6 +54,10 @@ const Portfolio = () => {
       id: "development",
       title: "Development",
     },
+    {
+      id: "internship",
+      title: "Internship",
+    },
     // {
     //   id: "content",
     //   title: "Content",
@@ -151,7 +155,7 @@ const Portfolio = () => {
       }
 
       const curr_project = await response.json();
-      // console.log(curr_project);
+      console.log(curr_project);
       setSelectedProject(curr_project);
     }
 
