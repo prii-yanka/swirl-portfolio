@@ -99,15 +99,13 @@ const Project = ({ project, selected, openModal, closeModal }) => {
           </div>
           <div> {project.description} </div>
         </div>
-        <div>
+        <div className="video-container">
           <div className="label">
-            {" "}
             <div>
-              {" "}
-              Video: <br /> <br />{" "}
-            </div>{" "}
+              Video: <br /> <br />
+            </div>
           </div>
-          <video src={project.video} width="100%">
+          <video src={project.video} controls>
             {/* <source  type="video/mp4" /> */}
           </video>
         </div>

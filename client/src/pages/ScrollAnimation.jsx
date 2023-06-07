@@ -32,7 +32,7 @@ export const ScrollAnimation = () => {
     useEffect(
         () =>
             yRange.onChange((v) => {
-                console.log(Math.trunc(yRange.current))
+                // console.log(Math.trunc(yRange.current))
                 setCurrentPercent(Math.trunc(yRange.current))
             }),
         [yRange]

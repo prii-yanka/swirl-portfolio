@@ -81,4 +81,14 @@
     background-color: #fed46e;
   }
 
+  .project-container .video-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .project-container .video-container video {
+    width: 25vw;
+  }
+
   

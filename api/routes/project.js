@@ -124,6 +124,34 @@ const getImagesByProject = async (project) => {
   return signed_url_array;
 };
 
+const getVideoByProject = async (project) => {
+  return new Promise((resolve, reject) => {
+    let my_signed_url = "";
+
+    const file_params = {
+      Bucket: process.env.S3_BUCKET_NAME /* required */,
+      Key: `${project.project_name}/Video.mp4`,
+      Expires: 900,
+    };
+
+    s3.getSignedUrl("getObject", file_params, function (err, signed_url) {
+      if (err) {
+        console.log(`Error getting image ${err}`);
+      } // an error occurred
+      else {
+        // console.log(`the signed Poster url is: ${signed_url}`);
+        if (signed_url.includes("mp4")) {
+          // only add if link has an image
+          my_signed_url = `${signed_url}`;
+          console.log(my_signed_url);
+          resolve(signed_url);
+        }
+      }
+      // return signed_url;
+    });
+  });
+};
+
 projectRouter.get("/::selected/::id", async (request, response) => {
   console.log(request.params.id);
   const project_id = request.params.id;
@@ -131,12 +159,13 @@ projectRouter.get("/::selected/::id", async (request, response) => {
   const project = await Project.findOne({ _id: ObjectId(project_id) });
   // console.log("project_name: " + project.project_name);
   const imageLinks = await getImagesByProject(project);
+  const videoLink = await getVideoByProject(project);
 
   // .then((imageLinks, err) => {
-  // console.log(`imageLinks: ${imageLinks}`);
+  console.log(`videoLink: ${videoLink}`);
   const updated_project = await Project.findOneAndUpdate(
     { _id: ObjectId(project_id) },
-    { images: imageLinks },
+    { images: imageLinks, video: videoLink },
     { new: true}
   );
   // console.log(`updated_project: ${updated_project}\n\n`);
