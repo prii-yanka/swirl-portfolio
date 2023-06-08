@@ -1,5 +1,6 @@
 .project-container  {
     margin: 0;
+    padding: 0 0 2rem 0;
     background-color: rgb(240, 239, 239);
     color: black;
     /* background: url(../../../public/images/table_top@72x.png); */

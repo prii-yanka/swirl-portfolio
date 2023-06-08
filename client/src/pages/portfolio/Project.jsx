@@ -3,11 +3,13 @@ import { NavLink, Navigate } from "react-router-dom";
 import Modal from "@mui/material/Modal";
 import "./project.css";
 import "../pages.css";
+import moment from "moment";
 
 const Project = ({ project, selected, openModal, closeModal }) => {
   // const [id, setId] = useState();
   const [images, setImages] = useState([]);
   const [imageCompare, setImageCompare] = useState();
+  const [isVideo, setIsVideo] = useState(false);
   // // const [imgs, setImgs] = useState([]);
   // const [projectName, setProjectName] = useState();
   // const [tags, setTags] = useState([]);
@@ -55,6 +57,17 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     setImages([...project.images]);
     setImageCompare(project.images[0]);
     // window.location.reload(false);
+    async function checkVideo() {
+      const response = await fetch(project.video);
+      if (!response.ok) {
+        // const message = `An error occurred getting video: ${response.statusText}`;
+        // console.log(message)
+        setIsVideo(false);
+      } else {
+        setIsVideo(true);
+      }
+    }
+    checkVideo();
   }, [project, imageCompare]);
 
   return (
@@ -99,7 +112,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
           </div>
           <div> {project.description} </div>
         </div>
-        <div className="video-container">
+        { isVideo && <div className="video-container">
           <div className="label">
             <div>
               Video: <br /> <br />
@@ -108,8 +121,10 @@ const Project = ({ project, selected, openModal, closeModal }) => {
           <video src={project.video} controls>
             {/* <source  type="video/mp4" /> */}
           </video>
+          <br /> <br />
         </div>
-        <div> {project.when} </div>
+        }
+        <div> { moment(project.when[0]).format('MMMM Do, YYYY')} = {moment(project.when[1]).format('MMMM Do, YYYY')} <br /> <br /> </div>
         <div> {project.linkTo} </div>
       </div>
     </Modal>

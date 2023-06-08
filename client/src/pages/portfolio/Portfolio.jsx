@@ -199,7 +199,7 @@ const Portfolio = () => {
         <h1>Portfolio </h1>
       </div>
 
-      <ul>
+      <ul className="filter">
         {list.map((item) => (
           <NavLink to={`/${item.id}`} key={item.id}>
             <PortfolioList

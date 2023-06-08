@@ -143,7 +143,7 @@ const getVideoByProject = async (project) => {
         if (signed_url.includes("mp4")) {
           // only add if link has an image
           my_signed_url = `${signed_url}`;
-          console.log(my_signed_url);
+          // console.log(my_signed_url);
           resolve(signed_url);
         }
       }
@@ -162,7 +162,7 @@ projectRouter.get("/::selected/::id", async (request, response) => {
   const videoLink = await getVideoByProject(project);
 
   // .then((imageLinks, err) => {
-  console.log(`videoLink: ${videoLink}`);
+  // console.log(`videoLink: ${videoLink}`);
   const updated_project = await Project.findOneAndUpdate(
     { _id: ObjectId(project_id) },
     { images: imageLinks, video: videoLink },

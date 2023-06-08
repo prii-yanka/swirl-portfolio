@@ -19,6 +19,7 @@
     "drie": "^2.0.0",
     "express": "^4.17.3",
     "framer-motion": "^6.5.1",
+    "moment": "^2.29.4",
     "nodemailer": "^6.7.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
