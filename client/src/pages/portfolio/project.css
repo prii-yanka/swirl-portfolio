@@ -82,6 +82,20 @@
     background-color: #fed46e;
   }
 
+  .project-container .description .item {
+    padding: 0.5rem;
+  }
+
+  .project-container .description .item .label {
+    color: #EF8181;
+    font-weight: 700;
+  }
+
+  .project-container .description .item div {
+    text-align: center;
+    margin-top: 0.25rem;
+  }
+
   .project-container .video-container {
     display: flex;
     justify-content: center;

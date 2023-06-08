@@ -1,16 +1,16 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 const url = process.env.ATLAS_URI;
 // console.log(process.env)
 
-const conn = mongoose.connect(url, { useNewUrlParser: true })
-  .then(result => {
-
-    console.log('connected to MongoDB')
+const conn = mongoose
+  .connect(url, { useNewUrlParser: true })
+  .then((result) => {
+    console.log("connected to MongoDB");
     // console.log(result)
   })
   .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
+    console.log("error connecting to MongoDB:", error.message);
+  });
 // const db = conn._db('portfolio');
 const ProjectSchema = new mongoose.Schema({
   project_name: {
@@ -43,10 +43,35 @@ const ProjectSchema = new mongoose.Schema({
     required: false,
   },
   description: {
-    type: String,
-    minLength: 100,
-    maxLength: 9000,
-    required: true,
+    // type: String,
+    // minLength: 100,
+    // maxLength: 9000,
+    // required: true,
+    aboutTheClient: {
+      type: [String],
+      required: false,
+      default: [],
+    },
+    goalAndSituation: {
+      type: [String],
+      required: false,
+      default: [],
+    },
+    processAndWhy: {
+      type: [String],
+      required: false,
+      default: [],
+    },
+    theOutcome: {
+      type: [String],
+      required: false,
+      default: [],
+    },
+    theTeam: {
+      type: [String],
+      required: false,
+      default: [],
+    }
   },
   when: {
     type: [Date],
@@ -56,7 +81,7 @@ const ProjectSchema = new mongoose.Schema({
   link_to: {
     type: String,
     required: false,
-  }
+  },
 });
 
 ProjectSchema.set("toJSON", {

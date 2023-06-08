@@ -172,4 +172,24 @@ projectRouter.get("/::selected/::id", async (request, response) => {
   response.json(updated_project);
 });
 
+projectRouter.post("/updateDescription", async (request, response) => {
+  const projects = await Project.find({ });
+  await Promise.all(
+    projects.map(async (project) => {
+      const poster_link = await getProjectPosterImage(project);
+      await Project.findOneAndUpdate(
+        { _id: ObjectId(project._id) },
+        { description: {
+          aboutTheClient: ["Name of client", "what they do & their location:"],
+          goalAndSituation: ["What was the main challenge and measure of success?", "Did you have a certain idea or expectation for the project when you began?"],
+          processAndWhy: ["Anything interesting to share about your process for this project?", "surprising insight? Early sketches we can see?", "Why did you choose that approach? Ask yourself WHY WHY WHY a thousand times and answer those questions."],
+          theOutcome: ["Did you feel proud of the result? Did it exceed your expectations?", "tell us why the project is still valuable or meaningful"],
+          theTeam: ["Talk about team roles and my role"]
+        } }
+      );
+    })
+  );
+  response.json("projects updated");
+});
+
 module.exports = projectRouter;

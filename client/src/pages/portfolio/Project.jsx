@@ -104,27 +104,59 @@ const Project = ({ project, selected, openModal, closeModal }) => {
         </div>
         <div className="description">
           <div className="label">
-            {" "}
             <div>
-              {" "}
-              Description: <br /> <br />{" "}
-            </div>{" "}
-          </div>
-          <div> {project.description} </div>
-        </div>
-        { isVideo && <div className="video-container">
-          <div className="label">
-            <div>
-              Video: <br /> <br />
+              Description: <br /> <br />
             </div>
           </div>
-          <video src={project.video} controls>
-            {/* <source  type="video/mp4" /> */}
-          </video>
-          <br /> <br />
+          <div className="item">
+            <div className="label">
+              <div> About The Client:</div>
+            </div>
+            <div>{project.description.aboutTheClient.map((data) => <div> {data} </div>)}</div>
+          </div>
+          <div className="item">
+            <div className="label">
+              <div> Goal And Situation:</div>
+            </div>
+            <div>{project.description.goalAndSituation.map((data) => <div> {data} </div>)}</div>
+          </div>
+          <div className="item">
+            <div className="label">
+              <div> Process And Why:</div>
+            </div>
+            <div>{project.description.processAndWhy.map((data) => <div> {data} </div>)} </div>
+          </div>
+          <div className="item">
+            <div className="label">
+              <div> The Outcome:</div>
+            </div>
+            <div>{project.description.theOutcome.map((data) => <div> {data} </div>)} </div>
+          </div>
+          <div className="item">
+            <div className="label">
+              <div> The Team:</div>
+            </div>
+            <div> {project.description.theTeam.map((data) => <div> {data} </div>)} </div>
+          </div>
         </div>
-        }
-        <div> { moment(project.when[0]).format('MMMM Do, YYYY')} = {moment(project.when[1]).format('MMMM Do, YYYY')} <br /> <br /> </div>
+        {isVideo && (
+          <div className="video-container">
+            <div className="label">
+              <div>
+                Video: <br /> <br />
+              </div>
+            </div>
+            <video src={project.video} controls>
+              {/* <source  type="video/mp4" /> */}
+            </video>
+            <br /> <br />
+          </div>
+        )}
+        <div>
+          {" "}
+          {moment(project.when[0]).format("MMMM Do, YYYY")} ={" "}
+          {moment(project.when[1]).format("MMMM Do, YYYY")} <br /> <br />{" "}
+        </div>
         <div> {project.linkTo} </div>
       </div>
     </Modal>
