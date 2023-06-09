@@ -154,10 +154,10 @@ const Project = ({ project, selected, openModal, closeModal }) => {
         )}
         <div>
           {" "}
-          {moment(project.when[0]).format("MMMM Do, YYYY")} ={" "}
+          {moment(project.when[0]).format("MMMM Do, YYYY")} -{" "}
           {moment(project.when[1]).format("MMMM Do, YYYY")} <br /> <br />{" "}
         </div>
-        <div> {project.linkTo} </div>
+        <div> <a href={project.linkTo} target="_blank" rel="noreferrer"> {project.linkTo} </a> </div>
       </div>
     </Modal>
   );

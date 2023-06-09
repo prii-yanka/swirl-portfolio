@@ -81,21 +81,19 @@ const Nav = () => {
           autoClose
           hideOrbit
           orbitRadius={130}
-          rotation={30}
+          rotation={180}
           mass={2}
           tension={100}
           friction={15}
         >
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
+          <div></div>
+          <div></div>
           {navLinks.map(({ navLinkId, scrollToId }, idx) => (
             <NavLink key={idx} navLinkId={navLinkId} scrollToId={scrollToId} />
           ))}
+         <div></div>
+          <div></div>
+         
         </Planet>
       </motion.nav>
     </div>

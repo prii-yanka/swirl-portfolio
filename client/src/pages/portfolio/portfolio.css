@@ -42,6 +42,7 @@
   padding: 7px;
   border-radius: 10px;
   cursor: pointer;
+  text-align: center;
 }
 
 .portfolioList.active {
@@ -146,8 +147,13 @@
     flex-direction: column;
   }
 
+  .portfolioList {
+    margin-right: 0;
+  }
+
   .filter {
     display: flex;
     flex-direction: column;
   }
+
 }
