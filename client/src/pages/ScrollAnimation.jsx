@@ -15,7 +15,7 @@ const ProgressContainer = styled(motion.div)`
     position: absolute;
     top: 0;
     zIndex: 100;
-    width: 106vh;
+    width: 100vh;
     text-align: center;  
     overflow-x: hidden;
 `;
@@ -27,7 +27,7 @@ export const ScrollAnimation = () => {
     const { scrollYProgress } = useViewportScroll();
     const yRange = useTransform(scrollYProgress, [0, 1], [0, 100], { clamp: false });
     const pathLength = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
-    const matches = useMediaQuery('(max-width:450px)');
+    const matches = useMediaQuery('(max-width:480px)');
 
     useEffect(
         () =>
@@ -71,7 +71,7 @@ export const ScrollAnimation = () => {
                 />
             </svg>}
 
-            {matches && <svg className="progress-icon" viewBox="0 0 860 6500">
+            {matches && <svg className="progress-icon" viewBox="0 0 860 7000">
                 <motion.path
                     fill="none"
                     // {currentPrecent === 100 ? "#CDFF00" : "none"}
