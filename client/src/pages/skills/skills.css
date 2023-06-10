@@ -159,7 +159,7 @@
   /* transform: rotate(5deg); */
 }
 
-@media (max-aspect-ratio : 9/16) {
+@media (max-aspect-ratio : 3/4) {
   /* Styles */
   .skills .skills-container {
     flex-direction: column;

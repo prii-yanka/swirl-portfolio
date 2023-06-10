@@ -89,7 +89,7 @@
     all: unset;
 }
 
-@media (max-aspect-ratio : 9/16) {
+@media (max-aspect-ratio : 3/4) {
   .contact-container {
     flex-direction: column;
     min-height: 100vh;

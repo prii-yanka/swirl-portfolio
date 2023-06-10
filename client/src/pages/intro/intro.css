@@ -118,7 +118,7 @@
 } */
 
 /* Smartphones (portrait) ----------- */
-@media (max-aspect-ratio : 9/16) {
+@media (max-aspect-ratio : 3/4) {
   /* Styles */
   .intro .container {
     flex-direction: column;

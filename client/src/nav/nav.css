@@ -84,7 +84,7 @@ nav div .nav-items:hover {
   z-index: 10;
 }
 
-@media (max-aspect-ratio : 9/16) {
+@media (max-aspect-ratio : 6/10) {
   /* Styles */
   .navButton {
     left: 33vw;
