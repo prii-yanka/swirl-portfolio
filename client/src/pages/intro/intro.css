@@ -123,10 +123,16 @@
   .intro .container {
     flex-direction: column;
     min-height: 80vh;
+    margin-top: 7rem;
   }
 
   .about-me {
-    width: 100vw;
+    width: 90vw;
+  }
+
+  .about-me .specialize .ugh {
+    justify-content: center;
+    align-items: center;
   }
 
   .intro-illustration-container {

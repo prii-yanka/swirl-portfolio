@@ -65,7 +65,7 @@
 
 .about-education ul li {
   text-align: left;
-  width: 400px;
+  width: 25rem;
   margin: 2.5px 5px;
 }
 
@@ -76,7 +76,15 @@
   }
 
   .about-education {
-    width: 100vw;
+    width: 90vw;
+  }
+
+  .about-education ul li {
+    width: 22rem;
+  }
+
+  .education-item {
+    overflow-wrap: break-word;
   }
 
   .education-illustration-container {

@@ -79,7 +79,10 @@ const Project = ({ project, selected, openModal, closeModal }) => {
           {images.map((image, idx) => {
             return (
               <div key={idx}>
-                <a href={image} target="_blank" rel="noreferrer"> <img src={image} alt="placeholder alt text" /> </a>
+                <a href={image} target="_blank" rel="noreferrer"> 
+                  <img src={image} alt="placeholder alt text" />
+                  {/* <p> {image_description/label}</p> */}
+                 </a>
               </div>
             );
           })}

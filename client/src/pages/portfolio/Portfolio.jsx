@@ -66,21 +66,6 @@ const Portfolio = () => {
 
   useEffect(() => {
     // console.log("saving state between refresh:");
-
-    if(process.env.NODE_ENV == "production") {
-      setBaseURL(process.env.PUBLIC_URL);
-    } else if (process.env.NODE_ENV == "development") {
-      setBaseURL("http://localhost:5001");
-    }
-
-    const curr_selection = window.localStorage.getItem("selected");
-
-    if (curr_selection) {
-      setSelected(curr_selection);
-    }
-    else {
-      setSelected("all");
-    }
     
     const getProjects =  async () => {
       let response;
@@ -107,7 +92,25 @@ const Portfolio = () => {
       // console.log(`----setProjects: ${projects}\n`);
       setProjects([...projects]);
     }
-    getProjects();
+    if(process.env.NODE_ENV == "production") {
+      setBaseURL(process.env.PUBLIC_URL);
+    } else if (process.env.NODE_ENV == "development") {
+      setBaseURL("http://localhost:5001");
+    }
+
+    const curr_selection = window.localStorage.getItem("selected");
+
+    if (curr_selection) {
+      setSelected(curr_selection);
+      console.log(`current selection from local storage: ${curr_selection}`)
+      // getProjects();
+    }
+    else {
+      setSelected("all");
+      // getProjects();
+    }
+    // getProjects();
+
   }, []);
 
   useEffect(() => {

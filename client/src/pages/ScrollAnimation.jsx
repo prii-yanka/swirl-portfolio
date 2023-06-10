@@ -7,6 +7,7 @@ import {
     AnimatePresence
 } from "framer-motion";
 import styled from 'styled-components';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import "./main.css";
 
 const ProgressContainer = styled(motion.div)`
@@ -15,10 +16,8 @@ const ProgressContainer = styled(motion.div)`
     top: 0;
     zIndex: 100;
     width: 106vh;
-    text-align: center; 
-    @media screen and (max-width : 450px) {
-        height: 650vh;
-    }  
+    text-align: center;  
+    overflow-x: hidden;
 `;
 
 export const ScrollAnimation = () => {
@@ -28,6 +27,7 @@ export const ScrollAnimation = () => {
     const { scrollYProgress } = useViewportScroll();
     const yRange = useTransform(scrollYProgress, [0, 1], [0, 100], { clamp: false });
     const pathLength = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
+    const matches = useMediaQuery('(max-width:450px)');
 
     useEffect(
         () =>
@@ -48,8 +48,9 @@ export const ScrollAnimation = () => {
     }, [currentPrecent])
 
     return (
-        <ProgressContainer className="progress-container">
-            <svg className="progress-icon" viewBox="0 0 823.1 3845.19">
+        // <div className="scroll-animation-container">
+            <ProgressContainer className="progress-container">
+            {!matches && <svg className="progress-icon" viewBox="0 0 830 3945.19">
                 <motion.path
                     fill="none"
                     // {currentPrecent === 100 ? "#CDFF00" : "none"}
@@ -68,7 +69,31 @@ export const ScrollAnimation = () => {
                         scaleX: -1
                     }}
                 />
+            </svg>}
+
+            {matches && <svg className="progress-icon" viewBox="0 0 860 6500">
+                <motion.path
+                    fill="none"
+                    // {currentPrecent === 100 ? "#CDFF00" : "none"}
+                    strokeWidth="8"
+                    stroke={currentProgressColor}
+                    strokeDasharray="0 1"
+                    // d="M 0, 20 a 20, 20 0 1,0 40,0 a 20, 20 0 1,0 -40,0"
+                    d="M422.18,2.5c1.59,212.57,3.19,425.13,4.78,637.7-7.13,1.33-108.74,22.12-148.26,119.57-26.95,66.45-16.55,147.62,33.48,200.87,71.08,75.66,205.66,77.42,272.61,4.78,49.74-53.96,71.64-159.26,14.35-210.44-49.02-43.8-150.26-42.81-186.53,19.13-23.8,40.65-14.92,99.54,23.91,143.48v851.32c-24.63-.94-202.79-4.71-330.01,138.7-93,104.84-128.93,254.7-86.09,392.18,53.08,170.35,201.84,240.62,243.92,258.27,15.04,6.31,262.54,105.4,435.23-52.61,89.82-82.19,151.57-226.78,105.22-363.48-6.7-19.75-53.12-149.51-186.53-191.31-157.52-49.35-285.96,71.06-296.53,81.31-15.81,15.33-138.17,133.97-90.87,267.83,28.72,81.29,107.18,131.86,181.74,143.48,92.27,14.38,214.98-25.24,243.92-119.57,24.26-79.1-19.83-188.76-81.31-196.09-51.07-6.09-119.95,57.74-138.7,162.61l-4.78,932.63c-8.99,1.89-120.7,27.4-162.61,133.92-33.27,84.55-9.75,187.63,62.18,243.92,89.84,70.31,236.13,52.7,291.74-33.48,40.31-62.47,40.54-172.69-23.91-210.44-62.72-36.73-171.09,4.3-186.53,71.74-8.6,37.58,14.11,72.66,23.91,86.09v328.1c-.02,13.76-.03,27.53-.04,41.3-.1,212.58,1.5,425.15,4.78,637.7-7.13,1.33-108.74,22.12-148.26,119.57-26.95,66.45-16.55,147.62,33.48,200.87,71.08,75.66,205.66,77.42,272.61,4.78,49.74-53.96,71.64-159.26,14.35-210.44-49.03-43.8-150.26-42.81-186.53,19.13-23.8,40.65-14.92,99.54,23.91,143.48v851.32c-24.63-.94-202.79-4.71-330.01,138.7-93,104.84-128.93,254.7-86.09,392.18,53.08,170.35,201.84,240.62,243.92,258.27,15.04,6.31,262.55,105.4,435.23-52.61,89.82-82.19,151.57-226.78,105.22-363.48-5.75-16.96-53.54-150.76-186.53-191.31-118.94-36.27-236.08,23.39-296.53,81.31-1.41,1.35-3,2.9-4.83,4.74-12.68,12.77-129.96,134.41-86.04,263.09,27.21,79.74,105.91,131.67,181.74,143.48,92.22,14.36,214.98-25.21,243.92-119.57,24.26-79.1-19.83-188.76-81.31-196.09-51.07-6.09-119.95,57.74-138.7,162.61-1.59,310.88-3.19,621.75-4.78,932.63-8.99,1.89-120.7,27.4-162.61,133.92-33.27,84.55-9.75,187.63,62.18,243.92,89.84,70.31,236.13,52.7,291.74-33.48,40.31-62.47,40.54-172.69-23.91-210.44-62.72-36.73-171.09,4.3-186.53,71.74-8.6,37.58,14.11,72.66,23.91,86.09v328.1"
+                    style={{
+                        pathLength,
+                        // rotate: 90,
+                        // translateX: 5,
+                        // translateY: 5,
+                        opacity: 1,
+                        // scaleX: -1,
+                        // scaleY: 5
+                    }}
+                />
             </svg>
-        </ProgressContainer>
+
+            }
+        </ProgressContainer> 
+        // </div>
     )
 }

@@ -163,10 +163,25 @@
   /* Styles */
   .skills .skills-container {
     flex-direction: column;
+    text-align: center;
   }
 
   .about-skills {
-    width: 100vw;
+    width: 90vw;
+  }
+
+  .skill-level {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .development-skills {
+    padding-right: 0;
+  }
+
+  .related {
+    justify-content: center;
+    align-items: center;
   }
 
   .skills-illustration-container {
