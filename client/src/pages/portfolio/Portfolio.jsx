@@ -65,57 +65,57 @@ const Portfolio = () => {
   ];
 
   useEffect(() => {
-    // console.log("saving state between refresh:");
-    
-    const getProjects =  async () => {
-      let response;
-  
-      if (selected) {
-        // response = await fetch(`http://localhost:5001/:${selected}`);
-        response = await fetch(`${baseURL}/:${selected}`);
-        <Navigate to={"/" + selected} />;
-      } 
-      else {
-        // response = await fetch(`http://localhost:5001/:all`);
-        response = await fetch(`${baseURL}/:all`);
-        <Navigate to="/all" />;
-        // navigate("/all");
-      }
-  
-      if (!response.ok) {
-        const message = `An error occurred loading initial: ${response.statusText}`;
-        console.log(message);
-        return;
-      }
-  
-      const projects = await response.json();
-      // console.log(`----setProjects: ${projects}\n`);
-      setProjects([...projects]);
-    }
     if(process.env.NODE_ENV == "production") {
       setBaseURL(process.env.PUBLIC_URL);
     } else if (process.env.NODE_ENV == "development") {
       setBaseURL("http://localhost:5001");
     }
-
+    // console.log("saving state between refresh:");
     const curr_selection = window.localStorage.getItem("selected");
 
     if (curr_selection) {
       setSelected(curr_selection);
       console.log(`current selection from local storage: ${curr_selection}`)
       // getProjects();
+      // navigate(`/${selected}`);
     }
     else {
       setSelected("all");
       // getProjects();
     }
+    // const getProjects =  async () => {
+    //   let response;
+  
+    //   // if (selected) {
+    //     // response = await fetch(`http://localhost:5001/:${selected}`);
+    //     response = await fetch(`${baseURL}/:${selected}`);
+    //     <Navigate to={"/" + selected} />;
+    //   // } 
+    //   // else {
+    //   //   // response = await fetch(`http://localhost:5001/:all`);
+    //   //   response = await fetch(`${baseURL}/:all`);
+    //   //   <Navigate to="/all" />;
+    //   //   // navigate("/all");
+    //   // }
+  
+    //   if (!response.ok) {
+    //     const message = `An error occurred loading initial: ${response.statusText}`;
+    //     console.log(message);
+    //     return;
+    //   }
+  
+    //   const projects = await response.json();
+    //   // console.log(`----setProjects: ${projects}\n`);
+    //   setProjects([...projects]);
+    // }
+
     // getProjects();
 
   }, []);
 
   useEffect(() => {
     // if (selected)
-    if (selected) {
+    // if (selected) {
       window.localStorage.setItem("selected", selected);
 
       async function getRelatedProjects() {
@@ -134,9 +134,10 @@ const Portfolio = () => {
         setProjects([...relatedProjects]);
       }
       getRelatedProjects();
-      <Navigate to={"/" + selected} />;
+      // <Navigate to={"/" + selected} />;
+      navigate(`/${selected}`);
       // setPosterImages({});
-    }
+    // }
   }, [selected]);
 
   useEffect(() => {
