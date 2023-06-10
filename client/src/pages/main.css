@@ -15,9 +15,25 @@
 .parts > * {
   width: 100%;
   min-height: 100vh;
+  font-size: 1rem;
+  text-size-adjust: auto;
   /* overflow: hidden; */
   /* scroll-snap-align: start; */
 }
+
+/* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+only screen and (min-device-pixel-ratio: 1.5) {
+  .parts > * {
+  font-size: 150%;
+}
+} */
+
+/* @media only screen and (-webkit-min-device-pixel-ratio: 5/2),
+only screen and (min-device-pixel-ratio: 5/2) {
+  .parts > * {
+  font-size: 200%;
+}
+} */
 
 .main-container {
   display: inline-flex;

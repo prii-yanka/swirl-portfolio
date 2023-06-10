@@ -31,13 +31,13 @@
 }
 
 .about-skills h1 {
-  font-size: 50px;
-  margin-bottom: 25px;
+  font-size: 4rem;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
 .about-skills .specialize {
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 .about-skills span {
@@ -54,7 +54,7 @@
 
 .about-skills ul li {
   text-align: left;
-  width: 200px;
+  width: 50rem;
   margin: 5px 10px 5px 0px;
 }
 
@@ -159,7 +159,7 @@
   /* transform: rotate(5deg); */
 }
 
-@media screen and (max-width : 480px) {
+@media (max-aspect-ratio : 9/16) {
   /* Styles */
   .skills .skills-container {
     flex-direction: column;

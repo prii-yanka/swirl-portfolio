@@ -27,7 +27,7 @@ export const ScrollAnimation = () => {
     const { scrollYProgress } = useViewportScroll();
     const yRange = useTransform(scrollYProgress, [0, 1], [0, 100], { clamp: false });
     const pathLength = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
-    const matches = useMediaQuery('(max-width:480px)');
+    const matches = useMediaQuery('(max-aspect-ratio : 9/16)');
 
     useEffect(
         () =>

@@ -47,8 +47,8 @@
 }
 
 .about-education h1 {
-  font-size: 50px;
-  margin-bottom: 10px;
+  font-size: 4rem;
+  margin-bottom: 2rem;
 }
 
 .about-education .graduation {
@@ -69,7 +69,7 @@
   margin: 2.5px 5px;
 }
 
-@media screen and (max-width : 480px) {
+@media (max-aspect-ratio : 9/16) {
   /* Styles */
   .education .container {
     flex-direction: column;

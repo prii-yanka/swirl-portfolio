@@ -108,7 +108,7 @@
     width: 25vw;
   }
 
-  @media screen and (max-width : 480px) {
+  @media (max-aspect-ratio : 9/16) {
     .project-container .images-container {
       justify-content: center;
       align-items: center;

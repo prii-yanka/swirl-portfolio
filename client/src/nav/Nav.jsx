@@ -59,6 +59,7 @@ const Nav = () => {
     // console.log("prevScroll: " + prevScrollPos + " " + "visibe: " + visible);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos, visible, handleScroll]);
+  
   return (
     <div className="navButton" style={{ transition: "top 0.3s", top: visible ? "0" : "-14rem" }}>
       <div className="logo-container">

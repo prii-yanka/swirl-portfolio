@@ -47,8 +47,8 @@
 }
 
 .about-contact h1 {
-  font-size: 50px;
-  margin-bottom: 10px;
+  font-size: 4rem;
+  margin-bottom: 2rem;
 }
 
 .profile-links {
@@ -58,7 +58,7 @@
   /* z-index: 100; */
   display: inline-flex;
   flex-direction: row;
-  margin-top: 20px;
+  margin-top: 2rem;
 }
 
 .profile-links .link-container {
@@ -89,7 +89,7 @@
     all: unset;
 }
 
-@media screen and (max-width : 480px) {
+@media (max-aspect-ratio : 9/16) {
   .contact-container {
     flex-direction: column;
     min-height: 100vh;
