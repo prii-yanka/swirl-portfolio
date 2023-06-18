@@ -65,8 +65,8 @@
   flex-direction: column;
   height: auto;
   margin: 2rem 0px 0px 0px;
-  border: 0.2rem solid #8FE1F3;
-  border-radius: 15px;
+  border: 0.08rem solid #8FE1F3;
+  border-radius: 0.5rem;
   padding: 1rem
 }
 

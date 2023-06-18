@@ -141,6 +141,15 @@
   z-index: 0;
 }
 
+.portfolio .loading {
+  /* text-align: center; */
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 @media (max-aspect-ratio : 3/4) {
   /* Styles */
   .portfolio .portfolio-item-container {

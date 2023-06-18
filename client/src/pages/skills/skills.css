@@ -202,3 +202,11 @@
   
 }
 
+@media (max-aspect-ratio : 3/4) {
+  /* Styles */
+  .skills .skills-container {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+

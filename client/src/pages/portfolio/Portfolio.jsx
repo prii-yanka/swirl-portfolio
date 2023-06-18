@@ -4,12 +4,10 @@ import "./portfolio.css";
 import "../pages.css";
 import { useNav } from "../../customHooks/useNav";
 import PortfolioList from "./PortfolioList";
-
-import Modal from "@mui/material/Modal";
-// import { TagContext, TagDispatchContext } from "../../context/TagsContext";
+import LoadingComponent from "../../components/LoadingComponent";
 import { Link, Navigate, NavLink, Route, Routes, useNavigate } from "react-router-dom";
 import Project from "./Project";
-// import ProjectThumbnail from "./ProjectThumbnail";
+
 const Portfolio = () => {
   const portfolioRef = useNav("Portfolio");
 
@@ -19,6 +17,8 @@ const Portfolio = () => {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState();
   const [openModal, setOpenModal] = useState(false);
+  const [isStopped, setIsStopped] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   // const [posterImages, setPosterImages] = useState({});
   const navigate = useNavigate();
   // const [closeModal, setCloseModal] = useState(true);
@@ -73,7 +73,7 @@ const Portfolio = () => {
     // console.log("saving state between refresh:");
     const curr_selection = window.localStorage.getItem("selected");
 
-    if (curr_selection) {
+    if (curr_selection && curr_selection != "undefined") {
       setSelected(curr_selection);
       console.log(`current selection from local storage: ${curr_selection}`)
       // getProjects();
@@ -190,14 +190,14 @@ const Portfolio = () => {
           <h1>Portfolio </h1>
         </div>
 
-        <div>
-          <h1> Loading </h1>
+        <div className="loading">
+          <h1> Projects Loading </h1>
+          <LoadingComponent/>
         </div>
       </section>
     );
   }
-
-  return (
+  else return (
     <section className="portfolio" ref={portfolioRef} id="portfolioContainer">
       <div className="portfolio-header">
         <h1>Portfolio </h1>
