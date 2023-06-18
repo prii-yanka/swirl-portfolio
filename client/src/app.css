@@ -3,6 +3,12 @@
   text-size-adjust: none;
 }
 
-.loading_animation_container {
+.loading {
+  /* text-align: center; */
+  height: 100vh;
+  z-index: 10;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
   align-items: center;
 }

@@ -182,7 +182,7 @@ const Portfolio = () => {
     // }
   }
 
-  if (projects.length === 0) {
+  if (projects.length === 0 ) {
     // console.log("NO PROJECTS");
     return (
       <section className="portfolio" ref={portfolioRef} id="portfolioContainer">
