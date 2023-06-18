@@ -6,7 +6,7 @@
 // import Education from "./pages/education/Education";
 // import Experience from "./pages/experience/Experience";
 // import Skills from "./pages/skills/Skills";
-import './app.css'
+import "./app.css";
 // import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 // import React, { useContext, useEffect } from 'react';
 // import ScrollToTop from "./ScrollToTop";
@@ -39,37 +39,43 @@ import './app.css'
 //   );
 // }
 
-import { Nav } from './nav';
-import { Main } from './pages';
-import NavProvider from './context/NavContext';
-import { useEffect, useState } from 'react';
-import LoadingComponent from './components/LoadingComponent';
+import { Nav } from "./nav";
+import { Main } from "./pages";
+import NavProvider from "./context/NavContext";
+import { useEffect, useState } from "react";
+import LoadingComponent from "./components/LoadingComponent";
 
 const App = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    window.addEventListener("load", function() {
-      // loaded
-      setLoading(false);
-  }, false); 
+    window.addEventListener(
+      "load",
+      function () {
+        // loaded
+        setLoading(false);
+      },
+      false
+    );
   }, []);
 
   return (
-    <div className='appContainer'>
+    <div className="appContainer">
       <NavProvider>
-        {loading && 
-          <div className='loading'>
-          <LoadingComponent/>
+        {loading && (
+          <div className="loading">
+            <LoadingComponent />
           </div>
-        }
-        {!loading && <div>
-        <Nav />
-        <Main />
-        </div>}
+        )}
+        {!loading && (
+          <div>
+            <Nav />
+            <Main />
+          </div>
+        )}
       </NavProvider>
     </div>
   );
-}
+};
 
 export default App;

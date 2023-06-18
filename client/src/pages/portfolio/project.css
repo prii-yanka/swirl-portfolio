@@ -31,8 +31,9 @@
   
   
   .portfolio-modal img {
-    max-width: 250px;
-    height: auto;
+    /* max-width: 250px; */
+    /* height: auto; */
+    width: 0;
   }
 
   .project-container h1 {

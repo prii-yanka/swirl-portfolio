@@ -4,12 +4,22 @@ import Modal from "@mui/material/Modal";
 import "./project.css";
 import "../pages.css";
 import moment from "moment";
+import LoadingComponent from "../../components/LoadingComponent";
 
 const Project = ({ project, selected, openModal, closeModal }) => {
   // const [id, setId] = useState();
   const [images, setImages] = useState([]);
   const [imageCompare, setImageCompare] = useState();
   const [isVideo, setIsVideo] = useState(false);
+  const [imgLoadedCount, setImgLoadedCount] = useState(0);
+  const [imageStyle, setImageStyle] = useState({
+    // border: '1px solid black'
+    width: '0'
+  });
+  // let imageStyle = {
+  //   // border: '1px solid black'
+  //   width: '0'
+  // };
   // // const [imgs, setImgs] = useState([]);
   // const [projectName, setProjectName] = useState();
   // const [tags, setTags] = useState([]);
@@ -24,8 +34,28 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     // <Navigate to={`/${selected}`}/>
     console.log("handle modal close");
     setOpen(false);
+    setImgLoadedCount(0);
+    setImageStyle({width: '0'})
     closeModal(true);
   };
+
+  const onLoad = () => {
+    setImgLoadedCount(imgLoadedCount+1);
+  }
+
+  useEffect(()=> {
+    if(images.length == imgLoadedCount) {
+      console.log(`here where images.length == imgLoadedCount`)
+      // imageStyle = {
+      //   // height: 'auto'
+      //   width: '250px'
+      // }
+      setImageStyle({
+        // height: 'auto'
+        width: '250px'
+      });
+    }
+  }, [images, imgLoadedCount])
 
   useEffect(() => {
     if (openModal) {
@@ -40,17 +70,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
   const handleOpen = () => {
     // window.location.reload(false);
     setOpen(true);
-
-    //   // console.log("id " + d.id);
-    //   // console.log("title " + d.title);
-    //   // console.log("img " + d.img);
-    //   setId(project.id);
-    //   setProjectName(project.project_name);
-    //   setTags(project.tags);
-    //   setVideo(project.video);
-    //   setDescription(project.description);
-    //   setWhen(project.when);
-    //   setLinkTo(project.link_to);
+    setImageStyle({width: '0'})
   };
 
   useEffect(() => {
@@ -69,24 +89,26 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     }
     checkVideo();
   }, [project, imageCompare]);
+ 
 
   return (
     <Modal className="portfolio-modal" open={open} onClose={handleClose}>
       <div className="project-container">
         <h1> {project.project_name} </h1>
         {/* <div>{project.id}</div> */}
-        <div className="images-container">
+        { images.length != imgLoadedCount && <LoadingComponent/>}
+        {<div className="images-container">
           {images.map((image, idx) => {
             return (
               <div key={idx}>
                 <a href={image} target="_blank" rel="noreferrer"> 
-                  <img src={image} alt="placeholder alt text" />
+                  <img src={image} onLoad={onLoad} alt="placeholder alt text" style={imageStyle}/>
                   {/* <p> {image_description/label}</p> */}
                  </a>
               </div>
             );
           })}
-        </div>
+        </div>}
         <div className="tags-container">
           <div className="label">
             {" "}
