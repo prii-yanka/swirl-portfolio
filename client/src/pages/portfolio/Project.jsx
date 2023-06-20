@@ -5,6 +5,7 @@ import "./project.css";
 import "../pages.css";
 import moment from "moment";
 import LoadingComponent from "../../components/LoadingComponent";
+import ImageSwipe from "./ImageSwipe";
 
 const Project = ({ project, selected, openModal, closeModal }) => {
   // const [id, setId] = useState();
@@ -14,7 +15,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
   const [imgLoadedCount, setImgLoadedCount] = useState(0);
   const [imageStyle, setImageStyle] = useState({
     // border: '1px solid black'
-    width: '0'
+    visibility: 'hidden'
   });
   
   // let imageStyle = {
@@ -36,7 +37,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     console.log("handle modal close");
     setOpen(false);
     setImgLoadedCount(0);
-    setImageStyle({width: '0'})
+    setImageStyle({visibility: 'hidden'})
     closeModal(true);
   };
 
@@ -53,7 +54,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
       // }
       setImageStyle({
         // height: 'auto'
-        width: '250px'
+        visibility: 'visible'
       });
     }
   }, [images, imgLoadedCount])
@@ -71,7 +72,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
   const handleOpen = () => {
     // window.location.reload(false);
     setOpen(true);
-    setImageStyle({width: '0'})
+    setImageStyle({visibility: 'hidden'})
   };
 
   useEffect(() => {
@@ -95,21 +96,22 @@ const Project = ({ project, selected, openModal, closeModal }) => {
   return (
     <Modal className="portfolio-modal" open={open} onClose={handleClose}>
       <div className="project-container">
+        <p className="close-button" onClick={handleClose}> X </p>
         <h1> {project.project_name} </h1>
         {/* <div>{project.id}</div> */}
         { images.length != imgLoadedCount && <LoadingComponent/>}
-        {<div className="images-container">
+        {/* <div className="images-container">
           {images.map((image, idx) => {
             return (
               <div key={idx}>
                 <a href={image} target="_blank" rel="noreferrer"> 
                   <img src={image} onLoad={onLoad} alt="placeholder alt text" style={imageStyle}/>
-                  {/* <p> {image_description/label}</p> */}
                  </a>
               </div>
             );
           })}
-        </div>}
+        </div> */}
+        {<ImageSwipe images={images} onLoad={onLoad} imageStyle={imageStyle}/>}
         <div className="tags-container">
           <div className="label">
             {" "}
