@@ -16,6 +16,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     // border: '1px solid black'
     width: '0'
   });
+  
   // let imageStyle = {
   //   // border: '1px solid black'
   //   width: '0'
