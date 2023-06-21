@@ -58,7 +58,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 45rem;
+    /* width: 45rem; */
     height: 26rem;
     align-items: center;
     justify-content: center;
@@ -82,7 +82,7 @@
     /* overflow-y: scroll; */
     /* border: solid 1rem #8FE1F3; */
     width: 100%;
-    height: 50vh;
+    height: 100%;
   }
 
   .project-container .close-button {
@@ -115,7 +115,7 @@
   }
 
   .current-image-thumbnail img {
-    border: solid 0.2rem #8FE1F3;
+    border: solid 0.5rem #8FE1F3;
   }
 
   .images-container {
@@ -221,6 +221,16 @@
     .project-container .images-container {
       justify-content: center;
       align-items: center;
+    }
+  } */
+
+  /* @media (max-aspect-ratio : 3/4) {
+    .current-image-container {
+      height: 12rem;
+    }
+
+    .project-images-container .current-image-container a img{
+      height: 11rem;
     }
   } */
 
