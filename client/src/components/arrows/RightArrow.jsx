@@ -1,9 +1,9 @@
 import React from "react";
 import "../components.css";
 
-const RightArrow = () => {
+const RightArrow = ({isVisible}) => {
   return (
-    <div className="right container">
+    <div className="right container" style={{visibility: isVisible}}>
       <svg
         id="Layer_2"
         data-name="Layer 2"
@@ -19,8 +19,8 @@ const RightArrow = () => {
               d="M68.97,47.18l-25.95-25.01v7.22l21.87,20.51v.21l-21.87,20.51v7.22l25.95-25.01v-5.65Z"
               fill="#f1807f"
               stroke="#f1807f"
-              stroke-miterlimit="10"
-              stroke-width="6"
+              strokeMiterlimit="10"
+              strokeWidth="6"
             />
           </g>
         </g>

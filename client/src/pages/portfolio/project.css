@@ -1,6 +1,6 @@
 .project-container  {
     margin: 0;
-    padding: 0 0 2rem 0;
+    padding: 0;
     background-color: rgb(240, 239, 239);
     color: black;
     /* background: url(../../../public/images/table_top@72x.png); */
@@ -17,14 +17,14 @@
 
   .portfolio-modal {
     position: absolute;
-    margin: 5vh 5vw;
+    margin: 2.5vh 2vw;
     top: 0;
     /* left: '50%', */
     /* transform: 'translate(-50%, 0)', */
-    width: 90vw;
-    height: 90vh;
+    width: 95vw;
+    height: 95vh;
     background-color: rgb(255, 255, 255);
-    border-radius: 10px;
+    border-radius: 0.5rem;
     /* overflow-x: scroll; */
     overflow-y: scroll;
   } 
@@ -35,28 +35,8 @@
   } */
 
   .project-container h1 {
-    padding: 1rem;
+    padding: 0.5rem;
   }
-
-  .project-container p {
-    margin: 1rem;
-    width: fit-content;
-    align-self:flex-end;
-  }
-
-  /* .project-container .images-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: nowrap;
-    width: 80vw;
-
-  }
-
-  .project-container .images-container .div {
-    padding: 0.75rem;
-  } */
 
   .project-images-container {
     width: 100%;
@@ -66,38 +46,71 @@
     justify-content: center;
   }
 
+  .project-images-container .carousel {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
   .current-image-container {
     position: relative;
     display: flex;
-    flex-direction: row;
-    width: 80%;
-    height: 50vh;
+    flex-direction: column;
+    width: 45rem;
+    height: 26rem;
     align-items: center;
-    justify-content: flex-start;
-    overflow-y: scroll;
-    border: solid 0.1rem #8FE1F3;
+    justify-content: center;
+    padding: 0.5rem;
+    background-color: #8FE1F3;
+    /* overflow-y: scroll; */
   }
 
-  .current-image-container img{
+  .project-container .current-image-container p {
+    align-self: center;
+  }
+
+  .project-images-container .current-image-container a {
+    width: 100%;
+  }
+
+  .project-images-container .current-image-container a img{
     object-fit: cover;
     object-position: left top;
+    /* overflow-clip-margin: ; */
+    /* overflow-y: scroll; */
+    /* border: solid 1rem #8FE1F3; */
     width: 100%;
-    height: 100%;
+    height: 50vh;
+  }
+
+  .project-container .close-button {
+    position: sticky;
+    top: 1rem;
+    margin: 1rem 1rem 0rem 0.5rem;
+    padding: 0.3rem;
+    background-color: #8FE1F3;
+    width: fit-content;
+    align-self:flex-end;
+    color: #EF8181;
+    font-weight: 700;
+    border-radius: 50%;
+    cursor: pointer;
   }
 
   .thumbnail {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 1rem;
+    margin: 1rem 0.5rem 0.5rem 0.5rem;
     object-fit: contain;
     width: 100%;
     /* height: 100%; */
     border-radius: 0.5rem;
   }
 
-  .current-image-thumbnail {
-    /* border: solid 0.2rem #8FE1F3; */
+  .thumbnail img {
     border-radius: 0.5rem;
   }
 
@@ -111,18 +124,41 @@
     flex-direction: row;
     width: 100%;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
   }
 
-  .images-container  #slider {
+  .images-container ::-webkit-scrollbar {
+      width: 0%;
+      background: transparent; /* make scrollbar transparent */
+  }
+
+  .images-container #slider {
     display: flex;
     flex-direction: row;
-    /* width: 85%; */
-    overflow: auto;
+    justify-content: flex-start;
+    /* width: 90%; */
+    overflow-x: auto;
   }
 
-  .images-container  #slider img {
+  .images-container #slider img {
     width: 8rem;
+    pointer-events: none;
+  }
+
+  .x-scroll-progress {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .x-scroll-progress .progress-range {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    background-color: #fed46e;
+  }
+
+  .x-scroll-progress .progress-range.active {
+    background-color: #8FE1F3;
   }
 
   .project-container .label {
@@ -181,11 +217,11 @@
     width: 25vw;
   }
 
-  @media (max-aspect-ratio : 3/4) {
+  /* @media (max-aspect-ratio : 3/4) {
     .project-container .images-container {
       justify-content: center;
       align-items: center;
     }
-  }
+  } */
 
   

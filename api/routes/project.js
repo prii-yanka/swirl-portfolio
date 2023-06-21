@@ -59,7 +59,9 @@ projectRouter.get("/::selected", async (request, response) => {
     request.params.selected.slice(1);
 
   try {
-    const projects = await Project.find(selected === "All" ? {} : { tags: selected });
+    const projects = await Project.find(
+      selected === "All" ? {} : { tags: selected }
+    );
 
     await Promise.all(
       projects.map(async (project) => {
@@ -72,7 +74,9 @@ projectRouter.get("/::selected", async (request, response) => {
       })
     );
 
-    const updated_projects = await Project.find(selected === "All" ? {} : { tags: selected });
+    const updated_projects = await Project.find(
+      selected === "All" ? {} : { tags: selected }
+    );
     response.json(updated_projects);
   } catch (error) {
     response.status(500).json({ error: "Internal Server Error" });
@@ -166,30 +170,68 @@ projectRouter.get("/::selected/::id", async (request, response) => {
   const updated_project = await Project.findOneAndUpdate(
     { _id: ObjectId(project_id) },
     { images: imageLinks, video: videoLink },
-    { new: true}
+    { new: true }
   );
   // console.log(`updated_project: ${updated_project}\n\n`);
   response.json(updated_project);
 });
 
 projectRouter.post("/updateDescription", async (request, response) => {
-  const projects = await Project.find({ });
+  const projects = await Project.find({});
   await Promise.all(
     projects.map(async (project) => {
       const poster_link = await getProjectPosterImage(project);
       await Project.findOneAndUpdate(
         { _id: ObjectId(project._id) },
-        { description: {
-          aboutTheClient: ["Name of client", "what they do & their location:"],
-          goalAndSituation: ["What was the main challenge and measure of success?", "Did you have a certain idea or expectation for the project when you began?"],
-          processAndWhy: ["Anything interesting to share about your process for this project?", "surprising insight? Early sketches we can see?", "Why did you choose that approach? Ask yourself WHY WHY WHY a thousand times and answer those questions."],
-          theOutcome: ["Did you feel proud of the result? Did it exceed your expectations?", "tell us why the project is still valuable or meaningful"],
-          theTeam: ["Talk about team roles and my role"]
-        } }
+        {
+          description: {
+            aboutTheClient: [
+              "Name of client",
+              "what they do & their location:",
+            ],
+            goalAndSituation: [
+              "What was the main challenge and measure of success?",
+              "Did you have a certain idea or expectation for the project when you began?",
+            ],
+            processAndWhy: [
+              "Anything interesting to share about your process for this project?",
+              "surprising insight? Early sketches we can see?",
+              "Why did you choose that approach? Ask yourself WHY WHY WHY a thousand times and answer those questions.",
+            ],
+            theOutcome: [
+              "Did you feel proud of the result? Did it exceed your expectations?",
+              "tell us why the project is still valuable or meaningful",
+            ],
+            theTeam: ["Talk about team roles and my role"],
+          },
+        }
       );
     })
   );
   response.json("projects updated");
 });
 
+projectRouter.post("/updateImages", async (request, response) => {
+  const projects = await Project.find({});
+  await Promise.all(
+    projects.map(async (project) => {
+      let descrptionsArray = [];
+      project.images.map((image) => {
+        // console.log(image);
+        const url = new URL(image);
+        let fileName = url.pathname.replace(/^.*[\\\/]/, "");
+
+        const reg = /\.png|\%\d*/g
+        fileName = fileName.replaceAll(reg, " ");
+        descrptionsArray = [...descrptionsArray,fileName];
+        console.log(`descarray: ${descrptionsArray}\n`);
+      });
+      await Project.findOneAndUpdate(
+        { _id: ObjectId(project._id) },
+        { imageDescriptions: descrptionsArray }
+      );
+    })
+  );
+  response.json("projects updated with image descrptions");
+});
 module.exports = projectRouter;

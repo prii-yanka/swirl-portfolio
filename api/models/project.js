@@ -38,6 +38,11 @@ const ProjectSchema = new mongoose.Schema({
     required: false,
     default: [],
   },
+  imageDescriptions: {
+    type: [String],
+    required: false,
+    default: [],
+  },
   video: {
     type: String,
     required: false,

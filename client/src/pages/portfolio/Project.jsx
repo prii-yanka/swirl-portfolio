@@ -111,7 +111,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
             );
           })}
         </div> */}
-        {<ImageSwipe images={images} onLoad={onLoad} imageStyle={imageStyle}/>}
+        {<ImageSwipe images={images} onLoad={onLoad} imageStyle={imageStyle} imageDescriptions={project.imageDescriptions}/>}
         <div className="tags-container">
           <div className="label">
             {" "}
