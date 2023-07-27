@@ -54,12 +54,12 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
     let myImg = document.querySelector("#imgId");
     let realWidth = myImg.naturalWidth;
     let realHeight = myImg.naturalHeight;
-    if (realWidth/realHeight <= 3 / 4) {
+    if (realWidth/realHeight != 3 / 4) {
       if(matches) {
-        setCurrImgContStyle({ width: "14rem", height: "24" });
+        setCurrImgContStyle({ width: "14rem", height: "24rem" });
       }
       else {
-        setCurrImgContStyle({ width: "14rem" });
+        setCurrImgContStyle({ width: "14rem" , height: "auto"});
       }
       console.log("14rem")
     } else {

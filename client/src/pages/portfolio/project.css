@@ -76,13 +76,13 @@
   }
 
   .project-images-container .current-image-container a img{
-    object-fit: cover;
+    object-fit: contain;
     object-position: left top;
     /* overflow-clip-margin: ; */
     /* overflow-y: scroll; */
     /* border: solid 1rem #8FE1F3; */
     width: 100%;
-    height: 100%;
+    height: auto;
   }
 
   .project-container .close-button {
