@@ -6,8 +6,9 @@ import { useNav } from "../../customHooks/useNav";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import EmailIcon from "@mui/icons-material/Email";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
+// import SportsBasketballIcon from "@mui/icons-material/SportsBasketball";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import InstagramIcon from '@mui/icons-material/Instagram';
 
 const Contact = (props) => {
   const contactRef = useNav("Contact");
@@ -67,17 +68,17 @@ const Contact = (props) => {
             </div>
             <div className="link-container">
               <a
-                href="https://dribbble.com/priyanka_jain"
+                href="https://www.instagram.com/priiyanka.art/"
                 target="_blank"
                 rel="noreferrer noopener"
               >
                 <div className="link-div">
-                  <SportsBasketballIcon
+                  <InstagramIcon
                     fontSize="large"
                     sx={{ color: "#EF8181" }}
                   />
                 </div>
-                <p>Dribble</p>
+                <p>Instagram</p>
               </a>
             </div>
             <div className="link-container">

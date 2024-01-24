@@ -58,10 +58,10 @@ const Portfolio = () => {
       id: "internship",
       title: "Internship",
     },
-    // {
-    //   id: "content",
-    //   title: "Content",
-    // },
+    {
+      id: "paintings",
+      title: "Paintings",
+    },
   ];
 
   useEffect(() => {

@@ -19,14 +19,18 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
   });
   const matches = useMediaQuery('(max-aspect-ratio : 3/4)');
 
+  // useEffect(
+  //   () => {
+  //     console.log(images.map((image, i) => `${images[i]} : ${imageDescriptions[i]}`))
+  //   },
+  //   [images]
+  // );
 
   useEffect(
-    () =>
-      xRange.onChange((v) => {
-        // console.log(Math.trunc(xRange.current));
-        setCurrentPercent(Math.trunc(xRange.current));
-      }),
-    [xRange]
+    () =>{
+      setCurrentPercent(Math.ceil( (sliderData / images.length)* 100 / 20) * 20);  // incements of 20
+    },
+    [sliderData, images]
   );
 
   const handleLeftImage = () => {
@@ -54,21 +58,34 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
     let myImg = document.querySelector("#imgId");
     let realWidth = myImg.naturalWidth;
     let realHeight = myImg.naturalHeight;
-    if (realWidth/realHeight != 3 / 4) {
+    if (realWidth/realHeight <= 3 / 4) {
       if(matches) {
+        console.log('mathces !=')
         setCurrImgContStyle({ width: "14rem", height: "24rem" });
       }
       else {
-        setCurrImgContStyle({ width: "14rem" , height: "auto"});
+        setCurrImgContStyle({ width: "14rem", height: `${(14*realHeight/realWidth) + 5}rem` });
       }
       console.log("14rem")
-    } else {
-      console.log("45rem")
+    } 
+    else if (realWidth/realHeight >= 4 / 3){
       if(matches) {
+        console.log('mathces !=')
+        setCurrImgContStyle({ width: "14rem", height: "24rem" });
+      }
+      else {
+        setCurrImgContStyle({ width: "20rem", height: `${(20*realHeight/realWidth) + 5}rem` });
+      }
+      console.log("20rem")
+    }
+    else {
+      console.log("25rem")
+      if(matches) {
+        console.log('mathces')
         setCurrImgContStyle({ width: "14rem", height: "10rem" });
       }
       else {
-        setCurrImgContStyle({ width: "45rem" });
+        setCurrImgContStyle({ width: "25rem", height: `${(25*realHeight/realWidth) + 5}rem` });
       }
     }
   }, [currImage]);
@@ -139,7 +156,7 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
       <div className="x-scroll-progress">
         <div
           className={
-            currentPrecent <= 20 && currentPrecent > !20
+            currentPrecent <= 20
               ? "progress-range one active"
               : "progress-range one"
           }

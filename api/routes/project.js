@@ -111,7 +111,7 @@ const getImagesByProject = async (project) => {
             } // an error occurred
             else {
               // console.log(`the signed url is: ${signed_url}`);
-              if (signed_url.includes("png")) {
+              if (signed_url.includes("png") || signed_url.includes("JPG")) {
                 // only add if link has an image
                 // key_count++;
                 signed_url_array = [...signed_url_array, `${signed_url}`];
