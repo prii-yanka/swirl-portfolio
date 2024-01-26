@@ -1,7 +1,7 @@
 .project-container  {
     margin: 0;
     padding: 0;
-    background-color: rgb(240, 239, 239);
+    background-color: #f0efef;
     color: black;
     /* background: url(../../../public/images/table_top@72x.png); */
     /* overflow: hidden; */
@@ -23,7 +23,7 @@
     /* transform: 'translate(-50%, 0)', */
     width: 95vw;
     height: 95vh;
-    background-color: rgb(255, 255, 255);
+    background-color: #ffffff;
     border-radius: 0.5rem;
     /* overflow-x: scroll; */
     overflow-y: scroll;
@@ -205,19 +205,33 @@
     margin: 2rem;
     border-radius: 0.5rem;
     background-color: #fed46e;
+    width: 90%;
+  }
+
+  .project-container .description h1 { 
+    /* description heading */
+    color: #EF8181;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    font-size: larger;
+    padding: 1rem;
   }
 
   .project-container .description .item {
-    padding: 0.5rem;
+    padding: 1rem;
   }
 
   .project-container .description .item .label {
     color: #EF8181;
     font-weight: 700;
+    display: flex;
+    justify-content: left;
+    font-size: large;
   }
 
   .project-container .description .item div {
-    text-align: center;
+    text-align: left;
     margin-top: 0.25rem;
   }
 

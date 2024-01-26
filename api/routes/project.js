@@ -176,7 +176,7 @@ projectRouter.get("/::selected/::id", async (request, response) => {
   response.json(updated_project);
 });
 
-projectRouter.post("/updateDescription", async (request, response) => {
+projectRouter.post("/updateDescriptionToDefault", async (request, response) => {
   const projects = await Project.find({});
   await Promise.all(
     projects.map(async (project) => {
@@ -211,6 +211,51 @@ projectRouter.post("/updateDescription", async (request, response) => {
   response.json("projects updated");
 });
 
+projectRouter.post("/updateDescription/::projectId", async (request, response) => {
+  const projectId = request.params.projectId;
+  console.log(`projectId: ${projectId}`);
+  const project = await Project.findOne({ _id: ObjectId(projectId) });
+  console.log(project.project_name);
+  const description = request.body.description
+  await Project.findOneAndUpdate(
+    { _id: ObjectId(project._id) },
+    {
+      description: {
+        aboutTheClient: description.aboutTheClient,
+        goalAndSituation: description.goalAndSituation,
+        processAndWhy: description.processAndWhy,
+        theOutcome: description.theOutcome,
+        theTeam: description.theTeam,
+      },
+    }
+  );
+  response.json("projects updated");
+});
+
+projectRouter.post("/updateImages/::projectId", async (request, response) => {
+  const projectId = request.params.projectId;
+  console.log(`projectId: ${projectId}`);
+  const project = await Project.findOne({ _id: ObjectId(projectId) });
+  console.log(project.project_name);
+  let descrptionsArray = [];
+  console.log(project.images.length);
+  project.images.map((image) => {
+    // console.log(image);
+    const url = new URL(image);
+    let fileName = url.pathname.replace(/^.*[\\\/]/, "");
+
+    const reg = /\.(png)|.(jpg)|.(JPG)|\%\d*/g;
+    fileName = fileName.replaceAll(reg, " ");
+    descrptionsArray = [...descrptionsArray, fileName];
+    console.log(`descarray: ${descrptionsArray}\n`);
+  });
+  await Project.findOneAndUpdate(
+    { _id: ObjectId(project._id) },
+    { imageDescriptions: descrptionsArray }
+  );
+  response.json("projects updated with image descrptions");
+});
+
 projectRouter.post("/updateImages", async (request, response) => {
   const projects = await Project.find({});
   await Promise.all(
@@ -221,9 +266,9 @@ projectRouter.post("/updateImages", async (request, response) => {
         const url = new URL(image);
         let fileName = url.pathname.replace(/^.*[\\\/]/, "");
 
-        const reg = /\.png|\%\d*/g
+        const reg = /\.(png)|.(jpg)|.(JPG)|\%\d*/g;
         fileName = fileName.replaceAll(reg, " ");
-        descrptionsArray = [...descrptionsArray,fileName];
+        descrptionsArray = [...descrptionsArray, fileName];
         console.log(`descarray: ${descrptionsArray}\n`);
       });
       await Project.findOneAndUpdate(

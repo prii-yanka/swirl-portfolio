@@ -62,6 +62,10 @@ const Portfolio = () => {
       id: "paintings",
       title: "Paintings",
     },
+    {
+      id: "studio",
+      title: "Studio Art",
+    },
   ];
 
   useEffect(() => {
