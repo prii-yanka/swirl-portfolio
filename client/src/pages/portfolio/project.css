@@ -17,12 +17,12 @@
 
   .portfolio-modal {
     position: absolute;
-    margin: 2.5vh 2vw;
+    margin: 2.5vh 2.5%;
     top: 0;
     /* left: '50%', */
     /* transform: 'translate(-50%, 0)', */
-    width: 95vw;
-    height: 95vh;
+    width: 95%;
+    height: 95%;
     background-color: #ffffff;
     border-radius: 0.5rem;
     /* overflow-x: scroll; */
@@ -201,11 +201,11 @@
   }
 
   .project-container .description {
-    padding: 2rem;
-    margin: 2rem;
+    padding: 1rem;
+    margin: 1rem;
     border-radius: 0.5rem;
     background-color: #fed46e;
-    width: 90%;
+    width: 80%;
   }
 
   .project-container .description h1 { 

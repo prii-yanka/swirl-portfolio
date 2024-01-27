@@ -8,7 +8,7 @@ import LoadingComponent from "../../components/LoadingComponent";
 import ImageSwipe from "./ImageSwipe";
 // import Divider from '@mui/material/Divider';
 import Timeline from "@mui/lab/Timeline";
-import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineItem, { timelineItemClasses } from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
@@ -22,12 +22,15 @@ import AdsClickIcon from '@mui/icons-material/AdsClick';
 import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
 import OutputIcon from '@mui/icons-material/Output';
 import GroupsIcon from '@mui/icons-material/Groups';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 
 const labelStyle = {
   color: "#EF8181",
   fontWeight: "700",
   padding: "0.5rem",
   fontSize: "1.5rem",
+  fontFamily: "Inconsolata, monospace"
 };
 
 const contentStyle = {
@@ -44,22 +47,27 @@ const iconStyle = {
 
 const dotStyle = {
   backgroundColor: "#8FE1F3",
+  justifyItems: 'flex-start'
 };
 
 const connectorStyle = {
   bgcolor: "#ffffff",
 };
 
-const bulletArrowStyle = {
-  fontSize: "1.3rem",
-  color: "#EF8181",
-};
-
-const listItemStyle = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center'
+const webTimelineStyle = {
+  [`& .${timelineOppositeContentClasses.root}`]: {
+    flex: 0.3,
+  },
 }
+
+const mobileTimelineStyle = {
+  [`& .${timelineItemClasses.root}:before`]: {
+    flex: 0,
+    padding: 0,
+  },
+}
+
+
 
 const Project = ({ project, selected, openModal, closeModal }) => {
   // const [id, setId] = useState();
@@ -71,6 +79,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     // border: '1px solid black'
     visibility: "hidden",
   });
+  const matches = useMediaQuery('(max-aspect-ratio : 3/4)')
 
   // let imageStyle = {
   //   // border: '1px solid black'
@@ -195,16 +204,12 @@ const Project = ({ project, selected, openModal, closeModal }) => {
         </div>
         <div className="description">
           <Timeline
-            sx={{
-              [`& .${timelineOppositeContentClasses.root}`]: {
-                flex: 0.3,
-              },
-            }}
+            sx={!matches ? webTimelineStyle : mobileTimelineStyle}
           >
             <TimelineItem>
-              <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
+              {!matches && <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
                 <Typography sx={labelStyle}> About The Client </Typography>
-              </TimelineOppositeContent>
+              </TimelineOppositeContent>}
               <TimelineSeparator>
                 <TimelineConnector sx={connectorStyle} />
                 <TimelineDot sx={dotStyle}>
@@ -213,6 +218,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
                 <TimelineConnector sx={connectorStyle} />
               </TimelineSeparator>
               <TimelineContent sx={{ py: "12px", px: 2 }}>
+                {matches && <Typography sx={labelStyle}> About The Client </Typography>}
                 <Typography sx={contentStyle}>
                   <ul>
                   {project.description.aboutTheClient.map((data) => (
@@ -223,9 +229,9 @@ const Project = ({ project, selected, openModal, closeModal }) => {
               </TimelineContent>
             </TimelineItem>
             <TimelineItem>
-              <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
+              {!matches && <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
                 <Typography sx={labelStyle}> Goal And Situation </Typography>
-              </TimelineOppositeContent>
+              </TimelineOppositeContent>}
               <TimelineSeparator>
                 <TimelineConnector sx={connectorStyle} />
                 <TimelineDot sx={dotStyle}>
@@ -234,6 +240,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
                 <TimelineConnector sx={connectorStyle} />
               </TimelineSeparator>
               <TimelineContent sx={{ py: "12px", px: 2 }}>
+                {matches && <Typography sx={labelStyle}> Goal And Situation </Typography>}
                 <Typography sx={contentStyle}>
                   <ul>
                   {project.description.goalAndSituation.map((data) => (
@@ -244,9 +251,9 @@ const Project = ({ project, selected, openModal, closeModal }) => {
               </TimelineContent>
             </TimelineItem>
             <TimelineItem>
-              <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
+              {!matches && <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
                 <Typography sx={labelStyle}> Process And Why </Typography>
-              </TimelineOppositeContent>
+              </TimelineOppositeContent>}
               <TimelineSeparator>
                 <TimelineConnector sx={connectorStyle} />
                 <TimelineDot sx={dotStyle}>
@@ -255,6 +262,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
                 <TimelineConnector sx={connectorStyle} />
               </TimelineSeparator>
               <TimelineContent sx={{ py: "12px", px: 2 }}>
+                {matches && <Typography sx={labelStyle}> Process And Why </Typography>}
                 <Typography sx={contentStyle}>
                   <ul>
                   {project.description.processAndWhy.map((data) => (
@@ -265,9 +273,9 @@ const Project = ({ project, selected, openModal, closeModal }) => {
               </TimelineContent>
             </TimelineItem>
             <TimelineItem>
-              <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
+              {!matches && <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
                 <Typography sx={labelStyle}> The Outcome </Typography>
-              </TimelineOppositeContent>
+              </TimelineOppositeContent>}
               <TimelineSeparator>
                 <TimelineConnector sx={connectorStyle} />
                 <TimelineDot sx={dotStyle}>
@@ -276,6 +284,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
                 <TimelineConnector sx={connectorStyle} />
               </TimelineSeparator>
               <TimelineContent sx={{ py: "12px", px: 2 }}>
+                {matches && <Typography sx={labelStyle}> The Outcome </Typography>}
                 <Typography sx={contentStyle}>
                   <ul>
                   {project.description.theOutcome.map((data) => (
@@ -286,9 +295,9 @@ const Project = ({ project, selected, openModal, closeModal }) => {
               </TimelineContent>
             </TimelineItem>
             <TimelineItem>
-              <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
+              {!matches && <TimelineOppositeContent sx={{ m: "auto 0" }} align="right">
                 <Typography sx={labelStyle}> The Team </Typography>
-              </TimelineOppositeContent>
+              </TimelineOppositeContent>}
               <TimelineSeparator>
                 <TimelineConnector sx={connectorStyle} />
                 <TimelineDot sx={dotStyle}>
@@ -297,6 +306,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
                 <TimelineConnector sx={connectorStyle} />
               </TimelineSeparator>
               <TimelineContent sx={{ py: "12px", px: 2 }}>
+                {matches && <Typography sx={labelStyle}> The Team </Typography>}
                 <Typography sx={contentStyle}>
                   <ul>
                   {project.description.theTeam.map((data) => (

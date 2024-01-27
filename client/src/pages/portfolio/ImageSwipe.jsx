@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 // import function to register Swiper custom elements
 import LeftArrow from "../../components/arrows/LeftArrow";
 import RightArrow from "../../components/arrows/RightArrow";
-import { motion, useScroll, useTransform } from "framer-motion";
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
@@ -11,12 +10,7 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
   const [currImgContStyle, setCurrImgContStyle] = useState({ width: "45rem" });
   const [sliderData, setSliderData] = useState(0);
   const [currentPrecent, setCurrentPercent] = useState(null);
-  const { scrollXProgress } = useScroll({
-    container: sliderRef,
-  });
-  const xRange = useTransform(scrollXProgress, [0, 1], [0, 100], {
-    clamp: false,
-  });
+ 
   const matches = useMediaQuery('(max-aspect-ratio : 3/4)');
 
   // useEffect(
