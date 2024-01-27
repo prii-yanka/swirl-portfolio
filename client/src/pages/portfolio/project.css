@@ -248,11 +248,11 @@
   }
 
   .project-container .video-container.landscape {
-    width: 80%;
+    width: 60%;
   }
 
   .project-container .video-container.portrait {
-    width: 40%;
+    width: 25%;
   }
 
   .project-container .video-container .label {
@@ -284,12 +284,11 @@
     margin-bottom: 1.5rem;
   }
 
-  /* @media (max-aspect-ratio : 3/4) {
-    .project-container .images-container {
-      justify-content: center;
-      align-items: center;
+  @media (max-aspect-ratio : 3/4) {
+    .project-container .video-container {
+      width: 75%;
     }
-  } */
+  }
 
   /* @media (max-aspect-ratio : 3/4) {
     .current-image-container {
