@@ -59,6 +59,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
   const [images, setImages] = useState([]);
   const [imageCompare, setImageCompare] = useState();
   const [isVideo, setIsVideo] = useState(false);
+  const [videoAspectRatio, setVideoAspectRatio] = useState(0);
   const [imgLoadedCount, setImgLoadedCount] = useState(0);
   const [imageStyle, setImageStyle] = useState({
     // border: '1px solid black'
@@ -93,6 +94,23 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     setImgLoadedCount(imgLoadedCount + 1);
   };
 
+  const handleOpen = () => {
+    // window.location.reload(false);
+    setOpen(true);
+    setImageStyle({ visibility: "hidden" });
+  };
+
+
+  const handleVideoMetadata = () => {
+    if(isVideo) {
+      var video = document.getElementById('demo-video');
+      const width = video.videoWidth;
+      const height = video.videoHeight;
+      console.log(`width: ${width} -- height: ${height} -- width/height: ${width/height}`);
+      setVideoAspectRatio(width/height);
+    }
+  }
+
   useEffect(() => {
     if (images.length == imgLoadedCount) {
       console.log(`here where images.length == imgLoadedCount`);
@@ -116,12 +134,6 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     //   handleClose();
     // }
   }, [openModal]);
-
-  const handleOpen = () => {
-    // window.location.reload(false);
-    setOpen(true);
-    setImageStyle({ visibility: "hidden" });
-  };
 
   useEffect(() => {
     setImages([...project.images]);
@@ -200,15 +212,15 @@ const Project = ({ project, selected, openModal, closeModal }) => {
           </Timeline>
         </div>
         {isVideo && (
-          <div className="video-container">
+          <div className={videoAspectRatio >= 4/3 ? "video-container landscape" : "video-container portrait"}>
             <div className="label">Demo Video:</div>
-            <video src={project.video} controls></video>
+            <video id="demo-video" src={project.video} controls onLoadedMetadata={handleVideoMetadata}></video>
           </div>
         )}
         <div className="projectDate">
           {" "}
           {moment(project.when[0]).format("MMMM Do, YYYY")} -{" "}
-          {moment(project.when[1]).format("MMMM Do, YYYY")} <br /> <br />{" "}
+          {moment(project.when[1]).format("MMMM Do, YYYY")} {" "}
         </div>
         {project.linkTo && (
           <div className="projectLink">
