@@ -45,6 +45,11 @@
   text-align: center;
 }
 
+.portfolio .filter a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .portfolio .filter {
   width: 95%;
   display: flex;
@@ -54,6 +59,11 @@
 
 .portfolioList.active {
   background-color: #8FE1F3;
+  color: #000000;
+}
+
+.portfolioList:hover {
+  background-color: #fed46e;
   color: #000000;
 }
 

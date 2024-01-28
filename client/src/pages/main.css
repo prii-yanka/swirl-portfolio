@@ -25,6 +25,15 @@ ul {
   padding-inline-start: 1rem
 }
 
+svg.progress-icon {
+  height: 100%;
+  width: 100%;
+}
+
+.progress-container {
+  height: 100%;
+}
+
 /* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
 only screen and (min-device-pixel-ratio: 1.5) {
   .parts > * {

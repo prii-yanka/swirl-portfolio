@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 // import function to register Swiper custom elements
 import LeftArrow from "../../components/arrows/LeftArrow";
 import RightArrow from "../../components/arrows/RightArrow";
-import useMediaQuery from '@mui/material/useMediaQuery';
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
   const sliderRef = useRef(null);
@@ -10,8 +10,8 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
   const [currImgContStyle, setCurrImgContStyle] = useState({ width: "45rem" });
   const [sliderData, setSliderData] = useState(0);
   const [currentPrecent, setCurrentPercent] = useState(null);
- 
-  const matches = useMediaQuery('(max-aspect-ratio : 3/4)');
+
+  const matches = useMediaQuery("(max-aspect-ratio : 3/4)");
 
   // useEffect(
   //   () => {
@@ -20,12 +20,11 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
   //   [images]
   // );
 
-  useEffect(
-    () =>{
-      setCurrentPercent(Math.ceil( (sliderData / images.length)* 100 / 20) * 20);  // incements of 20
-    },
-    [sliderData, images]
-  );
+  useEffect(() => {
+    setCurrentPercent(
+      Math.ceil(((sliderData / images.length) * 100) / 20) * 20
+    ); // incements of 20
+  }, [sliderData, images]);
 
   const handleLeftImage = () => {
     if (sliderData > 0) {
@@ -52,29 +51,41 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
     let myImg = document.querySelector("#imgId");
     let realWidth = myImg.naturalWidth;
     let realHeight = myImg.naturalHeight;
-    if (realWidth/realHeight <= 3 / 4) {
-      if(matches) {
-        setCurrImgContStyle({ width: "10rem", height: `${(10*realHeight/realWidth) + 3}rem` });
-
+    if (realWidth / realHeight <= 3 / 4) {
+      if (matches) {
+        setCurrImgContStyle({
+          width: "10rem",
+          height: `${(10 * realHeight) / realWidth + 3}rem`,
+        });
+      } else {
+        setCurrImgContStyle({
+          width: "14rem",
+          height: `${(14 * realHeight) / realWidth + 5}rem`,
+        });
       }
-      else {
-        setCurrImgContStyle({ width: "14rem", height: `${(14*realHeight/realWidth) + 5}rem` });
+    } else if (realWidth / realHeight >= 4 / 3) {
+      if (matches) {
+        setCurrImgContStyle({
+          width: "15rem",
+          height: `${(15 * realHeight) / realWidth + 3}rem`,
+        });
+      } else {
+        setCurrImgContStyle({
+          width: "20rem",
+          height: `${(20 * realHeight) / realWidth + 5}rem`,
+        });
       }
-    } 
-    else if (realWidth/realHeight >= 4 / 3){
-      if(matches) {
-        setCurrImgContStyle({ width: "15rem", height: `${(15*realHeight/realWidth) + 3}rem` });
-      }
-      else {
-        setCurrImgContStyle({ width: "20rem", height: `${(20*realHeight/realWidth) + 5}rem` });
-      }
-    }
-    else {
-      if(matches) {
-        setCurrImgContStyle({ width: "20rem", height: `${(20*realHeight/realWidth) + 3}rem` });
-      }
-      else {
-        setCurrImgContStyle({ width: "25rem", height: `${(25*realHeight/realWidth) + 5}rem` });
+    } else {
+      if (matches) {
+        setCurrImgContStyle({
+          width: "20rem",
+          height: `${(20 * realHeight) / realWidth + 3}rem`,
+        });
+      } else {
+        setCurrImgContStyle({
+          width: "25rem",
+          height: `${(25 * realHeight) / realWidth + 5}rem`,
+        });
       }
     }
   }, [currImage]);

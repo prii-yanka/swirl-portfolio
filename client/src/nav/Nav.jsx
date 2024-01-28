@@ -59,26 +59,31 @@ const Nav = () => {
     // console.log("prevScroll: " + prevScrollPos + " " + "visibe: " + visible);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [prevScrollPos, visible, handleScroll]);
-  
-  return (
-    <div className="navButton" style={{ transition: "top 0.3s", top: visible ? "0" : "-14rem" }}>
-      <div className="logo-container">
-        <img src="images/logo.png" className="logo" />
-        <motion.div
-          style={{ color: "#000000" }}
-          variants={textVariants}
-          initial="initial"
-          animate="final"
-        >
-          {" "}
-          Click Me{" "}
-        </motion.div>
-        {/* <div> Menu </div> */}
-      </div>
 
+  return (
+    <div
+      className="navButton"
+      style={{ transition: "top 0.3s", top: visible ? "0" : "-14rem" }}
+    >
       <motion.nav animate={{ x: [0, 15, -15, 0] }}>
         <Planet
-          centerContent={<div className="center" />}
+          centerContent={
+            <div className="center">
+              <div className="logo-container">
+                <img src="images/logo.png" className="logo" />
+              </div>
+              <motion.div
+                style={{ color: "#000000" }}
+                className="click-me"
+                variants={textVariants}
+                initial="initial"
+                animate="final"
+              >
+                {" "}
+                Click Me{" "}
+              </motion.div>
+            </div>
+          }
           autoClose
           hideOrbit
           orbitRadius={130}
@@ -92,9 +97,8 @@ const Nav = () => {
           {navLinks.map(({ navLinkId, scrollToId }, idx) => (
             <NavLink key={idx} navLinkId={navLinkId} scrollToId={scrollToId} />
           ))}
-         <div></div>
           <div></div>
-         
+          <div></div>
         </Planet>
       </motion.nav>
     </div>
