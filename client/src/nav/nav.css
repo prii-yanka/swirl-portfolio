@@ -100,7 +100,7 @@ nav div .nav-items:hover {
 .navButton {
   position: fixed;
   top: 0;
-  left: 45vw;
+  left: calc(50% - 3.5rem);
   z-index: 10;
 }
 
