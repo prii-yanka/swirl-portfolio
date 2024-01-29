@@ -53,7 +53,7 @@ const ProjectDescriptionItem = ({ content, label, icon, matches }) => {
         </TimelineDot>
         <TimelineConnector sx={connectorStyle} />
       </TimelineSeparator>
-      <TimelineContent sx={{ py: "0.2rem", px: 0 }}>
+      <TimelineContent sx={{ py: "0.25rem", px: "0.75rem" }}>
         {matches && <Typography sx={labelStyle}> {startCase(label)} </Typography>}
         <Typography sx={contentStyle}>
           <ul>
