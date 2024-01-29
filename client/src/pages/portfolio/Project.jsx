@@ -65,7 +65,7 @@ const Project = ({ project, selected, openModal, closeModal }) => {
     // border: '1px solid black'
     visibility: "hidden",
   });
-  const matches = useMediaQuery("(max-aspect-ratio : 3/4)");
+  const matches = useMediaQuery("(max-aspect-ratio : 3/4), (max-width : 47rem)");
 
   // let imageStyle = {
   //   // border: '1px solid black'

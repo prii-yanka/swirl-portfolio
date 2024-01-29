@@ -46,7 +46,7 @@ export const ScrollAnimation = ({ mainContainerHeight, mainContainerWidth }) => 
 
 	useEffect(() => {	
 		let myPathBox = document.getElementById("myPathBox").getBBox();
-		console.log(`myPathBox: ${myPathBox.x} ${myPathBox.y} ${myPathBox.width} ${myPathBox.height}`);
+		// console.log(`myPathBox: ${myPathBox.x} ${myPathBox.y} ${myPathBox.width} ${myPathBox.height}`);
 		// const x = (myPathBox.width - mainContainerWidth)/2;
 		// const adjustX = x - myPathBox.x;
 		setTranslateXPos(`${(myPathBox.x)}`);
@@ -75,7 +75,7 @@ export const ScrollAnimation = ({ mainContainerHeight, mainContainerWidth }) => 
           fill="none"
 					id="myPathBox"
           // {currentPrecent === 100 ? "#CDFF00" : "none"}
-          strokeWidth="9"
+          strokeWidth={matches ? "5" : "9"}
           stroke={currentProgressColor}
           strokeDasharray="0 1"
           transition={{

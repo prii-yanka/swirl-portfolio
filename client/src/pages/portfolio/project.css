@@ -47,7 +47,8 @@
   }
 
   .project-images-container .carousel {
-    width: 100%;
+    max-width: 100%;
+    width: fit-content;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -68,15 +69,26 @@
     border-radius: 0.5rem;
   }
 
-  .project-container .current-image-container p {
+  .current-image-container:hover {
+    background-color: #fed46e;
+  }
+
+  .project-container .current-image-container .image-description {
     align-self: center;
+    padding-top: 0.5rem;
   }
 
-  .project-images-container .current-image-container a {
+  .project-images-container a{
     width: 100%;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
-  .project-images-container .current-image-container a img{
+  .project-images-container a .current-image-container img{
     object-fit: contain;
     object-position: left top;
     /* overflow-clip-margin: ; */

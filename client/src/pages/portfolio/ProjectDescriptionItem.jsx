@@ -12,7 +12,7 @@ const labelStyle = {
   color: "#EF8181",
   fontWeight: "700",
   padding: "0.5rem",
-  fontSize: "1.5rem",
+  fontSize: "1.25rem",
   fontFamily: "Inconsolata, monospace",
 };
 
@@ -53,7 +53,7 @@ const ProjectDescriptionItem = ({ content, label, icon, matches }) => {
         </TimelineDot>
         <TimelineConnector sx={connectorStyle} />
       </TimelineSeparator>
-      <TimelineContent sx={{ py: "12px", px: 2 }}>
+      <TimelineContent sx={{ py: "0.2rem", px: 0 }}>
         {matches && <Typography sx={labelStyle}> {startCase(label)} </Typography>}
         <Typography sx={contentStyle}>
           <ul>

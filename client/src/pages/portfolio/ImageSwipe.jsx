@@ -78,8 +78,8 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
     } else {
       if (matches) {
         setCurrImgContStyle({
-          width: "20rem",
-          height: `${(20 * realHeight) / realWidth + 3}rem`,
+          width: "15rem",
+          height: `${(15 * realHeight) / realWidth + 3}rem`,
         });
       } else {
         setCurrImgContStyle({
@@ -145,17 +145,17 @@ const ImageSwipe = ({ images, onLoad, imageStyle, imageDescriptions }) => {
             }
           />
         </div>
-        <div className="current-image-container" style={currImgContStyle}>
-          <a href={images[sliderData]} target="_blank" rel="noreferrer">
+        <a href={images[sliderData]} target="_blank" rel="noreferrer">
+          <div className="current-image-container" style={currImgContStyle}>
             <img
               id="imgId"
               src={images[sliderData]}
               alt="placeholder alt text"
               onLoad={() => setCurrImage(images[sliderData])}
             />
-          </a>
-          <p> {imageDescriptions[sliderData]}</p>
-        </div>
+            <p className="image-description"> {imageDescriptions[sliderData]}</p>
+          </div>
+        </a>
         <div onClick={handleRightImage}>
           {/* <div> */}
           <RightArrow
