@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import './main.css';
-import { Contact, Education, Experience, InteractiveGrid, Intro, Portfolio, Skills } from './';
+import { Contact, Education, Experience, Intro, Portfolio, Skills } from './';
 import { motion, useViewportScroll, useSpring, useTransform } from 'framer-motion';
 // import { useSpring, animated } from 'react-spring'
-import styled, { css } from 'styled-components'
+// import styled, { css } from 'styled-components'
 import { ScrollAnimation } from "./ScrollAnimation";
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { TagProvider } from '../context/TagsContext';

@@ -4,7 +4,7 @@ import { navLinks } from "./navLinks";
 import "./nav.css";
 import { motion } from "framer-motion";
 
-import { Planet } from "react-planet";
+import { Planet } from "../components/my-react-planet/Planet";
 
 let textVariants = {
   initial: {

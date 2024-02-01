@@ -1,18 +1,18 @@
-import React from 'react'
-import './skills.css'
-import '../pages.css'
-import { useNav } from '../../customHooks/useNav';
+import React from "react";
+import "./skills.css";
+import "../pages.css";
+import { useNav } from "../../customHooks/useNav";
+import { CircularPacking2Levels } from "../../components/skills-visualization/CircularPacking2Levels";
 
 const Skills = () => {
-
-  const skillsRef = useNav('Skills')
+  const skillsRef = useNav("Skills");
 
   return (
-    <section className='skills' ref={skillsRef} id='skillsContainer'>
+    <section className="skills" ref={skillsRef} id="skillsContainer">
       <div className="skills-container">
         <div className="about-skills">
           <h1> Skills </h1>
-          <div className="content">
+          {/* <div className="content">
             <div className="development-skills">
               <h4> Development</h4>
               <div className="skill-item main-item">
@@ -208,16 +208,22 @@ const Skills = () => {
               </div>
             </div>
           </div>
-          <div className="other"> I have also worked with:<br /> Java | C/C++ | Git & GitHub | Linux Environment | SCRUM <br /> as part of my projects and classes</div>
+          <div className="other">
+            {" "}
+            I have also worked with:
+            <br /> Java | C/C++ | Git & GitHub | Linux Environment | SCRUM{" "}
+            <br /> as part of my projects and classes
+          </div> */}
+          <CircularPacking2Levels/>
         </div>
-        <div className='skills-illustration-container'>
+        <div className="skills-illustration-container">
           <div className="image-container">
             <img src="images/skills@72x.png" className="skills-bg" />
           </div>
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Skills
+export default Skills;

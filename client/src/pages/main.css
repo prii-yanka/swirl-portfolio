@@ -32,6 +32,13 @@ svg.progress-icon {
 
 .progress-container {
   height: 100%;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  z-index: 0;
+  text-align: center;
+  overflow-y: hidden;
+	overflow-x: hidden;
 }
 
 /* @media only screen and (-webkit-min-device-pixel-ratio: 1.5),

@@ -2,7 +2,7 @@ import './intro.css'
 import '../pages.css'
 import { useNav } from '../../customHooks/useNav';
 import React, { useRef, useState, useLayoutEffect } from "react"
-import { Typewriter } from 'react-simple-typewriter'
+import { Typewriter } from '../../components/my-typewriter/Typewriter'
 
 const Intro = () => {
 

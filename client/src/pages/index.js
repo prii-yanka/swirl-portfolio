@@ -1,4 +1,4 @@
-export { default as InteractiveGrid } from './interactive-grid/InteractiveGrid';
+// export { default as InteractiveGrid } from './interactive-grid/InteractiveGrid';
 export { default as Education } from './education/Education';
 export { default as Experience } from './experience/Experience';
 export { default as Intro } from './intro/Intro';

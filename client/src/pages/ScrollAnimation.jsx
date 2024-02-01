@@ -1,30 +1,30 @@
 import { useEffect, useState } from "react";
 import {
   motion,
-  useViewportScroll,
+  useScroll,
   useSpring,
   useTransform,
   AnimatePresence,
 } from "framer-motion";
-import styled from "styled-components";
+// import styled from "styled-components";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import "./main.css";
 
-const ProgressContainer = styled(motion.div)`
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  zindex: 100;
-  text-align: center;
-  overflow-y: hidden;
-	overflow-x: hidden;
-`;
+// const ProgressContainer = styled(motion.div)`
+//   pointer-events: none;
+//   position: absolute;
+//   top: 0;
+//   zindex: 100;
+//   text-align: center;
+//   overflow-y: hidden;
+// 	overflow-x: hidden;
+// `;
 
 export const ScrollAnimation = ({ mainContainerHeight, mainContainerWidth }) => {
   const [currentPrecent, setCurrentPercent] = useState(null);
   const [currentProgressColor, setCurrentProgressColor] = useState(null);
   const [scrollPercentage, setScrollPercentage] = useState(0);
-  const { scrollYProgress } = useViewportScroll();
+  const { scrollYProgress } = useScroll();
 	const [translateXPos, setTranslateXPos] = useState(0);
   const yRange = useTransform(scrollYProgress, [0, 1], [0, 100], {
     clamp: false,
@@ -65,7 +65,7 @@ export const ScrollAnimation = ({ mainContainerHeight, mainContainerWidth }) => 
   }, [currentPrecent]);
 
   return (
-    <ProgressContainer className="progress-container" style={{ height: mainContainerHeight, width: mainContainerWidth}}>
+    <motion.div className="progress-container" style={{ height: mainContainerHeight, width: mainContainerWidth}}>
       <svg
         className="progress-icon"
         viewBox="0 0 1920 5400"
@@ -94,6 +94,6 @@ export const ScrollAnimation = ({ mainContainerHeight, mainContainerWidth }) => 
           }}
         />
       </svg>
-    </ProgressContainer>
+    </motion.div>
   );
 };

@@ -3,44 +3,36 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.2",
-    "@mui/icons-material": "^5.5.1",
-    "@mui/lab": "^5.0.0-alpha.162",
-    "@mui/material": "^5.15.6",
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.4",
-    "@testing-library/user-event": "^13.5.0",
-    "aws-sdk": "^2.1229.0",
-    "axios": "^0.27.2",
-    "buffer": "^6.0.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
-    "drie": "^2.0.0",
-    "express": "^4.17.3",
-    "framer-motion": "^6.5.1",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.7",
+    "@mui/lab": "^5.0.0-alpha.163",
+    "@mui/material": "^5.15.7",
+    "@react-hook/resize-observer": "^1.2.6",
+    "@testing-library/jest-dom": "^6.4.1",
+    "@testing-library/react": "^14.2.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/d3": "^7.4.3",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.11.15",
+    "@types/react": "^18.2.51",
+    "@types/react-dom": "^18.2.18",
+    "@use-gesture/react": "^10.3.0",
+    "aws-sdk": "^2.1548.0",
+    "d3": "^7.8.5",
+    "dotenv": "^16.4.1",
+    "framer-motion": "^11.0.3",
     "lodash": "^4.17.21",
-    "lodash.startcase": "^4.4.0",
-    "lottie-web": "^5.12.0",
-    "moment": "^2.29.4",
-    "nodemailer": "^6.7.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-helmet": "^6.1.0",
-    "react-image-size": "^2.0.2",
-    "react-parallax": "^3.3.0",
-    "react-planet": "^1.0.1-ie11",
-    "react-router-dom": "^6.4.1",
+    "lottie-web": "^5.12.2",
+    "moment": "^2.30.1",
+    "nodemailer": "^6.9.8",
+    "react": "^18.2.0",
+    "react-image-size": "^2.3.2",
+    "react-router-dom": "^6.21.3",
     "react-scripts": "5.0.1",
-    "react-simple-typewriter": "^3.0.1",
-    "react-spring": "^9.4.4",
-    "react-swipeable": "^7.0.1",
-    "react-three-fiber": "^6.0.13",
-    "styled-components": "^5.3.5",
-    "three": "^0.138.3",
-    "web-vitals": "^2.1.4"
+    "react-spring": "^9.7.3",
+    "three": "^0.161.0",
+    "web-vitals": "^3.5.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -48,12 +40,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -68,7 +54,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^3.2.3"
+    "typescript": "^5.3.3"
   },
   "homepage": ".",
   "proxy": "http://localhost:5001"
