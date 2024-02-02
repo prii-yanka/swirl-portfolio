@@ -54,7 +54,9 @@
     ]
   },
   "devDependencies": {
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "@babel/plugin-proposal-private-property-in-object":"^7.21.11",
+    "fork-ts-checker-webpack-plugin":"^9.0.2"
   },
   "homepage": ".",
   "proxy": "http://localhost:5001"

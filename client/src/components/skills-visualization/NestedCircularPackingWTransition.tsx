@@ -75,7 +75,6 @@ export const NestedCircularPackingWTransition = ({
     return (
       <g key={leaf.data.name}>
         <AnimatedCircle
-          key={leaf.data.name}
           cx={leaf.x}
           cy={leaf.y}
           r={leaf.r}
@@ -86,7 +85,6 @@ export const NestedCircularPackingWTransition = ({
         />
 
         <AnimatedText
-          key={leaf.data.name}
           x={leaf.x}
           y={leaf.y}
           fontSize={13}
