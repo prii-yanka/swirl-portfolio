@@ -86,6 +86,24 @@ export type TreeNode = {
           { type: "leaf", name: "Einsteineee", value: 50 },
         ],
       },
+      {
+        type: "node",
+        name: "Team Sales",
+        value: 0,
+        children: [
+          { type: "leaf", name: "Mélanieeee", value: 20 },
+          { type: "leaf", name: "Einsteineee", value: 50 },
+        ],
+      },
+      {
+        type: "node",
+        name: "Team Sales",
+        value: 0,
+        children: [
+          { type: "leaf", name: "Mélanieeee", value: 20 },
+          { type: "leaf", name: "Einsteineee", value: 50 },
+        ],
+      },
     ],
   };
   

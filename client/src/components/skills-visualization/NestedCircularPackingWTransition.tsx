@@ -2,6 +2,7 @@ import * as d3 from "d3";
 import { Tree } from "./skillsData";
 import React from "react";
 import { animated, useSpring } from "react-spring";
+import { motion } from "framer-motion";
 
 type CircularPackingProps = {
   width: number;
@@ -11,32 +12,40 @@ type CircularPackingProps = {
 
 const MARGIN = 3;
 
-const colors = [
-  "#e0ac2b",
-  "#6689c6",
-  "#a4c969",
-  "#e85252",
-  "#9a6fb0",
-  "#a53253",
-  "#7f7f7f",
-];
+const colors = ["#EF8181", "#8FE1F3", "#fed46e"];
 
 export const NestedCircularPackingWTransition = ({
   width,
   height,
   data,
 }: CircularPackingProps) => {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        delayChildren: 0.5,
+        staggerChildren: 0.2
+      },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1 },
+  };
+
   const hierarchy = d3
     .hierarchy(data)
     .sum((d) => d.value)
-    .sort((a, b) => b.value! - a.value!);
+    // .sort((a, b) => b.value! - a.value!);
 
   const packGenerator = d3.pack<Tree>().size([width, height]).padding(4);
   const root = packGenerator(hierarchy);
 
   // List of item of level 1 (just under root) & related color scale
   const firstLevelGroups = hierarchy?.children?.map((child) => child.data.name);
-  var colorScale = d3
+  var colorScaleParent = d3
     .scaleOrdinal<string>()
     .domain(firstLevelGroups || [])
     .range(colors);
@@ -50,15 +59,19 @@ export const NestedCircularPackingWTransition = ({
 
       return (
         <g key={node.data.name}>
-          <circle
+          <motion.circle
+            variants={container}
+            initial="hidden"
+            animate="show"
             cx={node.x}
             cy={node.y}
             r={node.r}
-            stroke={colorScale(parentName)}
+            stroke={colorScaleParent(parentName)}
             strokeWidth={1}
             strokeOpacity={0.3}
-            fill={colorScale(parentName)}
-            fillOpacity={0.1}
+            fill={colorScaleParent(parentName)}
+            fillOpacity={1}
+            transition={{ ease: "easeOut", duration: 2 }}
           />
         </g>
       );
@@ -74,7 +87,7 @@ export const NestedCircularPackingWTransition = ({
 
     return (
       <g key={leaf.data.name}>
-        <AnimatedCircle
+        {/* <AnimatedCircle
           cx={leaf.x}
           cy={leaf.y}
           r={leaf.r}
@@ -82,6 +95,16 @@ export const NestedCircularPackingWTransition = ({
           strokeWidth={2}
           fill="#B794F4"
           fillOpacity={0.2}
+        /> */}
+        <motion.circle
+          cx={leaf.x}
+          cy={leaf.y}
+          variants={item}
+          fill='white'
+          fillOpacity={0.5}
+          transition={{ ease: "easeOut", duration: 2 }}
+          animate={{ cx: leaf.x, cy: leaf.y }}
+          r={leaf.r}
         />
 
         <AnimatedText
@@ -106,26 +129,26 @@ export const NestedCircularPackingWTransition = ({
   );
 };
 
-const AnimatedCircle = ({
-  cx,
-  cy,
-  r,
-  ...props
-}: React.SVGAttributes<SVGCircleElement>) => {
-  const animatedProps = useSpring({
-    cx,
-    cy,
-    r,
-  });
-  return (
-    <animated.circle
-      {...props}
-      r={animatedProps.r as any}
-      cx={animatedProps.cx as any}
-      cy={animatedProps.cy as any}
-    />
-  );
-};
+// const AnimatedCircle = ({
+//   cx,
+//   cy,
+//   r,
+//   ...props
+// }: React.SVGAttributes<SVGCircleElement>) => {
+//   const animatedProps = useSpring({
+//     cx,
+//     cy,
+//     r,
+//   });
+//   return (
+//     <animated.circle
+//       {...props}
+//       r={animatedProps.r as any}
+//       cx={animatedProps.cx as any}
+//       cy={animatedProps.cy as any}
+//     />
+//   );
+// };
 
 const AnimatedText = ({
   x,
