@@ -9,18 +9,22 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    // window.addEventListener(
-    //   "load",
-    //   function () {
-    //     // loaded
-    //     setLoading(false);
-    //   },
-    //   false
-    // );
-
-    window.onload = (event) => {
+    if (document.readyState === "complete") {
       setLoading(false);
-    };
+    } else {
+      document.addEventListener(
+        "load",
+        function () {
+          // loaded
+          setLoading(false);
+        },
+        false
+      );
+    }
+    // const mainElement = document.getElementsByClassName("mainElement")
+    // mainElement.onload = (event) => {
+    //   setLoading(false);
+    // };
   }, []);
 
   return (
@@ -34,7 +38,7 @@ const App = () => {
         {!loading && (
           <div>
             <Nav />
-            <Main />
+            <Main className="mainElement"/>
           </div>
         )}
       </NavProvider>

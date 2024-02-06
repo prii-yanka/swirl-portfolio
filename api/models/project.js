@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const url = process.env.ATLAS_URI;
 // console.log(process.env)
 
+mongoose.set('strictQuery', true);
 const conn = mongoose
   .connect(url, { useNewUrlParser: true })
   .then((result) => {

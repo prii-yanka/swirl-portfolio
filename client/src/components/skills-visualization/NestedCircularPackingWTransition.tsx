@@ -124,7 +124,7 @@ export const NestedCircularPackingWTransition = ({
   const packGenerator = d3
     .pack<Tree>()
     .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
-    .padding(20);
+    .padding(matches? 5 : 15);
   const root = packGenerator(hierarchy);
 
   const colorScale = d3
@@ -270,7 +270,7 @@ const AnimatedText = ({
       // dy='10'
       x={animatedProps.x as any}
       y={animatedProps.y as any}
-      letter-spacing="1"
+      letterSpacing="1"
       style={{
         pointerEvents: "none",
         // transform: `translateY(-${20}%)`

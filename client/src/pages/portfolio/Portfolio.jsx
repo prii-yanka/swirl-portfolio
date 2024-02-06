@@ -1,165 +1,116 @@
-import React, { useContext, useEffect, useState } from "react";
-// import { Buffer } from "buffer";
-import "./portfolio.css";
-import "../pages.css";
-import { useNav } from "../../customHooks/useNav";
-import PortfolioList from "./PortfolioList";
-import LoadingComponent from "../../components/LoadingComponent";
-import { Link, Navigate, NavLink, Route, Routes, useNavigate } from "react-router-dom";
-import Project from "./Project";
+import React, { useState, useEffect } from 'react';
+import { NavLink, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { useNav } from '../../customHooks/useNav';
+import PortfolioList from './PortfolioList';
+import LoadingComponent from '../../components/LoadingComponent';
+import Project from './Project';
+import './portfolio.css';
+import '../pages.css';
 
 const Portfolio = () => {
-  const portfolioRef = useNav("Portfolio");
+    const portfolioRef = useNav('Portfolio');
+    const [baseURL, setBaseURL] = useState('http://localhost:5001');
+    const [projects, setProjects] = useState([]);
+    const [selectedProject, setSelectedProject] = useState();
+    const [openModal, setOpenModal] = useState(false);
+    const navigate = useNavigate();
+    const [selected, setSelected] = useState('all');
+    
+    const list = [
+      {
+        id: "all",
+        title: "All",
+      },
+      {
+        id: "featured",
+        title: "Featured",
+      },
+      {
+        id: "web",
+        title: "Web App",
+      },
+      {
+        id: "mobile",
+        title: "Mobile App",
+      },
+      {
+        id: "design",
+        title: "Design",
+      },
+      {
+        id: "development",
+        title: "Development",
+      },
+      {
+        id: "internship",
+        title: "Internship",
+      },
+      {
+        id: "paintings",
+        title: "Paintings",
+      },
+      {
+        id: "studio",
+        title: "Studio Art",
+      },
+    ];    
 
-  // const getBase64StringFromDataURL = (dataURL) =>
-  //   dataURL.replace("data:", "").replace(/^.+,/, "");
-  const [baseURL, setBaseURL] = useState("")
-  const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState();
-  const [openModal, setOpenModal] = useState(false);
-  const [isStopped, setIsStopped] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  // const [posterImages, setPosterImages] = useState({});
-  const navigate = useNavigate();
-  // const [closeModal, setCloseModal] = useState(true);
-  // const [featuredProjects, setFeaturedProjects] = useState([]);
-  // const [webProjects, setWebProjects] = useState([]);
-  // const [mobileProjects, setMobileProjects] = useState([]);
-  // const [designProjects, setDesignProjects] = useState([]);
-  // const [loading, setLoading] = useState(projects ? false : true);
-  const [selected, setSelected] = useState();
-  // const [data, setData] = useState([]);
-  const list = [
-    {
-      id: "all",
-      title: "All",
-    },
-    {
-      id: "featured",
-      title: "Featured",
-    },
-    {
-      id: "web",
-      title: "Web App",
-    },
-    {
-      id: "mobile",
-      title: "Mobile App",
-    },
-    {
-      id: "design",
-      title: "Design",
-    },
-    {
-      id: "development",
-      title: "Development",
-    },
-    {
-      id: "internship",
-      title: "Internship",
-    },
-    {
-      id: "paintings",
-      title: "Paintings",
-    },
-    {
-      id: "studio",
-      title: "Studio Art",
-    },
-  ];
+    useEffect(() => {
+        const envBaseURL = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : 'http://localhost:5001';
+        setBaseURL(envBaseURL);
+        const curr_selection = window.localStorage.getItem('selected');
+        const selection = curr_selection == "undefined" ? 'all' : curr_selection;
+        setSelected(selection);
+    }, []);
 
-  useEffect(() => {
-    if(process.env.NODE_ENV == "production") {
-      setBaseURL(process.env.PUBLIC_URL);
-    } else if (process.env.NODE_ENV == "development") {
-      setBaseURL("http://localhost:5001");
-    }
-    // console.log("saving state between refresh:");
-    const curr_selection = window.localStorage.getItem("selected");
+    useEffect(() => {
+      console.log(`selected: ${selected}`)
+        const getRelatedProjects = async () => {
+            try {
+                const response = await fetch(`${baseURL}/:${selected}`);
+                if (!response.ok) {
+                    throw new Error(`An error occurred: ${response.statusText}`);
+                }
+                const relatedProjects = await response.json();
+                console.log(`----setProjects: ${relatedProjects}\n`)
 
-    if (curr_selection && curr_selection !== "undefined") {
-      setSelected(curr_selection);
-      console.log(`current selection from local storage: ${curr_selection}`)
-      // getProjects();
-      // navigate(`/${selected}`);
-    }
-    else {
-      setSelected("all");
-      // getProjects();
-    }
-  }, []);
+                setProjects([...relatedProjects]);
 
-  useEffect(() => {
-    // if (selected)
-    // if (selected) {
-      console.log("Base URL:", baseURL);
-      console.log("Selected Category:", selected);
-      window.localStorage.setItem("selected", selected);
-
-      async function getRelatedProjects() {
-        // const response = await fetch(`http://localhost:5001/:${selected}`);
-        const response = await fetch(`${baseURL}/:${selected}`);
-
-
-        if (!response.ok) {
-          const message = `An error occurred getting selected projects: ${response.statusText}`;
-          window.alert(message);
-          return;
-        }
-
-        const relatedProjects = await response.json();
-        // console.log(`----setProjects: ${relatedProjects}\n`)
-        setProjects([...relatedProjects]);
-      }
-      if (selected) {
+            } catch (error) {
+                console.error('Failed to fetch projects:', error);
+            }
+        };
         getRelatedProjects();
         navigate(`/${selected}`);
-      }
-      // setPosterImages({});
-    // }
-  }, [selected]);
+    }, [selected, baseURL]);
 
-  useEffect(() => {
-    console.log(projects);
-    // projects.map((project) => (
-    //   setPosterImages({...posterImages, [project.id]: [project.poster_image]})
-    // ))
-    // console.log(posterImages);
-  }, [projects]);
+    const openProject = async (id) => {
+        try {
+            const response = await fetch(`${baseURL}/:${selected}/:${id}`);
+            if (!response.ok) {
+                throw new Error(`An error occurred: ${response.statusText}`);
+            }
+            const project = await response.json();
+            setSelectedProject(project);
+            setOpenModal(true);
+            navigate(`/${selected}/${id}`);
+        } catch (error) {
+            console.error('Failed to open project:', error);
+        }
+    };
 
-  const openProject = async (id) => {
-    async function openProjectById() {
-      const response = await fetch(`${baseURL}/:${selected}/:${id}`);
+    const closeModal = () => {
+        setOpenModal(false);
+        navigate(-1); // go back one page
+    };
 
-      if (!response.ok) {
-        const message = `An error occurred opening project: ${response.statusText}`;
-        window.alert(message);
-        return;
-      }
-
-      const curr_project = await response.json();
-      console.log(curr_project);
-      setSelectedProject(curr_project);
-    }
-
-    await openProjectById();
-    <Navigate to={`/${selected}/${id}`} />    
-    setOpenModal(true);
-  };
-
-  useEffect(() => {
-    
-  }, [openModal]);
-
-  const closeModal = (closeValue) => {
-    setOpenModal(!closeValue);
-    navigate(-1); // go back one page
-    // if (selected) {
-      // <Navigate to={`/${selected}`} />
-    // } else {
-    //   <Navigate to={`/`} />
-    // }
-  }
+    useEffect(() => {
+      console.log(projects);
+      // projects.map((project) => (
+      //   setPosterImages({...posterImages, [project.id]: [project.poster_image]})
+      // ))
+      // console.log(posterImages);
+    }, [projects]);
 
   if (projects.length === 0 ) {
     // console.log("NO PROJECTS");
@@ -195,21 +146,40 @@ const Portfolio = () => {
         ))}
       </ul>
       <div className="portfolio-item-container">
-        { projects.map((d) => { 
-          // console.log(`d.poster_image: ${d.poster_image}`);
-          return (
+        {projects.map((project) => (
             <NavLink
-              to={`/${selected}/${d.id}`}
-              onClick={() => openProject(d.id)}
-              key={d.id}
+                to={`/${selected}/${project.id}`}
+                onClick={() => openProject(project.id)}
+                key={project.id}
+                className={({ isActive }) => (isActive ? 'active' : '')} // Apply 'active' class to the active link
             >
-              <div className="item">
-                <img src={d.poster_image} alt="" />
-                <h3> {d.project_name}</h3>
-              </div>
+                <div className="item">
+                    <img src={project.poster_image} alt="" />
+                    <h3>{project.project_name}</h3>
+                </div>
             </NavLink>
-          )})}
+        ))}
         <Routes>
+            <Route
+                path="/"
+                element={<Navigate to="all" />} // replace prop will prevent creating a new entry in the history
+            />
+            {projects && projects.map((project) => (
+                <Route
+                    key={project.id}
+                    path={`${selected}/*`} // Nested routes will be relative in v6
+                    element={
+                        <Project 
+                            project={selectedProject || project} 
+                            selected={selected} 
+                            openModal={openModal} 
+                            closeModal={closeModal} 
+                        />
+                    }
+                />
+            ))}
+        </Routes>
+        {/* <Routes>
               <Route
                 exact
                 path={`/`}
@@ -224,8 +194,8 @@ const Portfolio = () => {
                 element={<Project project={selectedProject? selectedProject : d} selected={selected} openModal={openModal} closeModal={closeModal}/>}
               ></Route>
             ))}
-        </Routes>
-      </div>
+        </Routes> */}
+    </div>
     </section>
   );
 };
