@@ -1,14 +1,33 @@
 import * as d3 from "d3";
-import { Tree } from "./skillsData";
-import React from "react";
-import { animated, useSpring } from "react-spring";
-import { motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { animated, useSpring } from "@react-spring/web";
+import { motion, useAnimation, useInView } from "framer-motion";
+import { Tree, TreeLeaf, TreeNode } from "./skillsData";
+import { useMediaQuery } from "@mui/material";
 
 type CircularPackingProps = {
   width: number;
   height: number;
   data: Tree;
 };
+
+class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
+  data: Tree;
+  x: number;
+  y: number;
+  r: number; // Assuming you have a radius for circular packing
+  component?: React.ReactNode; // Optional, since not all nodes will have a component
+
+  constructor(node: d3.HierarchyCircularNode<Tree>) {
+    this.data = node.data;
+    this.x = node.x;
+    this.y = node.y;
+    this.r = node.r; // Radius for circular layout
+    if ("component" in node.data) {
+      this.component = node.data.component; // Only set if component exists in data
+    }
+  }
+}
 
 const MARGIN = 3;
 
@@ -19,136 +38,222 @@ export const NestedCircularPackingWTransition = ({
   height,
   data,
 }: CircularPackingProps) => {
+  const controls = useAnimation();
+  const skillsPackContainerRef = useRef(null);
+
+  const inView1 = useInView(skillsPackContainerRef);
   const container = {
     hidden: { opacity: 0 },
-    show: {
+    visible: {
       opacity: 1,
       transition: {
         delayChildren: 0.5,
-        staggerChildren: 0.2
+        staggerChildren: 0.2,
       },
     },
   };
 
   const item = {
     hidden: { opacity: 0 },
-    show: { opacity: 1 },
+    visible: { opacity: 1 },
   };
+  const matches = useMediaQuery("(max-aspect-ratio : 3/4)");
+  const [containerHeight, setContainerHeight] = useState<any>(700);
+  const [containerWidth, setContainerWidth] = useState<any>(500);
+
+  const handleResize = () => {
+    let highestSlide = 0;
+    let widestSlide = 0;
+
+    if (
+      skillsPackContainerRef.current &&
+      // @ts-ignore
+      highestSlide < skillsPackContainerRef.current.offsetHeight
+    ) {
+      // @ts-ignore
+      highestSlide = skillsPackContainerRef.current.offsetHeight;
+    }
+
+    if (
+      skillsPackContainerRef.current &&
+      // @ts-ignore
+      widestSlide < skillsPackContainerRef.current.offsetWidth
+    ) {
+      // @ts-ignore
+      widestSlide = skillsPackContainerRef.current.offsetWidth;
+    }
+    setContainerHeight(highestSlide);
+    setContainerWidth(widestSlide);
+  };
+
+  useEffect(
+    // @ts-ignore
+    () => setContainerHeight(skillsPackContainerRef.current?.offsetHeight),
+    []
+  );
+
+  useEffect(
+    // @ts-ignore
+    () => setContainerWidth(skillsPackContainerRef.current?.offsetWidth),
+    []
+  );
+
+  // useEffect(() => {
+  //   console.log(`Cheight: ${containerHeight}`)
+  //   console.log(`Cwidth: ${containerWidth}`)
+  // }, [containerHeight, containerWidth])
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (inView1) {
+      controls.start("visible");
+    }
+  }, [controls, inView1]);
 
   const hierarchy = d3
     .hierarchy(data)
     .sum((d) => d.value)
-    // .sort((a, b) => b.value! - a.value!);
+    .sort((a, b) => b.value! - a.value!);
 
-  const packGenerator = d3.pack<Tree>().size([width, height]).padding(4);
+  const packGenerator = d3
+    .pack<Tree>()
+    .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
+    .padding(20);
   const root = packGenerator(hierarchy);
 
-  // List of item of level 1 (just under root) & related color scale
-  const firstLevelGroups = hierarchy?.children?.map((child) => child.data.name);
-  var colorScaleParent = d3
-    .scaleOrdinal<string>()
-    .domain(firstLevelGroups || [])
+  const colorScale = d3
+    .scaleOrdinal()
+    .domain(d3.range(0, colors.length).map(String)) // Convert numbers to strings
     .range(colors);
 
-  // Circles for level 1 of the hierarchy
-  const allLevel1Circles = root
-    .descendants()
-    .filter((node) => node.depth === 1)
-    .map((node) => {
-      const parentName = node.data.name;
+  const svgRef = useRef(null);
 
-      return (
-        <g key={node.data.name}>
-          <motion.circle
-            variants={container}
-            initial="hidden"
-            animate="show"
-            cx={node.x}
-            cy={node.y}
-            r={node.r}
-            stroke={colorScaleParent(parentName)}
-            strokeWidth={1}
-            strokeOpacity={0.3}
-            fill={colorScaleParent(parentName)}
-            fillOpacity={1}
-            transition={{ ease: "easeOut", duration: 2 }}
-          />
-        </g>
+  const handleClick = (d: any) => {
+    if (!svgRef.current) return;
+
+    const svg = d3.select(svgRef.current);
+
+    svg
+      .transition()
+      .duration(1000)
+      .attr(
+        "viewBox",
+        [
+          d.x - d.r - MARGIN * 2,
+          d.y - d.r - MARGIN * 6,
+          d.r * 2 + MARGIN * 6,
+          d.r * 2 + MARGIN * 6,
+        ].join(" ")
       );
-    });
+  };
 
-  // Circles for level 2 = leaves
-  const allLeafCircles = root.leaves().map((leaf) => {
-    const parentName = leaf.parent?.data.name;
+  const createTextArc = (d: any, radiusOffset: any) => {
+    const effectiveRadius = Math.max(d.r + radiusOffset, 1); // Ensure the effective radius doesn't go below 0
+    const circumference = 2 * Math.PI * effectiveRadius;
 
-    if (!parentName) {
-      return null;
-    }
+    // Define the arc as an SVG path
+    const arcPath = `
+      M${d.x - effectiveRadius},${d.y}
+      a${effectiveRadius},${effectiveRadius} 0 1,1 ${2 * effectiveRadius},0
+      a${effectiveRadius},${effectiveRadius} 0 1,1 ${-2 * effectiveRadius},0
+    `;
 
+    // Define the id for the path (to link with textPath)
+    const pathId = `arcPath-${d.data.name.replace(/\s+/g, "-")}-${d.depth}`;
+
+    return { pathId, arcPath, circumference };
+  };
+
+  const allCircles = root.descendants().map((d, i) => {
+    // Create an instance of HierarchyCircularNode
+    const node = new HierarchyCircularNode(d);
+    // console.log(`node.r, d.data.name: ${node.r}, ${node.data.name}`);
+    // Create an arc for the text
+    // createtextarc number can be adjusted based on how far from the circle you want the text
+    const { pathId, arcPath, circumference } = createTextArc(d, -2);
     return (
-      <g key={leaf.data.name}>
-        {/* <AnimatedCircle
-          cx={leaf.x}
-          cy={leaf.y}
-          r={leaf.r}
-          stroke="#553C9A"
-          strokeWidth={2}
-          fill="#B794F4"
-          fillOpacity={0.2}
-        /> */}
+      <motion.g
+        key={d.data.name}
+        animate={controls}
+        variants={container}
+        viewport={{ once: true }}
+        transition={{ duration: 0.3 }}
+      >
         <motion.circle
-          cx={leaf.x}
-          cy={leaf.y}
+          animate={controls}
           variants={item}
-          fill='white'
-          fillOpacity={0.5}
-          transition={{ ease: "easeOut", duration: 2 }}
-          animate={{ cx: leaf.x, cy: leaf.y }}
-          r={leaf.r}
+          cx={node.x}
+          cy={node.y}
+          r={node.r}
+          fill={colorScale(String(d.depth % colors.length)) as string}
+          onClick={() => handleClick(node)}
+          whileInView="visible"
+          viewport={{ once: true }}
+          transition={{ ease: "easeOut", duration: 1 }}
         />
+        {/* Render the component if it exists */}
+        {node.component && (
+          <foreignObject
+            x={node.x - node.r}
+            y={node.y - node.r}
+            width={node.r * 2}
+            height={node.r * 2}
+            // You might need to adjust the style to center the content
+            style={{
+              overflow: "visible",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {node.component}
+          </foreignObject>
+        )}
+        <g>
+          {/* Arc path for the text */}
+          <path id={pathId} d={arcPath} fill="none" stroke="none" />
 
-        <AnimatedText
-          x={leaf.x}
-          y={leaf.y}
-          fontSize={13}
-          fontWeight={0.4}
-          textAnchor="middle"
-          alignmentBaseline="middle"
-        >
-          {leaf.data.name}
-        </AnimatedText>
-      </g>
+          {/* Text along the arc path */}
+          <AnimatedText
+            color="black"
+            fontSize={matches ? 5 : 12}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+          >
+            <textPath
+              xlinkHref={`#${pathId}`}
+              startOffset={matches ? "5%" : "10%"}
+              style={{ textAnchor: "start" }}
+            >
+              {d.data.name}
+            </textPath>
+          </AnimatedText>
+        </g>
+      </motion.g>
     );
   });
 
   return (
-    <svg width={width} height={height} style={{ display: "inline-block" }}>
-      {allLevel1Circles}
-      {allLeafCircles}
-    </svg>
+    <div ref={skillsPackContainerRef} style={{ width: "100%", height: "100%" }}>
+      <svg
+        xmlnsXlink="http://www.w3.org/1999/xlink"
+        ref={svgRef}
+        width={`${width}%`}
+        height={`${height}%`}
+        className="skillsSvg"
+        // viewBox is not managed by React state anymore
+      >
+        {allCircles}
+      </svg>
+    </div>
   );
 };
-
-// const AnimatedCircle = ({
-//   cx,
-//   cy,
-//   r,
-//   ...props
-// }: React.SVGAttributes<SVGCircleElement>) => {
-//   const animatedProps = useSpring({
-//     cx,
-//     cy,
-//     r,
-//   });
-//   return (
-//     <animated.circle
-//       {...props}
-//       r={animatedProps.r as any}
-//       cx={animatedProps.cx as any}
-//       cy={animatedProps.cy as any}
-//     />
-//   );
-// };
 
 const AnimatedText = ({
   x,
@@ -162,8 +267,62 @@ const AnimatedText = ({
   return (
     <animated.text
       {...props}
+      // dy='10'
       x={animatedProps.x as any}
       y={animatedProps.y as any}
+      letter-spacing="1"
+      style={{
+        pointerEvents: "none",
+        // transform: `translateY(-${20}%)`
+      }}
     />
   );
 };
+
+// const svgRef = React.createRef<SVGSVGElement>();
+
+{
+  /* {d.depth == 1 &&
+          // Add text only for first level
+            <AnimatedText
+            x={d.x}
+            y={d.y}
+            fontSize={2}
+            fontWeight={0.4}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+          >
+            {d.data.name}
+          </AnimatedText>
+        } */
+}
+
+// useEffect(() => {
+//   // const simulationNodes = data.nodes.map()
+//   const simulation = d3
+//     .forceSimulation()
+//     .force(
+//       "center",
+//       d3
+//         .forceCenter()
+//         .x(width / 2)
+//         .y(height / 2)
+//     ) // Attraction to the center of the svg area
+//     .force("charge", d3.forceManyBody().strength(0.1)) // Nodes are attracted one each other of value is > 0
+//     .force(
+//       "collide",
+//       d3
+//         .forceCollide()
+//         .strength(0.2)
+//         .radius(function (d) {
+//           return size(d.value) + 3;
+//         })
+//         .iterations(1)
+//     ); // Force that avoids circle overlapping
+
+//   // Apply these forces to the nodes and update their positions.
+//   // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
+//   simulation.nodes(root).on("tick", function (d) {
+//     node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
+//   });
+// }, []);

@@ -2,7 +2,7 @@ import React from "react";
 import "./skills.css";
 import "../pages.css";
 import { useNav } from "../../customHooks/useNav";
-import { CircularPacking2Levels } from "../../components/skills-visualization/CircularPacking2Levels";
+import { CircularPacking } from "../../components/skills-visualization/CircularPacking";
 
 const Skills = () => {
   const skillsRef = useNav("Skills");
@@ -12,6 +12,7 @@ const Skills = () => {
       <div className="skills-container">
         <div className="about-skills">
           <h1> Skills </h1>
+          <p> Tap on a Circle to Zoom</p>
           {/* <div className="content">
             <div className="development-skills">
               <h4> Development</h4>
@@ -214,7 +215,7 @@ const Skills = () => {
             <br /> Java | C/C++ | Git & GitHub | Linux Environment | SCRUM{" "}
             <br /> as part of my projects and classes
           </div> */}
-          <CircularPacking2Levels/>
+          <CircularPacking/>
         </div>
         <div className="skills-illustration-container">
           <div className="image-container">

@@ -32,6 +32,11 @@
 
 .about-skills h1 {
   font-size: 4rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.about-skills p {
   margin-bottom: 2rem;
   text-align: center;
 }
@@ -44,7 +49,7 @@
   font-weight: 700;
 }
 
-.about-skills ul {
+/* .about-skills ul {
   margin: 5px 0px 5px 0px;
   padding: 0;
   list-style: none;
@@ -56,7 +61,7 @@
   text-align: left;
   width: 50rem;
   margin: 5px 10px 5px 0px;
-}
+} */
 
 .about-skills .content {
   display: inline-flex;
@@ -141,7 +146,7 @@
   position: relative;
 }
 
-.skills .image-container {
+.skills .skills-illustration-container .image-container {
   padding: 0vw 5vw;
   width: auto;
   /* height: 100vh; */
@@ -151,7 +156,7 @@
   /* overflow: visible; */
 }
 
-.skills img {
+.skills .skills-illustration-container img {
   width: 40vw;
   height: auto;
   object-fit: contain;
@@ -163,36 +168,24 @@
   /* Styles */
   .skills .skills-container {
     flex-direction: column;
-    text-align: center;
+    /* text-align: center; */
   }
 
   .about-skills {
-    width: 90vw;
-  }
-
-  .skill-level {
-    justify-content: center;
-    align-items: center;
-  }
-
-  .development-skills {
-    padding-right: 0;
-  }
-
-  .related {
-    justify-content: center;
-    align-items: center;
+    width: 90%;
+    height: 60vh;
   }
 
   .skills-illustration-container {
     width: 100vw;
+    padding-bottom: 2rem;
   }
 
-  .skills .image-container {
+  .skills .skills-illustration-container .image-container {
     position: relative;
   }
 
-  .skills img { 
+  .skills .skills-illustration-container img { 
     width: 90vw;
   }
 

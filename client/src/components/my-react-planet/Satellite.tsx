@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { animated, useSpring } from 'react-spring';
+import { animated, useSpring } from '@react-spring/web';
 import useResizeObserver from '@react-hook/resize-observer';
 import { styled } from '@mui/material/styles';
 import { DraggableContainer } from './DraggableContainer';
