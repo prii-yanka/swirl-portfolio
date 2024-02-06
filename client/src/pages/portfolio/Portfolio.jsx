@@ -77,7 +77,7 @@ const Portfolio = () => {
     // console.log("saving state between refresh:");
     const curr_selection = window.localStorage.getItem("selected");
 
-    if (curr_selection && curr_selection != "undefined") {
+    if (curr_selection && curr_selection !== "undefined") {
       setSelected(curr_selection);
       console.log(`current selection from local storage: ${curr_selection}`)
       // getProjects();
@@ -87,39 +87,13 @@ const Portfolio = () => {
       setSelected("all");
       // getProjects();
     }
-    // const getProjects =  async () => {
-    //   let response;
-  
-    //   // if (selected) {
-    //     // response = await fetch(`http://localhost:5001/:${selected}`);
-    //     response = await fetch(`${baseURL}/:${selected}`);
-    //     <Navigate to={"/" + selected} />;
-    //   // } 
-    //   // else {
-    //   //   // response = await fetch(`http://localhost:5001/:all`);
-    //   //   response = await fetch(`${baseURL}/:all`);
-    //   //   <Navigate to="/all" />;
-    //   //   // navigate("/all");
-    //   // }
-  
-    //   if (!response.ok) {
-    //     const message = `An error occurred loading initial: ${response.statusText}`;
-    //     console.log(message);
-    //     return;
-    //   }
-  
-    //   const projects = await response.json();
-    //   // console.log(`----setProjects: ${projects}\n`);
-    //   setProjects([...projects]);
-    // }
-
-    // getProjects();
-
   }, []);
 
   useEffect(() => {
     // if (selected)
     // if (selected) {
+      console.log("Base URL:", baseURL);
+      console.log("Selected Category:", selected);
       window.localStorage.setItem("selected", selected);
 
       async function getRelatedProjects() {
@@ -137,9 +111,10 @@ const Portfolio = () => {
         // console.log(`----setProjects: ${relatedProjects}\n`)
         setProjects([...relatedProjects]);
       }
-      getRelatedProjects();
-      // <Navigate to={"/" + selected} />;
-      navigate(`/${selected}`);
+      if (selected) {
+        getRelatedProjects();
+        navigate(`/${selected}`);
+      }
       // setPosterImages({});
     // }
   }, [selected]);
