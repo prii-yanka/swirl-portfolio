@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "./components/LoadingComponent";
 
 const App = () => {
-  const [loading, setLoading] = useState(null);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
     window.addEventListener(
