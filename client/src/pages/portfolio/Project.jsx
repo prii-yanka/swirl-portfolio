@@ -155,10 +155,10 @@ const Project = ({ project, selected, openModal, closeModal }) => {
   return (
     <Modal className="portfolio-modal" open={open} onClose={handleClose}>
       <div className="project-container">
-        <p className="close-button" onClick={handleClose}>
+        <div className="close-button" onClick={handleClose}>
           {" "}
           X{" "}
-        </p>
+        </div>
         <h1> {project.project_name} </h1>
         {/* <div>{project.id}</div> */}
         {images.length != imgLoadedCount && <LoadingComponent />}
@@ -186,8 +186,8 @@ const Project = ({ project, selected, openModal, closeModal }) => {
             {" "}
             <div>Tags: </div>{" "}
           </div>
-          {project.tags.map((tag) => (
-            <div className="tags"> {tag} </div>
+          {project.tags.map((tag, i) => (
+            <div key={i} className="tags"> {tag} </div>
           ))}
         </div>
         <div className="technologies-container">
@@ -196,13 +196,14 @@ const Project = ({ project, selected, openModal, closeModal }) => {
             <div> Technologies: </div>{" "}
           </div>
           {project.technologies.map((technology) => (
-            <div className="technologies"> {technology} </div>
+            <div key={technology} className="technologies"> {technology} </div>
           ))}
         </div>
         <div className="description">
           <Timeline sx={!matches ? webTimelineStyle : mobileTimelineStyle}>
             {descList.map((descItem, i) => (
               <ProjectDescriptionItem
+                key={i}
                 content={project.description[descItem.label]}
                 label={Object.keys(project.description)[i]}
                 icon={descItem.icon}

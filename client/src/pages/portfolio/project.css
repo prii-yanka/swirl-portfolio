@@ -102,7 +102,7 @@
     position: sticky;
     top: 1rem;
     margin: 1rem 1rem 0rem 0.5rem;
-    padding: 0.3rem;
+    padding: 0.3rem 0.5rem;
     background-color: #8FE1F3;
     width: fit-content;
     align-self:flex-end;
@@ -110,13 +110,11 @@
     font-weight: 700;
     border-radius: 50%;
     cursor: pointer;
+    font-weight: 900;
   }
 
   .project-container .close-button:hover {
     position: sticky;
-    top: 1rem;
-    margin: 1rem 1rem 0rem 0.5rem;
-    padding: 0.3rem;
     background-color: #fed46e;
     width: fit-content;
     align-self:flex-end;

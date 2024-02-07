@@ -7,64 +7,72 @@ import Project from './Project';
 import './portfolio.css';
 import '../pages.css';
 
+const list = [
+  {
+    id: "all",
+    title: "All",
+  },
+  {
+    id: "featured",
+    title: "Featured",
+  },
+  {
+    id: "web",
+    title: "Web App",
+  },
+  {
+    id: "mobile",
+    title: "Mobile App",
+  },
+  {
+    id: "design",
+    title: "Design",
+  },
+  {
+    id: "development",
+    title: "Development",
+  },
+  {
+    id: "internship",
+    title: "Internship",
+  },
+  {
+    id: "paintings",
+    title: "Paintings",
+  },
+  {
+    id: "studio",
+    title: "Studio Art",
+  },
+];    
+
+const getSessionStorage = () => {
+  const curr_selection = sessionStorage.getItem('selected');
+  const selection = Object.keys(list).forEach((id) => { if(curr_selection === id) {console.log(`${id}`); return id;} else return null})
+  console.log(`getSessionStorage selection: ${selection}`)
+  return selection;
+}
+
 const Portfolio = () => {
     const portfolioRef = useNav('Portfolio');
-    const [baseURL, setBaseURL] = useState('http://localhost:5001');
+    const [baseURL, setBaseURL] = useState(process.env.PUBLIC_URL);
     const [projects, setProjects] = useState([]);
     const [selectedProject, setSelectedProject] = useState();
     const [openModal, setOpenModal] = useState(false);
     const navigate = useNavigate();
-    const [selected, setSelected] = useState('all');
-    
-    const list = [
-      {
-        id: "all",
-        title: "All",
-      },
-      {
-        id: "featured",
-        title: "Featured",
-      },
-      {
-        id: "web",
-        title: "Web App",
-      },
-      {
-        id: "mobile",
-        title: "Mobile App",
-      },
-      {
-        id: "design",
-        title: "Design",
-      },
-      {
-        id: "development",
-        title: "Development",
-      },
-      {
-        id: "internship",
-        title: "Internship",
-      },
-      {
-        id: "paintings",
-        title: "Paintings",
-      },
-      {
-        id: "studio",
-        title: "Studio Art",
-      },
-    ];    
+    const [selected, setSelected] = useState("all");
 
     useEffect(() => {
         const envBaseURL = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_URL : 'http://localhost:5001';
         setBaseURL(envBaseURL);
-        const curr_selection = window.localStorage.getItem('selected');
-        const selection = curr_selection == "undefined" ? 'all' : curr_selection;
-        setSelected(selection);
+        // const curr_selection = window.localStorage.getItem('selected');
+        // const selection = getSessionStorage();
+        // setSelected(selection || "all");
     }, []);
 
     useEffect(() => {
       console.log(`selected: ${selected}`)
+      // sessionStorage.setItem('selected', selected)
         const getRelatedProjects = async () => {
             try {
                 const response = await fetch(`${baseURL}/:${selected}`);
@@ -101,7 +109,7 @@ const Portfolio = () => {
 
     const closeModal = () => {
         setOpenModal(false);
-        navigate(-1); // go back one page
+        navigate(`/${selected}`); // go back one page
     };
 
     useEffect(() => {
@@ -162,7 +170,7 @@ const Portfolio = () => {
         <Routes>
             <Route
                 path="/"
-                element={<Navigate to="all" />} // replace prop will prevent creating a new entry in the history
+                element={<Navigate to={`${selected}`} />} // replace prop will prevent creating a new entry in the history
             />
             {projects && projects.map((project) => (
                 <Route
@@ -170,6 +178,7 @@ const Portfolio = () => {
                     path={`${selected}/*`} // Nested routes will be relative in v6
                     element={
                         <Project 
+                            key={project.id}
                             project={selectedProject || project} 
                             selected={selected} 
                             openModal={openModal} 

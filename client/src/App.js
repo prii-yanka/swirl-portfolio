@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "./components/LoadingComponent";
 
 const App = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     if (document.readyState === "complete") {
       setLoading(false);
     } else {
@@ -38,7 +38,7 @@ const App = () => {
         {!loading && (
           <div>
             <Nav />
-            <Main className="mainElement"/>
+            <Main />
           </div>
         )}
       </NavProvider>
