@@ -270,7 +270,7 @@ const AnimatedText = ({
       // dy='10'
       x={animatedProps.x as any}
       y={animatedProps.y as any}
-      letterSpacing="1"
+      letterSpacing="0.5"
       style={{
         pointerEvents: "none",
         // transform: `translateY(-${20}%)`

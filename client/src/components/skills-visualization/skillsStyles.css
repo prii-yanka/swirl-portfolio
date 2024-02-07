@@ -39,9 +39,11 @@
   }
 
   circle {
-    transition: 0.5s;
+    transform-origin: center;
+    transition: transform 0.7s ease-in-out; 
   }
 
   circle:hover {
     fill: #FEE7AF;
+    transform: scale(1.04, 1.04);
   }
