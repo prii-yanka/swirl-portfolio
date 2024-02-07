@@ -40,12 +40,14 @@
 
 .mycircle {
   transform-origin: center;
-  transition: fill 0.5s ease, transform 0.5s ease;
+  transition: fill 0.5s ease-in-out, transform 0.5s ease-in-out;
+  -webkit-transition-behaviour: initial;
+
 }
 
 .mycircle.touchstart {
   fill: #fee7af;
-  transform: scale(1.07, 1.07);
+  transform: scale(1.04, 1.04);
 }
 
 @media (hover: hover) {
@@ -54,3 +56,5 @@
     transform: scale(1.04, 1.04);
   }
 }
+
+/* remember css animations from storysoft */

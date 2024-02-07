@@ -128,6 +128,9 @@ export const NestedCircularPackingWTransition = ({
       if (circle && circle.classList.contains("mycircle")) {
         circle.classList.add("touchstart");
         console.log(`circle.classList after add: ${circle.classList}`);
+        setTimeout(function() {
+          circle?.classList.remove('touchstart');
+        }, 600);
       }
     };
 
@@ -141,7 +144,7 @@ export const NestedCircularPackingWTransition = ({
     };
     if (matches) {
       document.body.addEventListener("touchstart", addTouchClassName, false);
-      document.body.addEventListener("touchend", removeTouchClassName, false);
+      // document.body.addEventListener("touchend", removeTouchClassName, false);
     }
   }, []);
 
