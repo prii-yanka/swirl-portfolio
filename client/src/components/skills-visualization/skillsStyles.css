@@ -35,25 +35,34 @@
   height: calc(100% - 1rem);
   display: flex;
   justify-content: center;
-  padding: 0.5rem;
+  align-items: center;
+  padding: 0.25rem;
+  background-color: white;
+  border-radius: 50%;
+  margin: 0.25rem;
+}
+
+.image-container.skillsLeaf img {
+  width: 100%;
+  object-fit: fill;
+  border-radius: 30%;
 }
 
 .mycircle {
   transform-origin: center;
-  transition: fill 0.5s ease-in-out, transform 0.5s ease-in-out;
-  -webkit-transition-behaviour: initial;
-
+  /* transition: fill 0.5s ease-in-out, transform 0.5s ease-in-out; */
+  transition: fill 0.5s ease-in-out;
 }
 
 .mycircle.touchstart {
   fill: #fee7af;
-  transform: scale(1.04, 1.04);
+  /* transform: scale(1.04, 1.04); */
 }
 
 @media (hover: hover) {
   .mycircle:hover {
     fill: #fee7af;
-    transform: scale(1.04, 1.04);
+    /* transform: scale(1.04, 1.04); */
   }
 }
 
