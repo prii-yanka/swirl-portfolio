@@ -9,41 +9,48 @@
     align-items: center;
     background: linear-gradient(180deg, #d0e, #91f);
   } */
-  
-  .skills.container {
-    width: 150px;
-    height: 150px;
-    display: grid;
-    overflow: hidden;
-    margin: 0;
-    list-style: none;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 15px;
-    padding: 15px;
-    background: #F2C36B;
-    border-radius: 50px;
-  }
-  
-  .skills.item {
-    background: white;
-    border-radius: 100%;
-  }
 
-  .image-container.skillsLeaf {
-    width: calc(100% - 1rem);
-    height: calc(100% - 1rem);
-    display: flex;
-    justify-content: center;
-    padding: 0.5rem;
-  }
+.skills.container {
+  width: 150px;
+  height: 150px;
+  display: grid;
+  overflow: hidden;
+  margin: 0;
+  list-style: none;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 15px;
+  padding: 15px;
+  background: #f2c36b;
+  border-radius: 50px;
+}
 
-  circle {
-    transform-origin: center;
-    transition: transform 0.7s ease-in-out; 
-  }
+.skills.item {
+  background: white;
+  border-radius: 100%;
+}
 
+.image-container.skillsLeaf {
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
+  display: flex;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+circle {
+  transform-origin: center;
+  transition: fill 0.7s ease-in-out, transform 0.7s ease-in-out;
+}
+
+cirlce.touchstart {
+  fill: #fee7af;
+  transform: scale(1.04, 1.04);
+}
+
+@media (hover: hover) {
   circle:hover {
-    fill: #FEE7AF;
+    fill: #fee7af;
     transform: scale(1.04, 1.04);
   }
+}

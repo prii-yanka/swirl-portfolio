@@ -116,6 +116,20 @@ export const NestedCircularPackingWTransition = ({
     }
   }, [controls, inView1]);
 
+  useEffect(() => {
+      const addTouchClassName = () => {
+        console.log("touchstart")
+        const circles = document.querySelectorAll('circle')
+        circles.forEach((item) => {
+          console.log(`item.classList: ${item.classList}`)
+          item.classList.add('touchstart')
+        })
+      }
+      if(matches) {
+        document.body.addEventListener('touchstart', addTouchClassName, false);
+      }
+  }, [])
+
   const hierarchy = d3
     .hierarchy(data)
     .sum((d) => d.value)
