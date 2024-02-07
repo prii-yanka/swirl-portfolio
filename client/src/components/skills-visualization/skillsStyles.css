@@ -38,18 +38,18 @@
   padding: 0.5rem;
 }
 
-circle {
+.mycircle {
   transform-origin: center;
-  transition: fill 0.7s ease-in-out, transform 0.7s ease-in-out;
+  transition: fill 0.5s ease, transform 0.5s ease;
 }
 
-cirlce.touchstart {
+.mycircle.touchstart {
   fill: #fee7af;
-  transform: scale(1.04, 1.04);
+  transform: scale(1.07, 1.07);
 }
 
 @media (hover: hover) {
-  circle:hover {
+  .mycircle:hover {
     fill: #fee7af;
     transform: scale(1.04, 1.04);
   }

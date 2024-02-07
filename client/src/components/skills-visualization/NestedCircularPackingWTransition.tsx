@@ -117,18 +117,33 @@ export const NestedCircularPackingWTransition = ({
   }, [controls, inView1]);
 
   useEffect(() => {
-      const addTouchClassName = () => {
-        console.log("touchstart")
-        const circles = document.querySelectorAll('circle')
-        circles.forEach((item) => {
-          console.log(`item.classList: ${item.classList}`)
-          item.classList.add('touchstart')
-        })
+    let circle: Element | null;
+    const addTouchClassName = (event: any) => {
+      console.log(`touchstart`);
+      circle = document.elementFromPoint(
+        event.touches[0].clientX,
+        event.touches[0].clientY
+      );
+
+      if (circle && circle.classList.contains("mycircle")) {
+        circle.classList.add("touchstart");
+        console.log(`circle.classList after add: ${circle.classList}`);
       }
-      if(matches) {
-        document.body.addEventListener('touchstart', addTouchClassName, false);
+    };
+
+    const removeTouchClassName = (event: any) => {
+      console.log(`touchend`);
+
+      if (circle && circle.classList.contains("mycircle")) {
+        circle.classList.remove("touchstart");
+        console.log(`circle.classList after remove: ${circle.classList}`);
       }
-  }, [])
+    };
+    if (matches) {
+      document.body.addEventListener("touchstart", addTouchClassName, false);
+      document.body.addEventListener("touchend", removeTouchClassName, false);
+    }
+  }, []);
 
   const hierarchy = d3
     .hierarchy(data)
@@ -138,7 +153,7 @@ export const NestedCircularPackingWTransition = ({
   const packGenerator = d3
     .pack<Tree>()
     .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
-    .padding(matches? 5 : 15);
+    .padding(matches ? 5 : 15);
   const root = packGenerator(hierarchy);
 
   const colorScale = d3
@@ -200,6 +215,7 @@ export const NestedCircularPackingWTransition = ({
         transition={{ duration: 0.3 }}
       >
         <motion.circle
+          className="mycircle"
           animate={controls}
           variants={item}
           cx={node.x}
