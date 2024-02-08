@@ -49,7 +49,7 @@
 }
 
 .mycircle {
-  transform-origin: center;
+  /* transform-origin: center; */
   /* transition: fill 0.5s ease-in-out, transform 0.5s ease-in-out; */
   transition: fill 0.5s ease-in-out;
 }

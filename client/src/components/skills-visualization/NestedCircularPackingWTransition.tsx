@@ -1,10 +1,8 @@
 import * as d3 from "d3";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
-import { motion, useAnimation, useInView } from "framer-motion";
 import { Tree, TreeLeaf, TreeNode } from "./skillsData";
 import { useMediaQuery } from "@mui/material";
-import { count } from "console";
 
 type CircularPackingProps = {
   width: number;
@@ -26,6 +24,7 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
   parent: TreeNode | TreeLeaf | null;
   type: string;
   id: string
+  isLeaf: any;
   // index: number;
 
   constructor(node: d3.HierarchyCircularNode<Tree>) {
@@ -103,13 +102,23 @@ export const NestedCircularPackingWTransition = ({
   const handleMouseEnter = (node: HierarchyCircularNode<Tree>) => {
     setHoveredNode(node);
     // controls.start("visible");
-    // simulation?.tick();
+    simulation?.tick();
   };
+
+  const handleMouseOver = () => {
+    // if (!d3.active) simulation.alphaTarget(0.3).restart(); // Heat up the simulation
+    simulation.alphaTarget(0.3).restart();
+  }
+
+  const handleMouseOut = () => {
+    // if (!d3.active) simulation.alphaTarget(0); // Cool down the simulation
+    simulation.stop();
+  }
 
   const handleMouseLeave = () => {
     setHoveredNode(null);
     // controls.start("visible");
-    // simulation?.tick();
+    simulation?.tick();
   };
 
   useEffect(() => {
@@ -158,23 +167,43 @@ export const NestedCircularPackingWTransition = ({
   }, []);
 
   useEffect(() => {
+    function forceSeparateLeafNodes(alpha: number) {
+      nodes.forEach(node => {
+        if (node.isLeaf) {
+          // Apply custom logic to push leaf nodes further apart
+          nodes.forEach(otherNode => {
+            if (otherNode.isLeaf && node !== otherNode) {
+              const dx = node.x - otherNode.x;
+              const dy = node.y - otherNode.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+              const minDistance = node.r + otherNode.r + nodePadding; // Define leafNodePadding as needed
+    
+              if (distance < minDistance) {
+                const force = ((distance - minDistance) / distance) * alpha;
+                node.vx += (dx * force) / node.r;
+                node.vy += (dy * force) / node.r;
+                otherNode.vx -= (dx * force) / otherNode.r;
+                otherNode.vy -= (dy * force) / otherNode.r;
+              }
+            }
+          });
+        }
+      });
+    }
+
     function forceContainChildren(alpha: number) {
       for (const node of nodes) {
         if (node.parent) {
-          // Calculate distance from child to parent center
           const dx = node.x - (node.parent?.x ?? 0);
           const dy = node.y - (node.parent?.y ?? 0);
           const distance = Math.sqrt(dx * dx + dy * dy);
-          // Correctly compute maxDistance by subtracting node radius from parent radius
-          const maxDistance = (node.parent?.r ?? 0) - node.r; // Maximum allowed distance from parent center
-  
-          // If outside the parent boundary, adjust position
+          const maxDistance = (node.parent?.r ?? 0) - node.r; // Ensure there's space for the node's radius
+    
           if (distance > maxDistance) {
-            const angle = Math.atan2(dy, dx);
-  
-            // Correctly move child inside parent boundary
-            node.x = (node.parent?.x ?? 0) + Math.cos(angle) * maxDistance;
-            node.y = (node.parent?.y ?? 0) + Math.sin(angle) * maxDistance;
+            // Calculate the ratio to scale dx and dy
+            const ratio = maxDistance / distance;
+            node.x = (node.parent?.x ?? 0) + dx * ratio;
+            node.y = (node.parent?.y ?? 0) + dy * ratio;
           }
         }
       }
@@ -233,10 +262,11 @@ export const NestedCircularPackingWTransition = ({
     }
     const tempSim = d3
       .forceSimulation<HierarchyCircularNode<Tree>>()
+      // .force("charge", d3.forceManyBody().strength(-1.5)) // +/- attract/repel
+      // .force("cluster", forceCluster())
+      // .force("collide", forceCollide())
       .force("contain-children", forceContainChildren)
-      .force("charge", d3.forceManyBody().strength(-1.5)) // +/- attract/repel
-      .force("cluster", forceCluster())
-      .force("collide", forceCollide());
+      // .force("separateLeafNodes", forceSeparateLeafNodes);
     setSimulation(tempSim);
   }, [nodes]);
 
@@ -296,11 +326,24 @@ export const NestedCircularPackingWTransition = ({
       .nodes(nodes)
       .on('tick', () => {
         svg.selectAll('.node')
+          .data(nodes)
+          .enter()
+          .append('node')
+            .on('mouseover', handleMouseOver)
+            .on('mouseout', handleMouseOut)
           .attr('transform', (d: any) => {
 
+            // if (d.isLeaf) {
+            //   // Custom position adjustment for leaf nodes
+            //   // Example: Pull leaf nodes slightly towards the outside
+            //   const centerOffsetX = d.x - width / 2;
+            //   const centerOffsetY = d.y - height / 2;
+            //   d.x += centerOffsetX * 0.01; // Adjust as needed
+            //   d.y += centerOffsetY * 0.01; // Adjust as needed
+            // }
             if (hoveredNode && d.id !== hoveredNode.id) {
               // Apply some custom logic based on hoveredNode
-              const repulsionStrength = 10; // Example value, adjust as needed
+              const repulsionStrength = 2; // Example value, adjust as needed
               const dx = d.x - hoveredNode.x;
               const dy = d.y - hoveredNode.y;
               const distance = Math.sqrt(dx * dx + dy * dy);
