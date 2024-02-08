@@ -60,8 +60,6 @@ export const NestedCircularPackingWTransition = ({
   const [nodes, setNodes] = useState<HierarchyCircularNode<Tree | TreeLeaf>[]>(
     []
   );
-  const [hoveredNode, setHoveredNode] =
-    useState<HierarchyCircularNode<Tree> | null>(null);
   const [root, setRoot] = useState<d3.HierarchyCircularNode<Tree> | null>(null);
   const [svgElement, setSvgElement] = useState<SVGSVGElement | null>(null);
   const svgRef = useCallback((node: SVGSVGElement) => {
@@ -70,81 +68,6 @@ export const NestedCircularPackingWTransition = ({
       setSvgElement(node);
     }
   }, []);
-  const [simulation, setSimulation] = useState<any>();
-
-  function forceContainChildren(alpha: number) {
-    for (const node of nodes) {
-      if (node.parent) {
-        // Calculate distance from child to parent center
-        const dx = node.x - (node.parent?.x ?? 0);
-        const dy = node.y - (node.parent?.y ?? 0);
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        // Correctly compute maxDistance by subtracting node radius from parent radius
-        const maxDistance = (node.parent?.r ?? 0) - node.r*2; // Maximum allowed distance from parent center
-
-        // If outside the parent boundary, adjust position
-        if (distance > maxDistance) {
-          const angle = Math.atan2(dy, dx);
-
-          // Correctly move child inside parent boundary
-          node.x = (node.parent?.x ?? 0) + Math.cos(angle) * maxDistance;
-          node.y = (node.parent?.y ?? 0) + Math.sin(angle) * maxDistance;
-        }
-      }
-    }
-  }
-
-  function forceCollide() {
-    const alpha = 0.8;
-    let maxRadius = d3.max(nodes, (d) => d.r);
-
-    return () => {
-      const quadtree = d3.quadtree(
-        nodes,
-        (d) => d.x,
-        (d) => d.y
-      );
-      for (const d of nodes) {
-        const r = d.r + (maxRadius ?? 0);
-        const nx1 = d.x - r,
-          ny1 = d.y - r;
-        const nx2 = d.x + r,
-          ny2 = d.y + r;
-
-        quadtree.visit((q, x1, y1, x2, y2) => {
-          if (!q.length)
-            do {
-              if (q.data !== d && q.data.depth === d.depth) {
-                const r = d.r + q.data.r + nodePadding;
-                let x = d.x - q.data.x,
-                  y = d.y - q.data.y,
-                  l = Math.hypot(x, y);
-                if (l < r) {
-                  l = ((l - r) / l) * alpha;
-                  d.x -= x *= l;
-                  d.y -= y *= l;
-                  q.data.x += x;
-                  q.data.y += y;
-                }
-              }
-            } while (q === q.next);
-          return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-        });
-      }
-    };
-  }
-
-  function forceCluster() {
-    return (alpha: number) => {
-      for (const d of nodes) {
-        const strength = 10;
-        if (d.parent) {
-          d.vx -= (d.x - (d.parent?.x ?? 0)) * (alpha * strength);
-          d.vy -= (d.y - (d.parent?.y ?? 0)) * (alpha * strength);
-        }
-      }
-    };
-  }
 
   const handleResize = () => {
     let highestSlide = 0;
@@ -170,28 +93,6 @@ export const NestedCircularPackingWTransition = ({
     setContainerHeight(highestSlide);
     setContainerWidth(widestSlide);
   };
-
-  const handleMouseEnter = (node: HierarchyCircularNode<Tree>) => {
-    setHoveredNode(node);
-    // controls.start("visible");
-    simulation?.tick();
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredNode(null);
-    // controls.start("visible");
-    simulation?.tick();
-  };
-
-  function handleMouseOver() {
-    simulation.alphaTarget(0.3).restart();
-    // Additional mouseover actions
-  }
-  
-  function handleMouseOut() {
-    simulation.alphaTarget(0);
-    // Additional mouseout actions
-  }
 
   useEffect(() => {
     console.log("useEffect: set container height and width");
@@ -239,16 +140,6 @@ export const NestedCircularPackingWTransition = ({
   }, []);
 
   useEffect(() => {
-    const tempSim = d3
-      .forceSimulation<HierarchyCircularNode<Tree>>()
-      .force("contain-children", forceContainChildren)
-      .force("charge", d3.forceManyBody().strength(-10)) // +/- attract/repel
-      .force("cluster", forceCluster())
-      .force("collide", forceCollide());
-    setSimulation(tempSim);
-  }, []);
-
-  useEffect(() => {
     const hierarchy = d3
       .hierarchy(data)
       .sum((d) => d.value)
@@ -289,50 +180,6 @@ export const NestedCircularPackingWTransition = ({
       }
     }
   }, [root]);
-
-  // ******** code to simulate force using d3 ********
-  useEffect(() => {
-    console.log("useEffect: simulation");
-
-    if (!nodes || !hoveredNode || !root || !svgElement) return;
-    const svg = d3.select(svgElement);
-
-    simulation
-      .nodes(nodes)
-      .on('tick', () => {
-        svg.selectAll('circle')
-          .data(nodes)
-          .enter()
-            .on('mouseover', handleMouseOver)
-            .on('mouseout', handleMouseOut)
-          .attr('transform', (d: any) => {
-            // bound nodes to parent
-            if ( d.parent ) {
-              // get dist from center of node d to center of parent node
-              let dist = Math.sqrt( Math.pow(Math.abs(d.x - d.parent.x), 2) + Math.pow(Math.abs(d.y - d.parent.y), 2))
-  
-              // children can get 1/2 ( d.r ) out of parent
-              if ( dist > d.parent.r ) {
-                // get angle of d
-                const theta = Math.atan2(d.y - d.parent.y, d.x - d.parent.x)
-                const delta = d.parent.r
-                // get new point of edge of parent
-                const ndx = d.parent.x + delta * Math.cos(theta)
-                const ndy = d.parent.y + delta * Math.sin(theta)
-  
-                d.x = ndx
-                d.y = ndy
-              }
-            }
-          
-            // bound the nodes to the svg
-            d.x = Math.max(d.r, Math.min(((width / 100) * containerWidth * 0.5) - d.r, d.x))
-            d.y = Math.max(d.r, Math.min(((height / 100) * containerHeight * 0.5) - d.r, d.y))
-  
-            return 'translate(' + d.x + ',' + d.y + ')'
-          })
-      });
-  }, [svgElement, nodes, hoveredNode]);
 
   const colorScale = d3
     .scaleOrdinal()
@@ -395,8 +242,8 @@ export const NestedCircularPackingWTransition = ({
           r={node.r}
           fill={colorScale(String(d.depth % colors.length)) as string}
           onClick={() => handleClick(node)}
-          onMouseEnter={() => handleMouseEnter(node)}
-          onMouseLeave={() => handleMouseLeave()}
+          // onMouseEnter={() => handleMouseEnter(node)}
+          // onMouseLeave={() => handleMouseLeave()}
         />
         {/* Render the component if it exists */}
         {node.component && (
