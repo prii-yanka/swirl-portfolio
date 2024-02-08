@@ -1,9 +1,10 @@
 import * as d3 from "d3";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
 import { motion, useAnimation, useInView } from "framer-motion";
 import { Tree, TreeLeaf, TreeNode } from "./skillsData";
 import { useMediaQuery } from "@mui/material";
+import { count } from "console";
 
 type CircularPackingProps = {
   width: number;
@@ -19,6 +20,10 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
   component?: React.ReactNode; // Optional, since not all nodes will have a component
   value?: number;
   depth: number;
+  vx?: number;
+  vy?: number;
+  name?: string;
+  // index: number;
 
   constructor(node: d3.HierarchyCircularNode<Tree>) {
     this.data = node.data;
@@ -27,6 +32,7 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
     this.r = node.r; // Radius for circular layout
     this.value = node.value;
     this.depth = node.depth;
+    // this.index = 0;
     if ("component" in node.data) {
       this.component = node.data.component; // Only set if component exists in data
     }
@@ -65,17 +71,50 @@ export const NestedCircularPackingWTransition = ({
   const matches = useMediaQuery("(max-aspect-ratio : 3/4)");
   const [containerHeight, setContainerHeight] = useState<any>(700);
   const [containerWidth, setContainerWidth] = useState<any>(500);
-  const [nodes, setNodes] = useState<HierarchyCircularNode<Tree>[]>([]);
+  const [nodes, setNodes] = useState<HierarchyCircularNode<Tree | TreeLeaf>[]>(
+    []
+  );
   const [hoveredNode, setHoveredNode] =
     useState<HierarchyCircularNode<Tree> | null>(null);
-  // const [root, setRoot] = useState<HierarchyCircularNode<Tree> | null>(null);
+  const [root, setRoot] = useState<d3.HierarchyCircularNode<Tree> | null>(null);
+  // <d3.HierarchyCircularNode<Tree>>
   // const [simulation, setSimulation] = useState<any>();
-  const svgRef = useRef(null);
-  const simulation =  d3.forceSimulation<HierarchyCircularNode<Tree>>()
-      .force("forceX", d3.forceX().strength(.1).x(width * containerWidth * .005))
-      .force("forceY", d3.forceY().strength(.1).y(height * containerHeight * .005))
-      .force("center", d3.forceCenter().x(width * containerWidth * .005).y(height * containerHeight * .005))
-      .force("charge", d3.forceManyBody().strength(-15));
+  // const [svgRefLoaded, setSvgRefLoaded] = useState(false);
+  const [svgElement, setSvgElement] = useState<SVGSVGElement | null>(null);
+  const svgRef = useCallback((node: SVGSVGElement) => {
+    if (node !== null) {
+      // setSvgRefLoaded(true);
+      setSvgElement(node);
+      console.log("useEffect: simulate");
+
+      if (!nodes || !hoveredNode || !root || !svgElement || !simulation) return;
+      const svg = d3.select(svgElement);
+
+      // simulation
+      //   .nodes(nodes)
+      // Adjust collision strength based on hover
+      // .force(
+      //   "collide",
+      //   d3
+      //     .forceCollide()
+      //     .radius((d: any) => d.r + MARGIN)
+      //     .strength(hoveredNode ? 1 : 0.1)
+      // )
+      // .on("tick", () => {
+      //   svg
+      //     .selectAll("circle")
+      //     .attr("r", (d: any) => {
+      //       d.t = d === hoveredNode ? 1 - (1 - d.t) * 0.9 : d.t * 0.9;
+      //       d.r = (1 - d.t) * d.radius + d.t * Math.max(d.radius * 1.2, 100);
+      //       return d.r;
+      //     })
+      //     .attr("cx", (d: any) => d.x)
+      //     .attr("cy", (d: any) => d.y);
+      // });
+    }
+  }, []);
+  const [simulation, setSimulation] = useState<any>();
+
   // const collide = d3
   //   .forceCollide()
   //   .strength(0.5)
@@ -170,50 +209,115 @@ export const NestedCircularPackingWTransition = ({
     }
   }, []);
 
-  const hierarchy = d3
-    .hierarchy(data)
-    .sum((d) => d.value)
-    .sort((a, b) => b.value! - a.value!);
+  useEffect(() => {
+    const tempSim = d3
+      .forceSimulation<HierarchyCircularNode<Tree>>()
+      .force(
+        "forceX",
+        d3
+          .forceX()
+          .strength(0.1)
+          .x((width / 100) * containerWidth * 0.5)
+      )
+      .force(
+        "forceY",
+        d3
+          .forceY()
+          .strength(0.1)
+          .y((height / 100) * containerHeight * 0.5)
+      )
+      .force(
+        "center",
+        d3
+          .forceCenter()
+          .x((width / 100) * containerWidth * 0.5)
+          .y((height / 100) * containerHeight * 0.5)
+      )
+      .force("charge", d3.forceManyBody().strength(-15));
 
-  const packGenerator = d3
-    .pack<Tree>()
-    .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
-    .padding(matches ? 5 : 12);
-  const root = packGenerator(hierarchy);
+    setSimulation(tempSim);
+  }, []);
 
-  // useEffect(() => {
-  //   const simulation = d3
-  //     .forceSimulation<HierarchyCircularNode<Tree>>()
-  //     .force(
-  //       "center",
-  //       d3
-  //         .forceCenter()
-  //         .x(((width * containerWidth) / 2) * 100)
-  //         .y(((height * containerHeight) / 2) * 100)
-  //     )
-  //     .force("charge", d3.forceManyBody().strength(0.1))
-  //     .force(
-  //       "collide",
-  //       d3
-  //         .forceCollide()
-  //         .strength(0.2)
-  //         .radius((d: any) => (d.r || 0) + 3)
-  //         .iterations(1)
-  //     )
-  //     .on("tick", () => {
-  //       setNodes(root.descendants().map((d) => new HierarchyCircularNode<Tree>(d)));
-  //     });
+  useEffect(() => {
+    const hierarchy = d3
+      .hierarchy(data)
+      .sum((d) => d.value)
+      .sort((a, b) => b.value! - a.value!);
 
-  //   return () => {
-  //     simulation.stop();
-  //   };
-  // }, [root, height, width, containerHeight, containerWidth]);
+    const packGenerator = d3
+      .pack<Tree>()
+      .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
+      .padding(matches ? 5 : 12);
+    // const root = packGenerator(hierarchy);
+    const root = packGenerator(hierarchy);
+    setRoot(root);
+  }, [data, containerHeight, containerWidth, matches]);
 
-  // useEffect(() => {
-  //   console.log("useEffect: simulation");
-  
-  //   if (!svgRef.current || !nodes || !hoveredNode || !root) return;
-  //   const svg = d3.select(svgRef.current);
+  useEffect(() => {
+    console.log(`root: ${root}`);
+    let tempNodes: HierarchyCircularNode<Tree>[] = [];
+    const stack = new Set();
+
+    if (root) {
+      // for (const descendant of root.descendants()) {
+      //   // if(descendant.depth === root.height)
+      // };
+      root.each((descendant) => {
+        const myDescendant = new HierarchyCircularNode<Tree>(descendant);
+        console.log(myDescendant.data.name);
+        if (stack.has(myDescendant.data.name)) {
+          // do not process this again
+          return;
+        } else {
+          stack.add(myDescendant.data.name);
+          // Assuming you want to skip the root node itself which has depth of 0
+          if (myDescendant.depth >= 1) {
+            tempNodes.push(myDescendant);
+          }
+        }
+      });
+
+      if (tempNodes.length !== 0) {
+        setNodes(tempNodes);
+      }
+    }
+  }, [root]);
+
+  // ******** code to simulate force using d3 ********
+  useEffect(() => {
+    console.log("useEffect: simulation");
+
+    if (!nodes || !hoveredNode || !root || !svgElement) return;
+    const svg = d3.select(svgElement);
+
+    simulation
+      .nodes(nodes)
+      .force(
+        "collide",
+        d3
+          .forceCollide()
+          .radius((d: any) => d.r + nodePadding)
+          .strength(hoveredNode ? 1 : 0.4)
+      ) // Adjust collision strength based on hover
+      .on("tick", () => {
+        svg
+          .selectAll("circle")
+          .attr("r", (d: any) => {
+            d.t = d === hoveredNode ? 1 - (1 - d.t) * 0.9 : d.t * 0.9;
+            d.r = (1 - d.t) * d.radius + d.t * Math.max(d.radius * 1.2, 100);
+            return d.r;
+          })
+          .attr("cx", (d: any) => d.x)
+          .attr("cy", (d: any) => d.y);
+      });
+    // .alpha(1).restart();;
+  }, [svgElement, nodes, hoveredNode]);
+
+  // const simulate = () => {
+  //   console.log("useEffect: simulate");
+
+  //   if (!nodes || !hoveredNode || !root || !svgElement || !simulation) return;
+  //   const svg = d3.select(svgElement);
 
   //   simulation
   //     .nodes(nodes)
@@ -230,7 +334,12 @@ export const NestedCircularPackingWTransition = ({
   //         .attr("cx", (d: any) => d.x)
   //         .attr("cy", (d: any) => d.y);
   //     });
-  // }, [nodes, hoveredNode, containerHeight, containerWidth]);
+  // };
+
+  // useEffect(() => {
+  //   console.log("useEffect: simulation");
+  //   simulate();
+  // }, [svgElement, nodes, hoveredNode, simulation]);
 
   const colorScale = d3
     .scaleOrdinal()
@@ -238,9 +347,9 @@ export const NestedCircularPackingWTransition = ({
     .range(colors);
 
   const handleClick = (d: any) => {
-    if (!svgRef.current) return;
+    if (!svgElement) return;
 
-    const svg = d3.select(svgRef.current);
+    const svg = d3.select(svgElement);
 
     svg
       .transition()
@@ -273,8 +382,8 @@ export const NestedCircularPackingWTransition = ({
     return { pathId, arcPath, circumference };
   };
 
-  const allCircles = root.descendants().map((d: any) => {
-  // const allCircles = nodes.map((d: any) => {
+  // const allCircles = root?.descendants().map((d: any) => {
+  const allCircles = nodes.map((d: any) => {
     // Create an instance of HierarchyCircularNode
     if (!d) return null;
     const node = new HierarchyCircularNode<Tree>(d);
@@ -283,14 +392,14 @@ export const NestedCircularPackingWTransition = ({
     // createtextarc number can be adjusted based on how far from the circle you want the text
     const { pathId, arcPath, circumference } = createTextArc(d, -3);
     return (
-      <motion.g
+      <g
         key={d.data.name}
         // animate={controls}
         // variants={container}
-        viewport={{ once: true }}
-        transition={{ duration: 0.3 }}
+        // viewport={{ once: true }}
+        // transition={{ duration: 0.3 }}
       >
-        <motion.circle
+        <circle
           className="mycircle"
           // animate={controls}
           // variants={item}
@@ -301,9 +410,9 @@ export const NestedCircularPackingWTransition = ({
           onClick={() => handleClick(node)}
           onMouseEnter={() => handleMouseEnter(node)}
           onMouseLeave={() => handleMouseLeave()}
-          whileInView="visible"
-          viewport={{ once: true }}
-          transition={{ ease: "easeOut", duration: 1 }}
+          // whileInView="visible"
+          // viewport={{ once: true }}
+          // transition={{ ease: "easeOut", duration: 1 }}
         />
         {/* Render the component if it exists */}
         {node.component && (
@@ -343,7 +452,7 @@ export const NestedCircularPackingWTransition = ({
             </textPath>
           </AnimatedText>
         </g>
-      </motion.g>
+      </g>
     );
   });
 

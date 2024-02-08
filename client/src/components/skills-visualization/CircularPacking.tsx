@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NestedCircularPackingWTransition } from "./NestedCircularPackingWTransition";
-import { Tree, data, data2 } from "./skillsData";
+import { Tree, data } from "./skillsData";
 import CirclePackingZoom from "./CirclePackingZoom";
 import LeafImage from "./LeafImage";
 
