@@ -23,8 +23,6 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
   name?: string;
   parent: TreeNode | TreeLeaf | null;
   type: string;
-  id: string
-  isLeaf: any;
   // index: number;
 
   constructor(node: d3.HierarchyCircularNode<Tree>) {
@@ -38,7 +36,6 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
     this.parent = node.parent ? node.parent.data : null;
     this.vx = 0;
     this.vy = 0;
-    this.id = node.id? node.id : '';
     // this.index = 0;
     if ("component" in node.data) {
       this.component = node.data.component; // Only set if component exists in data
@@ -47,7 +44,7 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
 }
 
 const MARGIN = 3;
-const nodePadding = 1;
+const nodePadding = 2.5;
 
 const colors = ["#EF8181", "#8FE1F3", "#fed46e"];
 
@@ -69,55 +66,36 @@ export const NestedCircularPackingWTransition = ({
   const [svgElement, setSvgElement] = useState<SVGSVGElement | null>(null);
   const svgRef = useCallback((node: SVGSVGElement) => {
     if (node !== null) {
+      // setSvgRefLoaded(true);
       setSvgElement(node);
     }
   }, []);
   const [simulation, setSimulation] = useState<any>();
 
-  function forceSeparateLeafNodes(alpha: number) {
-    nodes.forEach(node => {
-      if (node.isLeaf) {
-        // Apply custom logic to push leaf nodes further apart
-        nodes.forEach(otherNode => {
-          if (otherNode.isLeaf && node !== otherNode) {
-            const dx = node.x - otherNode.x;
-            const dy = node.y - otherNode.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            const minDistance = node.r + otherNode.r + nodePadding; // Define leafNodePadding as needed
-  
-            if (distance < minDistance) {
-              const force = ((distance - minDistance) / distance) * alpha;
-              node.vx += (dx * force) / node.r;
-              node.vy += (dy * force) / node.r;
-              otherNode.vx -= (dx * force) / otherNode.r;
-              otherNode.vy -= (dy * force) / otherNode.r;
-            }
-          }
-        });
-      }
-    });
-  }
-
   function forceContainChildren(alpha: number) {
     for (const node of nodes) {
       if (node.parent) {
+        // Calculate distance from child to parent center
         const dx = node.x - (node.parent?.x ?? 0);
         const dy = node.y - (node.parent?.y ?? 0);
         const distance = Math.sqrt(dx * dx + dy * dy);
-        const maxDistance = (node.parent?.r ?? 0) - node.r; // Ensure there's space for the node's radius
-  
+        // Correctly compute maxDistance by subtracting node radius from parent radius
+        const maxDistance = (node.parent?.r ?? 0) - node.r*2; // Maximum allowed distance from parent center
+
+        // If outside the parent boundary, adjust position
         if (distance > maxDistance) {
-          // Calculate the ratio to scale dx and dy
-          const ratio = maxDistance / distance;
-          node.x = (node.parent?.x ?? 0) + dx * ratio;
-          node.y = (node.parent?.y ?? 0) + dy * ratio;
+          const angle = Math.atan2(dy, dx);
+
+          // Correctly move child inside parent boundary
+          node.x = (node.parent?.x ?? 0) + Math.cos(angle) * maxDistance;
+          node.y = (node.parent?.y ?? 0) + Math.sin(angle) * maxDistance;
         }
       }
     }
   }
 
   function forceCollide() {
-    const alpha = 0.01;
+    const alpha = 0.8;
     let maxRadius = d3.max(nodes, (d) => d.r);
 
     return () => {
@@ -159,7 +137,7 @@ export const NestedCircularPackingWTransition = ({
   function forceCluster() {
     return (alpha: number) => {
       for (const d of nodes) {
-        const strength = 0.01;
+        const strength = 10;
         if (d.parent) {
           d.vx -= (d.x - (d.parent?.x ?? 0)) * (alpha * strength);
           d.vy -= (d.y - (d.parent?.y ?? 0)) * (alpha * strength);
@@ -199,21 +177,21 @@ export const NestedCircularPackingWTransition = ({
     simulation?.tick();
   };
 
-  const handleMouseOver = () => {
-    // if (!d3.active) simulation.alphaTarget(0.3).restart(); // Heat up the simulation
-    simulation.alphaTarget(0.3).restart();
-  }
-
-  const handleMouseOut = () => {
-    // if (!d3.active) simulation.alphaTarget(0); // Cool down the simulation
-    simulation.stop();
-  }
-
   const handleMouseLeave = () => {
     setHoveredNode(null);
     // controls.start("visible");
     simulation?.tick();
   };
+
+  function handleMouseOver() {
+    simulation.alphaTarget(0.3).restart();
+    // Additional mouseover actions
+  }
+  
+  function handleMouseOut() {
+    simulation.alphaTarget(0);
+    // Additional mouseout actions
+  }
 
   useEffect(() => {
     console.log("useEffect: set container height and width");
@@ -264,12 +242,11 @@ export const NestedCircularPackingWTransition = ({
     const tempSim = d3
       .forceSimulation<HierarchyCircularNode<Tree>>()
       .force("contain-children", forceContainChildren)
-      .force("charge", d3.forceManyBody().strength(-1.5)) // +/- attract/repel
+      .force("charge", d3.forceManyBody().strength(-10)) // +/- attract/repel
       .force("cluster", forceCluster())
-      .force("collide", forceCollide())
-      // .force("separateLeafNodes", forceSeparateLeafNodes);
+      .force("collide", forceCollide());
     setSimulation(tempSim);
-  }, [nodes]);
+  }, []);
 
   useEffect(() => {
     const hierarchy = d3
@@ -292,9 +269,6 @@ export const NestedCircularPackingWTransition = ({
     const stack = new Set();
 
     if (root) {
-      // for (const descendant of root.descendants()) {
-      //   // if(descendant.depth === root.height)
-      // };
       root.each((descendant) => {
         const myDescendant = new HierarchyCircularNode<Tree>(descendant);
         console.log(myDescendant.data.name);
@@ -323,39 +297,15 @@ export const NestedCircularPackingWTransition = ({
     if (!nodes || !hoveredNode || !root || !svgElement) return;
     const svg = d3.select(svgElement);
 
-
-    // .data(nodes)
-    // .enter()
-    // .append('node')
-    //   .on('mouseover', handleMouseOver)
-    //   .on('mouseout', handleMouseOut)
-
     simulation
       .nodes(nodes)
       .on('tick', () => {
-        svg.selectAll('.node')
+        svg.selectAll('circle')
+          .data(nodes)
+          .enter()
+            .on('mouseover', handleMouseOver)
+            .on('mouseout', handleMouseOut)
           .attr('transform', (d: any) => {
-
-            // if (d.isLeaf) {
-            //   // Custom position adjustment for leaf nodes
-            //   // Example: Pull leaf nodes slightly towards the outside
-            //   const centerOffsetX = d.x - width / 2;
-            //   const centerOffsetY = d.y - height / 2;
-            //   d.x += centerOffsetX * 0.01; // Adjust as needed
-            //   d.y += centerOffsetY * 0.01; // Adjust as needed
-            // }
-            if (hoveredNode && d.id !== hoveredNode.id) {
-              // Apply some custom logic based on hoveredNode
-              const repulsionStrength = 2; // Example value, adjust as needed
-              const dx = d.x - hoveredNode.x;
-              const dy = d.y - hoveredNode.y;
-              const distance = Math.sqrt(dx * dx + dy * dy);
-      
-              if (distance < repulsionStrength) {
-                d.x += dx / distance * repulsionStrength;
-                d.y += dy / distance * repulsionStrength;
-              }
-            }
             // bound nodes to parent
             if ( d.parent ) {
               // get dist from center of node d to center of parent node
