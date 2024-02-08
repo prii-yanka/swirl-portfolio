@@ -25,6 +25,7 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
   name?: string;
   parent: TreeNode | TreeLeaf | null;
   type: string;
+  id: string
   // index: number;
 
   constructor(node: d3.HierarchyCircularNode<Tree>) {
@@ -38,6 +39,7 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
     this.parent = node.parent ? node.parent.data : null;
     this.vx = 0;
     this.vy = 0;
+    this.id = node.id? node.id : '';
     // this.index = 0;
     if ("component" in node.data) {
       this.component = node.data.component; // Only set if component exists in data
@@ -46,7 +48,7 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
 }
 
 const MARGIN = 3;
-const nodePadding = 2.5;
+const nodePadding = 1;
 
 const colors = ["#EF8181", "#8FE1F3", "#fed46e"];
 
@@ -55,25 +57,7 @@ export const NestedCircularPackingWTransition = ({
   height,
   data,
 }: CircularPackingProps) => {
-  const controls = useAnimation();
   const skillsPackContainerRef = useRef(null);
-
-  const inView1 = useInView(skillsPackContainerRef);
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.5,
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const item = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1 },
-  };
   const matches = useMediaQuery("(max-aspect-ratio : 3/4)");
   const [containerHeight, setContainerHeight] = useState<any>(700);
   const [containerWidth, setContainerWidth] = useState<any>(500);
@@ -83,91 +67,13 @@ export const NestedCircularPackingWTransition = ({
   const [hoveredNode, setHoveredNode] =
     useState<HierarchyCircularNode<Tree> | null>(null);
   const [root, setRoot] = useState<d3.HierarchyCircularNode<Tree> | null>(null);
-  // <d3.HierarchyCircularNode<Tree>>
-  // const [simulation, setSimulation] = useState<any>();
-  // const [svgRefLoaded, setSvgRefLoaded] = useState(false);
   const [svgElement, setSvgElement] = useState<SVGSVGElement | null>(null);
   const svgRef = useCallback((node: SVGSVGElement) => {
     if (node !== null) {
-      // setSvgRefLoaded(true);
       setSvgElement(node);
     }
   }, []);
   const [simulation, setSimulation] = useState<any>();
-
-  function forceContainChildren(alpha: number) {
-    for (const node of nodes) {
-      if (node.parent) {
-        // Calculate distance from child to parent center
-        const dx = node.x - (node.parent?.x ?? 0);
-        const dy = node.y - (node.parent?.y ?? 0);
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        // Correctly compute maxDistance by subtracting node radius from parent radius
-        const maxDistance = (node.parent?.r ?? 0) - node.r; // Maximum allowed distance from parent center
-
-        // If outside the parent boundary, adjust position
-        if (distance > maxDistance) {
-          const angle = Math.atan2(dy, dx);
-
-          // Correctly move child inside parent boundary
-          node.x = (node.parent?.x ?? 0) + Math.cos(angle) * maxDistance;
-          node.y = (node.parent?.y ?? 0) + Math.sin(angle) * maxDistance;
-        }
-      }
-    }
-  }
-
-  function forceCollide() {
-    const alpha = 0.1;
-    let maxRadius = d3.max(nodes, (d) => d.r);
-
-    return () => {
-      const quadtree = d3.quadtree(
-        nodes,
-        (d) => d.x,
-        (d) => d.y
-      );
-      for (const d of nodes) {
-        const r = d.r + (maxRadius ?? 0);
-        const nx1 = d.x - r,
-          ny1 = d.y - r;
-        const nx2 = d.x + r,
-          ny2 = d.y + r;
-
-        quadtree.visit((q, x1, y1, x2, y2) => {
-          if (!q.length)
-            do {
-              if (q.data !== d && q.data.depth === d.depth) {
-                const r = d.r + q.data.r + nodePadding;
-                let x = d.x - q.data.x,
-                  y = d.y - q.data.y,
-                  l = Math.hypot(x, y);
-                if (l < r) {
-                  l = ((l - r) / l) * alpha;
-                  d.x -= x *= l;
-                  d.y -= y *= l;
-                  q.data.x += x;
-                  q.data.y += y;
-                }
-              }
-            } while (q === q.next);
-          return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-        });
-      }
-    };
-  }
-
-  function forceCluster() {
-    return (alpha: number) => {
-      for (const d of nodes) {
-        const strength = 0.01;
-        if (d.parent) {
-          d.vx -= (d.x - (d.parent?.x ?? 0)) * (alpha * strength);
-          d.vy -= (d.y - (d.parent?.y ?? 0)) * (alpha * strength);
-        }
-      }
-    };
-  }
 
   const handleResize = () => {
     let highestSlide = 0;
@@ -197,13 +103,13 @@ export const NestedCircularPackingWTransition = ({
   const handleMouseEnter = (node: HierarchyCircularNode<Tree>) => {
     setHoveredNode(node);
     // controls.start("visible");
-    simulation?.tick();
+    // simulation?.tick();
   };
 
   const handleMouseLeave = () => {
     setHoveredNode(null);
     // controls.start("visible");
-    simulation?.tick();
+    // simulation?.tick();
   };
 
   useEffect(() => {
@@ -226,12 +132,6 @@ export const NestedCircularPackingWTransition = ({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  // useEffect(() => {
-  //   if (inView1) {
-  //     controls.start("visible");
-  //   }
-  // }, [controls, inView1]);
 
   useEffect(() => {
     console.log("useEffect: event listener for touchstart");
@@ -258,37 +158,87 @@ export const NestedCircularPackingWTransition = ({
   }, []);
 
   useEffect(() => {
+    function forceContainChildren(alpha: number) {
+      for (const node of nodes) {
+        if (node.parent) {
+          // Calculate distance from child to parent center
+          const dx = node.x - (node.parent?.x ?? 0);
+          const dy = node.y - (node.parent?.y ?? 0);
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          // Correctly compute maxDistance by subtracting node radius from parent radius
+          const maxDistance = (node.parent?.r ?? 0) - node.r; // Maximum allowed distance from parent center
+  
+          // If outside the parent boundary, adjust position
+          if (distance > maxDistance) {
+            const angle = Math.atan2(dy, dx);
+  
+            // Correctly move child inside parent boundary
+            node.x = (node.parent?.x ?? 0) + Math.cos(angle) * maxDistance;
+            node.y = (node.parent?.y ?? 0) + Math.sin(angle) * maxDistance;
+          }
+        }
+      }
+    }
+  
+    function forceCollide() {
+      const alpha = 0.01;
+      let maxRadius = d3.max(nodes, (d) => d.r);
+  
+      return () => {
+        const quadtree = d3.quadtree(
+          nodes,
+          (d) => d.x,
+          (d) => d.y
+        );
+        for (const d of nodes) {
+          const r = d.r + (maxRadius ?? 0);
+          const nx1 = d.x - r,
+            ny1 = d.y - r;
+          const nx2 = d.x + r,
+            ny2 = d.y + r;
+  
+          quadtree.visit((q, x1, y1, x2, y2) => {
+            if (!q.length)
+              do {
+                if (q.data !== d && q.data.depth === d.depth) {
+                  const r = d.r + q.data.r + nodePadding;
+                  let x = d.x - q.data.x,
+                    y = d.y - q.data.y,
+                    l = Math.hypot(x, y);
+                  if (l < r) {
+                    l = ((l - r) / l) * alpha;
+                    d.x -= x *= l;
+                    d.y -= y *= l;
+                    q.data.x += x;
+                    q.data.y += y;
+                  }
+                }
+              } while (q === q.next);
+            return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+          });
+        }
+      };
+    }
+  
+    function forceCluster() {
+      return (alpha: number) => {
+        for (const d of nodes) {
+          const strength = 0.01;
+          if (d.parent) {
+            d.vx -= (d.x - (d.parent?.x ?? 0)) * (alpha * strength);
+            d.vy -= (d.y - (d.parent?.y ?? 0)) * (alpha * strength);
+          }
+        }
+      };
+    }
     const tempSim = d3
       .forceSimulation<HierarchyCircularNode<Tree>>()
       .force("contain-children", forceContainChildren)
       .force("charge", d3.forceManyBody().strength(-1.5)) // +/- attract/repel
       .force("cluster", forceCluster())
       .force("collide", forceCollide());
-    // .force(
-    //   "forceX",
-    //   d3
-    //     .forceX()
-    //     .strength(0.1)
-    //     .x((width / 100) * containerWidth * 0.5)
-    // )
-    // .force(
-    //   "forceY",
-    //   d3
-    //     .forceY()
-    //     .strength(0.1)
-    //     .y((height / 100) * containerHeight * 0.5)
-    // )
-    // .force(
-    //   "center",
-    //   d3
-    //     .forceCenter()
-    //     .x((width / 100) * containerWidth * 0.5)
-    //     .y((height / 100) * containerHeight * 0.5)
-    // )
-    // .force("charge", d3.forceManyBody().strength(1));
-
     setSimulation(tempSim);
-  }, []);
+  }, [nodes]);
 
   useEffect(() => {
     const hierarchy = d3
@@ -347,6 +297,19 @@ export const NestedCircularPackingWTransition = ({
       .on('tick', () => {
         svg.selectAll('.node')
           .attr('transform', (d: any) => {
+
+            if (hoveredNode && d.id !== hoveredNode.id) {
+              // Apply some custom logic based on hoveredNode
+              const repulsionStrength = 10; // Example value, adjust as needed
+              const dx = d.x - hoveredNode.x;
+              const dy = d.y - hoveredNode.y;
+              const distance = Math.sqrt(dx * dx + dy * dy);
+      
+              if (distance < repulsionStrength) {
+                d.x += dx / distance * repulsionStrength;
+                d.y += dy / distance * repulsionStrength;
+              }
+            }
             // bound nodes to parent
             if ( d.parent ) {
               // get dist from center of node d to center of parent node
@@ -372,56 +335,8 @@ export const NestedCircularPackingWTransition = ({
   
             return 'translate(' + d.x + ',' + d.y + ')'
           })
-      // .force(
-      //   "collide",
-      //   d3
-      //     .forceCollide()
-      //     .radius((d: any) => d.r + nodePadding)
-      //     .strength(hoveredNode ? 1 : 0.4)
-      // ) // Adjust collision strength based on hover
-      // Add custom force to keep children within parent's boundary
-      // .force("contain-children", forceContainChildren)
-      // .on("tick", () => {
-      //   svg
-      //     .selectAll("circle")
-      //     // .attr("r", (d: any) => {
-      //     //   d.t = d === hoveredNode ? 1 - (1 - d.t) * 0.9 : d.t * 0.9;
-      //     //   d.r = (1 - d.t) * d.radius + d.t * Math.max(d.radius * 1.2, 100);
-      //     //   return d.r;
-      //     // })
-      //     .attr("cx", (d: any) => d.x)
-      //     .attr("cy", (d: any) => d.y);
       });
-    // .alpha(1).restart();;
   }, [svgElement, nodes, hoveredNode]);
-
-  // const simulate = () => {
-  //   console.log("useEffect: simulate");
-
-  //   if (!nodes || !hoveredNode || !root || !svgElement || !simulation) return;
-  //   const svg = d3.select(svgElement);
-
-  //   simulation
-  //     .nodes(nodes)
-  //     .force(
-  //       "collide",
-  //       d3
-  //         .forceCollide()
-  //         .radius((d: any) => d.r + MARGIN)
-  //         .strength(hoveredNode ? 0.5 : 0.1)
-  //     ) // Adjust collision strength based on hover
-  //     .on("tick", () => {
-  //       svg
-  //         .selectAll("circle")
-  //         .attr("cx", (d: any) => d.x)
-  //         .attr("cy", (d: any) => d.y);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   console.log("useEffect: simulation");
-  //   simulate();
-  // }, [svgElement, nodes, hoveredNode, simulation]);
 
   const colorScale = d3
     .scaleOrdinal()
@@ -476,15 +391,9 @@ export const NestedCircularPackingWTransition = ({
     return (
       <g
         key={d.data.name}
-        // animate={controls}
-        // variants={container}
-        // viewport={{ once: true }}
-        // transition={{ duration: 0.3 }}
       >
         <circle
           className="mycircle"
-          // animate={controls}
-          // variants={item}
           cx={node.x}
           cy={node.y}
           r={node.r}
@@ -492,9 +401,6 @@ export const NestedCircularPackingWTransition = ({
           onClick={() => handleClick(node)}
           onMouseEnter={() => handleMouseEnter(node)}
           onMouseLeave={() => handleMouseLeave()}
-          // whileInView="visible"
-          // viewport={{ once: true }}
-          // transition={{ ease: "easeOut", duration: 1 }}
         />
         {/* Render the component if it exists */}
         {node.component && (
