@@ -74,6 +74,100 @@ export const NestedCircularPackingWTransition = ({
   }, []);
   const [simulation, setSimulation] = useState<any>();
 
+  function forceSeparateLeafNodes(alpha: number) {
+    nodes.forEach(node => {
+      if (node.isLeaf) {
+        // Apply custom logic to push leaf nodes further apart
+        nodes.forEach(otherNode => {
+          if (otherNode.isLeaf && node !== otherNode) {
+            const dx = node.x - otherNode.x;
+            const dy = node.y - otherNode.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const minDistance = node.r + otherNode.r + nodePadding; // Define leafNodePadding as needed
+  
+            if (distance < minDistance) {
+              const force = ((distance - minDistance) / distance) * alpha;
+              node.vx += (dx * force) / node.r;
+              node.vy += (dy * force) / node.r;
+              otherNode.vx -= (dx * force) / otherNode.r;
+              otherNode.vy -= (dy * force) / otherNode.r;
+            }
+          }
+        });
+      }
+    });
+  }
+
+  function forceContainChildren(alpha: number) {
+    for (const node of nodes) {
+      if (node.parent) {
+        const dx = node.x - (node.parent?.x ?? 0);
+        const dy = node.y - (node.parent?.y ?? 0);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const maxDistance = (node.parent?.r ?? 0) - node.r; // Ensure there's space for the node's radius
+  
+        if (distance > maxDistance) {
+          // Calculate the ratio to scale dx and dy
+          const ratio = maxDistance / distance;
+          node.x = (node.parent?.x ?? 0) + dx * ratio;
+          node.y = (node.parent?.y ?? 0) + dy * ratio;
+        }
+      }
+    }
+  }
+
+  function forceCollide() {
+    const alpha = 0.01;
+    let maxRadius = d3.max(nodes, (d) => d.r);
+
+    return () => {
+      const quadtree = d3.quadtree(
+        nodes,
+        (d) => d.x,
+        (d) => d.y
+      );
+      for (const d of nodes) {
+        const r = d.r + (maxRadius ?? 0);
+        const nx1 = d.x - r,
+          ny1 = d.y - r;
+        const nx2 = d.x + r,
+          ny2 = d.y + r;
+
+        quadtree.visit((q, x1, y1, x2, y2) => {
+          if (!q.length)
+            do {
+              if (q.data !== d && q.data.depth === d.depth) {
+                const r = d.r + q.data.r + nodePadding;
+                let x = d.x - q.data.x,
+                  y = d.y - q.data.y,
+                  l = Math.hypot(x, y);
+                if (l < r) {
+                  l = ((l - r) / l) * alpha;
+                  d.x -= x *= l;
+                  d.y -= y *= l;
+                  q.data.x += x;
+                  q.data.y += y;
+                }
+              }
+            } while (q === q.next);
+          return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+        });
+      }
+    };
+  }
+
+  function forceCluster() {
+    return (alpha: number) => {
+      for (const d of nodes) {
+        const strength = 0.01;
+        if (d.parent) {
+          d.vx -= (d.x - (d.parent?.x ?? 0)) * (alpha * strength);
+          d.vy -= (d.y - (d.parent?.y ?? 0)) * (alpha * strength);
+        }
+      }
+    };
+  }
+
   const handleResize = () => {
     let highestSlide = 0;
     let widestSlide = 0;
@@ -167,105 +261,12 @@ export const NestedCircularPackingWTransition = ({
   }, []);
 
   useEffect(() => {
-    function forceSeparateLeafNodes(alpha: number) {
-      nodes.forEach(node => {
-        if (node.isLeaf) {
-          // Apply custom logic to push leaf nodes further apart
-          nodes.forEach(otherNode => {
-            if (otherNode.isLeaf && node !== otherNode) {
-              const dx = node.x - otherNode.x;
-              const dy = node.y - otherNode.y;
-              const distance = Math.sqrt(dx * dx + dy * dy);
-              const minDistance = node.r + otherNode.r + nodePadding; // Define leafNodePadding as needed
-    
-              if (distance < minDistance) {
-                const force = ((distance - minDistance) / distance) * alpha;
-                node.vx += (dx * force) / node.r;
-                node.vy += (dy * force) / node.r;
-                otherNode.vx -= (dx * force) / otherNode.r;
-                otherNode.vy -= (dy * force) / otherNode.r;
-              }
-            }
-          });
-        }
-      });
-    }
-
-    function forceContainChildren(alpha: number) {
-      for (const node of nodes) {
-        if (node.parent) {
-          const dx = node.x - (node.parent?.x ?? 0);
-          const dy = node.y - (node.parent?.y ?? 0);
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = (node.parent?.r ?? 0) - node.r; // Ensure there's space for the node's radius
-    
-          if (distance > maxDistance) {
-            // Calculate the ratio to scale dx and dy
-            const ratio = maxDistance / distance;
-            node.x = (node.parent?.x ?? 0) + dx * ratio;
-            node.y = (node.parent?.y ?? 0) + dy * ratio;
-          }
-        }
-      }
-    }
-  
-    function forceCollide() {
-      const alpha = 0.01;
-      let maxRadius = d3.max(nodes, (d) => d.r);
-  
-      return () => {
-        const quadtree = d3.quadtree(
-          nodes,
-          (d) => d.x,
-          (d) => d.y
-        );
-        for (const d of nodes) {
-          const r = d.r + (maxRadius ?? 0);
-          const nx1 = d.x - r,
-            ny1 = d.y - r;
-          const nx2 = d.x + r,
-            ny2 = d.y + r;
-  
-          quadtree.visit((q, x1, y1, x2, y2) => {
-            if (!q.length)
-              do {
-                if (q.data !== d && q.data.depth === d.depth) {
-                  const r = d.r + q.data.r + nodePadding;
-                  let x = d.x - q.data.x,
-                    y = d.y - q.data.y,
-                    l = Math.hypot(x, y);
-                  if (l < r) {
-                    l = ((l - r) / l) * alpha;
-                    d.x -= x *= l;
-                    d.y -= y *= l;
-                    q.data.x += x;
-                    q.data.y += y;
-                  }
-                }
-              } while (q === q.next);
-            return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-          });
-        }
-      };
-    }
-  
-    function forceCluster() {
-      return (alpha: number) => {
-        for (const d of nodes) {
-          const strength = 0.01;
-          if (d.parent) {
-            d.vx -= (d.x - (d.parent?.x ?? 0)) * (alpha * strength);
-            d.vy -= (d.y - (d.parent?.y ?? 0)) * (alpha * strength);
-          }
-        }
-      };
-    }
     const tempSim = d3
       .forceSimulation<HierarchyCircularNode<Tree>>()
-      // .force("charge", d3.forceManyBody().strength(-1.5)) // +/- attract/repel
-      // .force("cluster", forceCluster())
-      // .force("collide", forceCollide())
       .force("contain-children", forceContainChildren)
+      .force("charge", d3.forceManyBody().strength(-1.5)) // +/- attract/repel
+      .force("cluster", forceCluster())
+      .force("collide", forceCollide())
       // .force("separateLeafNodes", forceSeparateLeafNodes);
     setSimulation(tempSim);
   }, [nodes]);
@@ -322,15 +323,17 @@ export const NestedCircularPackingWTransition = ({
     if (!nodes || !hoveredNode || !root || !svgElement) return;
     const svg = d3.select(svgElement);
 
+
+    // .data(nodes)
+    // .enter()
+    // .append('node')
+    //   .on('mouseover', handleMouseOver)
+    //   .on('mouseout', handleMouseOut)
+
     simulation
       .nodes(nodes)
       .on('tick', () => {
         svg.selectAll('.node')
-          .data(nodes)
-          .enter()
-          .append('node')
-            .on('mouseover', handleMouseOver)
-            .on('mouseout', handleMouseOut)
           .attr('transform', (d: any) => {
 
             // if (d.isLeaf) {
