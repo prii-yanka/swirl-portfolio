@@ -1,18 +1,39 @@
 import React from "react";
 import LeafImage from "./LeafImage";
 
-export type TreeNode = {
+interface BaseNode {
+  x?: number;
+  y?: number;
+  r?: number; // Radius for circular packing
+  parent?: BaseNode; // Optional parent reference
+}
+
+export interface TreeNode extends BaseNode {
   type: "node";
-  value: number;
   name: string;
-  children: Tree[];
-};
-export type TreeLeaf = {
+  value: number;
+  children?: Tree[]; 
+}
+
+export interface TreeLeaf extends BaseNode {
   type: "leaf";
   name: string;
   value: number;
   component: React.ReactNode;
-};
+}
+
+// export type TreeNode = {
+//   type: "node";
+//   value: number;
+//   name: string;
+//   children: Tree[];
+// };
+// export type TreeLeaf = {
+//   type: "leaf";
+//   name: string;
+//   value: number;
+//   component: React.ReactNode;
+// };
 
 export type Tree = TreeNode | TreeLeaf;
 
