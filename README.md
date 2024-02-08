@@ -1,6 +1,7 @@
 # swirl-portfolio
 
 add cache control:
+no-store, no-cache, must-revalidate, proxy-revalidate
 
 ```
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
