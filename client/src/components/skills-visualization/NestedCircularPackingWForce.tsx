@@ -21,7 +21,7 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
   vx: number;
   vy: number;
   name: string;
-  parent: TreeNode | TreeLeaf | null;
+  parent: HierarchyCircularNode<Tree> | null;
   type: string;
   children?: Tree[];
   descendants: () => HierarchyCircularNode<Tree>[]; // Declare as a function type
@@ -36,7 +36,9 @@ class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
     this.value = node.value ?? 0;
     this.depth = node.depth;
     this.type = node.data.type;
-    this.parent = node.parent ? node.parent.data : null;
+    this.parent = node.parent
+      ? (node.parent as unknown as HierarchyCircularNode<Tree>)
+      : null;
     this.vx = 5;
     this.vy = 5;
     this.name = node.data.name;
@@ -89,47 +91,66 @@ export const NestedCircularPackingWForce = ({
   }, []);
   const [simulation, setSimulation] = useState<any>();
   const [hoveredNodesNames, setHoveredNodesNames] = useState<string[]>([]);
-	const packGenerator = d3
-      .pack<Tree>()
-      .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
-      .padding(matches ? 5 : 12);
+  const packGenerator = d3
+    .pack<Tree>()
+    .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
+    .padding(matches ? 5 : 12);
 
-const forceContainChildren = () => {
-	return (alpha: number) => {
-		for (const node of hoveredNodes) {
-			if (node.parent) {
-				// Calculate distance from child to parent center
-				const dx = node.x - (node.parent?.x ?? 0);
-				const dy = node.y - (node.parent?.y ?? 0);
-				const distance = Math.sqrt(dx * dx + dy * dy);
-				// Correctly compute maxDistance by subtracting node radius from parent radius
-				const maxDistance = (node.parent?.r ?? 0) - node.r; // Maximum allowed distance from parent center
+  // const forceContainChildren = () => {
+  //   return (alpha: number) => {
+  //     for (const node of hoveredNodes) {
+  //       if (node.parent) {
+  //         // Calculate distance from child to parent center
+  //         const dx = node.x - (node.parent?.x ?? 0);
+  //         const dy = node.y - (node.parent?.y ?? 0);
+  //         const distance = Math.sqrt(dx * dx + dy * dy);
+  //         // Correctly compute maxDistance by subtracting node radius from parent radius
+  //         const maxDistance = (node.parent?.r ?? 0) - node.r; // Maximum allowed distance from parent center
 
-				// If outside the parent boundary, adjust position
-				if (distance > maxDistance) {
-					const angle = Math.atan2(dy, dx);
+  //         // If outside the parent boundary, adjust position
+  //         if (distance > maxDistance) {
+  //           const angle = Math.atan2(dy, dx);
 
-					// Correctly move child inside parent boundary
-					node.x = (node.parent?.x ?? 0) + Math.cos(angle) * maxDistance;
-					node.y = (node.parent?.y ?? 0) + Math.sin(angle) * maxDistance;
-				}
-			}
-		}
-	};
-}
+  //           // Correctly move child inside parent boundary
+  //           node.x = (node.parent?.x ?? 0) + Math.cos(angle) * maxDistance;
+  //           node.y = (node.parent?.y ?? 0) + Math.sin(angle) * maxDistance;
+  //         }
+  //       }
+  //     }
+  //   };
+  // };
+  const forceContainChildren = () => {
+    return ( alpha: number) => {for (let node of hoveredNodes) {
+      if (node.parent) {
+        const parent = node.parent;
+        const dx = node.x - (parent.x ?? 0);
+        const dy = node.y - (parent.y ?? 0);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const maxDistance = (parent.r ?? 0) - node.r - nodePadding; // margin is the minimal distance from the edge of the parent
+
+        if (distance > maxDistance) {
+          // Calculate the angle and position the node inside the parent's boundary
+          const angle = Math.atan2(dy, dx);
+          node.x = (parent.x ?? 0) + Math.cos(angle) * maxDistance;
+          node.y = (parent.y ?? 0) + Math.sin(angle) * maxDistance;
+        }
+      }
+    }}
+  };
 
   const forceCollide = () => {
     // const alpha = 0.8;
     let maxRadius = d3.max(hoveredNodes, (d) => d.r);
+		let mimRadius = d3.min(hoveredNodes, (d) => d.r);
 
     return (alpha: number) => {
       const quadtree = d3.quadtree(
-        nodes,
+        hoveredNodes,
         (d) => d.x,
         (d) => d.y
       );
-      for (const d of nodes) {
-        const r = d.r + (maxRadius ?? 0);
+      for (const d of hoveredNodes) {
+        const r = d.r + Math.max(maxRadius?? 0, mimRadius?? 0) + Math.max(nodePadding, 2);
         const nx1 = d.x - r,
           ny1 = d.y - r;
         const nx2 = d.x + r,
@@ -156,7 +177,7 @@ const forceContainChildren = () => {
         });
       }
     };
-  }
+  };
 
   const forceCluster = () => {
     return (alpha: number) => {
@@ -168,21 +189,62 @@ const forceContainChildren = () => {
         }
       }
     };
-  }
+  };
 
+  const boundNodesToParent = (d: any) => {
+    if (d.parent) {
+      const dist = Math.sqrt(
+        Math.pow(Math.abs(d.x - d.parent.x), 2) +
+          Math.pow(Math.abs(d.y - d.parent.y), 2)
+      );
+
+      if (dist > d.parent.r) {
+        const theta = Math.atan2(d.y - d.parent.y, d.x - d.parent.x);
+        const delta = d.parent.r;
+        const ndx = d.parent.x + delta * Math.cos(theta);
+        const ndy = d.parent.y + delta * Math.sin(theta);
+
+        d.x = ndx;
+        d.y = ndy;
+      }
+    }
+
+    d.x = Math.max(
+      d.r,
+      Math.min((width / 100) * containerWidth * 0.5 - d.r, d.x)
+    );
+    d.y = Math.max(
+      d.r,
+      Math.min((height / 100) * containerHeight * 0.5 - d.r, d.y)
+    );
+  };
   // function initializeSimulation() {
-  const initializeSimulation = (hoveredNodes: HierarchyCircularNode<Tree>[]) =>
-    {
-      const simulation = d3
-        .forceSimulation<HierarchyCircularNode<Tree>>(hoveredNodes)
-        .force("my-contain-children", forceContainChildren)
-        .force("charge", d3.forceManyBody().strength(-10)) // +/- attract/repel
-        .force("my-cluster", forceCluster)
-        .force("my-collide", forceCollide)
-        .alphaDecay(0.01)
-        .alpha(0.9);
-      setSimulation(simulation);
-    };
+  // const initializeSimulation = (hoveredNodes: HierarchyCircularNode<Tree>[]) =>
+  const initializeSimulation = () => {
+    const simulation = d3
+      .forceSimulation<HierarchyCircularNode<Tree>>()
+      .force("center", d3.forceCenter(width / 2, height / 2)) // Center the nodes in the SVG
+      // .force(
+      //   "collide",
+      //   d3.forceCollide().radius((d: any) => d.r * 10)
+      // ) // Prevent node overlap
+      .force("charge", d3.forceManyBody().strength(-5)) // Repel nodes from each other
+      .force("my-cluster", forceCluster)
+      .force("my-collide", forceCollide)
+      // .force(
+      //   "collide",
+      //   d3.forceCollide().radius((d: any) => d.r + 1)
+      // )
+      // .force(
+      //   "charge",
+      //   d3.forceManyBody().strength((d: any) => -d.r / 2)
+      // )
+      .force("my-contain-children", forceContainChildren)
+      // .force("charge", d3.forceManyBody().strength(1.5)) // +/- attract/repel
+      .alphaDecay(0.01)
+      .alpha(0.9);
+    setSimulation(simulation);
+  };
 
   const handleResize = () => {
     let highestSlide = 0;
@@ -222,13 +284,15 @@ const forceContainChildren = () => {
     // simulation?.tick();
   };
 
-  function handleMouseOver() {
+  function handleMouseOver(d: any) {
+    console.log(`************* in handleMouseOver *************`);
     simulation.restart();
     // simulation?.tick();
     // Additional mouseover actions
   }
 
-  function handleMouseOut() {
+  function handleMouseOut(d: any) {
+    console.log(`************* in handleMouseOut *************`);
     simulation.restart().stop();
     // Additional mouseout actions
   }
@@ -327,26 +391,28 @@ const forceContainChildren = () => {
 
     if (hoveredNode) {
       const hoveredHierarchy = d3
-        .hierarchy<HierarchyCircularNode<Tree>>(hoveredNode)
+        .hierarchy(hoveredNode)
         .sum((d) => d.value)
         .sort((a, b) => b.value! - a.value!);
 
-    	// const root = packGenerator(hierarchy);
-			
+      // const root = packGenerator(hierarchy);
+
       // console.log(`hoveredNode.descendants(): ${hoveredNode.descendants()}`);
-      // hoveredNode.descendants().forEach((descendant: any) => {
       hoveredHierarchy.descendants().forEach((descendant: any) => {
         const myDescendant = new HierarchyCircularNode<Tree>(descendant);
-        console.log(
-          `hoveredNode: ${hoveredNode?.name}: hoveredNodes myDescendant.data.name: ${myDescendant.name}`
-        );
-        if (stack.has(myDescendant.data.name) || myDescendant.data.name === hoveredNode.name) {
+        // console.log(
+        //   `hoveredNode: ${hoveredNode?.name}: hoveredNodes myDescendant.data.name: ${myDescendant.name}`
+        // );
+        if (
+          stack.has(myDescendant.data.name) ||
+          myDescendant.data.name === hoveredNode.name
+        ) {
           // do not process this again
           return;
         } else {
           stack.add(myDescendant.data.name);
           // Assuming you want to skip the root node itself which has depth of 0
-          if (myDescendant.depth >= 0) {
+          if (myDescendant.depth >= hoveredNode.depth + 1 && myDescendant.depth <= root?.height! && myDescendant.name !== hoveredNode.name) {
             tempNodes.push(myDescendant);
             hoveredNodesNames.push(myDescendant.name);
           }
@@ -363,7 +429,8 @@ const forceContainChildren = () => {
   // ******** code to simulate force using d3 ********
   useEffect(() => {
     console.log("useEffect: simulation");
-
+    let initialX = 0;
+    let initialY = 0;
     // if (!hoveredNodes && !hoveredNode && !root && !svgElement) return;
     const svg = d3.select(svgElement);
 
@@ -375,69 +442,51 @@ const forceContainChildren = () => {
       hoveredNodesNames
     ) {
       console.log(hoveredNodesNames); // Log hoveredNodesNames
-      initializeSimulation(hoveredNodes);
+      // initializeSimulation(hoveredNodes);
+      initializeSimulation();
 
-      
-				// .nodes(hoveredNodes)
-        // console.log(`simulation.nodes(hoveredNodes): ${simulation?.nodes()}`);
-        simulation?.on("tick", () => {
-          // const svgSelection = svg
-					svg
-            .selectAll("circle")
-						.data(hoveredNodes)
-						.enter()
-						.append("circle")
-            .filter((d: any, i: number, groups: ArrayLike<d3.BaseType>) => {
-              const circle = groups[i] as SVGSVGElement;
-              const className = circle.getAttribute("class")?.split(" ")[1];
-              console.log(className ? className : ""); // Log className
-              return hoveredNodesNames.includes(className ? className : "");
-            })
-            // console.log(svgSelection);
-            .on("mouseover", handleMouseOver)
-            .on("mouseout", handleMouseOut)
-            // .attr("transform", (d: any) => {
-            //   // bound nodes to parent
-            //   if (d.parent) {
-            //     // get dist from center of node d to center of parent node
-            //     let dist = Math.sqrt(
-            //       Math.pow(Math.abs(d.x - d.parent.x), 2) +
-            //         Math.pow(Math.abs(d.y - d.parent.y), 2)
-            //     );
-
-            //     // children can get 1/2 ( d.r ) out of parent
-            //     if (dist > d.parent.r) {
-            //       // get angle of d
-            //       const theta = Math.atan2(d.y - d.parent.y, d.x - d.parent.x);
-            //       const delta = d.parent.r;
-            //       // get new point of edge of parent
-            //       const ndx = d.parent.x + delta * Math.cos(theta);
-            //       const ndy = d.parent.y + delta * Math.sin(theta);
-
-            //       d.x = ndx;
-            //       d.y = ndy;
-            //     }
-            //   }
-
-            //   // bound the nodes to the svg
-            //   d.x = Math.max(
-            //     d.r,
-            //     Math.min((width / 100) * containerWidth * 0.5 - d.r, d.x)
-            //   );
-            //   d.y = Math.max(
-            //     d.r,
-            //     Math.min((height / 100) * containerHeight * 0.5 - d.r, d.y)
-            //   );
-
-            //   // return "translate(" + d.x + "," + d.y + ")";
-						// 	return `translate(${d.x},${d.y})`;
-            // });
-        });
+      // .nodes(hoveredNodes)
+      // console.log(`simulation.nodes(hoveredNodes): ${simulation?.nodes()}`);
+      simulation?.nodes(hoveredNodes).on("tick", () => {
+        // const svgSelection = svg
+        console.log(`in simulation?.on("tick")`);
+        svg
+          // .selectAll("node")
+          .selectAll(".mycircle")
+          .filter((d: any, i: number, groups: ArrayLike<d3.BaseType>) => {
+            console.log(`groups: ${groups}`);
+            const circle = groups[i] as SVGSVGElement;
+            const className = circle.getAttribute("class")?.split(" ")[1];
+            // console.log(className ? className : ""); // Log className
+            const bbox = circle.getBBox();
+            initialX = bbox.x - bbox.width / 2;
+            initialY = bbox.y - bbox.height / 2;
+            return hoveredNodesNames.includes(className ? className : "");
+          })
+          .data(hoveredNodes)
+          .join("mycircle")
+          .on("mouseover", handleMouseOver)
+          .on("mouseout", handleMouseOut)
+          .attr("cx", (d) => d.x)
+          .attr("cy", (d) => d.y);
+          // .attr("cx", (d) => d.x)
+          // .attr("cy", (d) => d.y);
+        // .attr("cx", (d: any) => {
+        //   boundNodesToParent(d);
+        //   return d.x;
+        // })
+        // .attr("cy", (d: any) => {
+        //   boundNodesToParent(d);
+        //   return d.y;
+        // });
+      });
+      // simulation?.restart();
     }
 
     return () => {
       // Clean up the on("tick") event handler
       simulation?.on("tick", null);
+      simulation?.restart().stop();
     };
   }, [hoveredNodes, hoveredNode, hoveredNodesNames, root, svgElement]);
 
@@ -492,7 +541,7 @@ const forceContainChildren = () => {
     // createtextarc number can be adjusted based on how far from the circle you want the text
     const { pathId, arcPath, circumference } = createTextArc(d, -3);
     return (
-      <g key={d.data.name}>
+      <g key={d.data.name} className={`mygroup ${d.name}`}>
         <circle
           className={`mycircle ${d.name}`}
           cx={node.x}
@@ -506,6 +555,7 @@ const forceContainChildren = () => {
         {/* Render the component if it exists */}
         {node.component && (
           <foreignObject
+            transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`} // Update the transform property
             x={node.x - node.r}
             y={node.y - node.r}
             width={node.r * 2}
@@ -521,10 +571,11 @@ const forceContainChildren = () => {
             {node.component}
           </foreignObject>
         )}
-        <g>
+        <g transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`}>
+          {" "}
+          {/* Update the transform property */}
           {/* Arc path for the text */}
           <path id={pathId} d={arcPath} fill="none" stroke="none" />
-
           {/* Text along the arc path */}
           <AnimatedText
             color="black"

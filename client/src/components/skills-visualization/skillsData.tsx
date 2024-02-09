@@ -58,6 +58,7 @@ export const data: Tree = {
             { type: "leaf", name: "Bootstrap", value: 63, component: <LeafImage imagePath="images/skillsLeafIcons/Bootstrap.svg"/>},
             { type: "leaf", name: "Three.js", value: 84, component: <LeafImage imagePath="images/skillsLeafIcons/Threejs.svg"/>},
             { type: "leaf", name: "D3", value: 84, component: <LeafImage imagePath="images/skillsLeafIcons/D3.svg"/>},
+            { type: "leaf", name: "Typescript", value: 76, component: <LeafImage imagePath="images/skillsLeafIcons/Typescript.svg"/>},
           ],
         },
         { type: "leaf", name: "HTML", value: 95, component: <LeafImage imagePath="images/skillsLeafIcons/Html.svg"/>},
