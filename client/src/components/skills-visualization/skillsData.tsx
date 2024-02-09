@@ -44,12 +44,12 @@ export const data: Tree = {
   children: [
     {
       type: "node",
-      name: "Frontend Engineering",
+      name: "Frontend_Engineering",
       value: 90,
       children: [
         {
           type: "node",
-          name: "JavaScript FE",
+          name: "JavaScript_FE",
           value: 95,
           children: [
             { type: "leaf", name: "React.js", value: 90, component: <LeafImage imagePath="images/skillsLeafIcons/Reactjs.svg"/>},
@@ -67,12 +67,12 @@ export const data: Tree = {
     },
     {
       type: "node",
-      name: "Backend Engineering",
+      name: "Backend_Engineering",
       value: 90,
       children: [
         {
           type: "node",
-          name: "JavaScript BE",
+          name: "JavaScript_BE",
           value: 95,
           children: [
             { type: "leaf", name: "Node.js", value: 90, component: <LeafImage imagePath="images/skillsLeafIcons/Nodejs.svg"/>},
@@ -99,7 +99,7 @@ export const data: Tree = {
     },
     {
       type: "node",
-      name: "Wireframing, Prototyping & Design",
+      name: "Wireframing_Prototyping_&_Design",
       value: 90,
       children: [
         { type: "leaf", name: "Figma", value: 95, component: <LeafImage imagePath="images/skillsLeafIcons/Figma.svg"/>},
@@ -110,7 +110,7 @@ export const data: Tree = {
     },
     {
       type: "node",
-      name: "Version Control & Management",
+      name: "Version_Control_&_Management",
       value: 90,
       children: [
         { type: "leaf", name: "Github", value: 95, component: <LeafImage imagePath="images/skillsLeafIcons/Github.svg"/>},
