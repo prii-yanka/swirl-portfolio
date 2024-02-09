@@ -427,68 +427,68 @@ export const NestedCircularPackingWForce = ({
   }, [hoveredNode]);
 
   // ******** code to simulate force using d3 ********
-  useEffect(() => {
-    console.log("useEffect: simulation");
-    let initialX = 0;
-    let initialY = 0;
-    // if (!hoveredNodes && !hoveredNode && !root && !svgElement) return;
-    const svg = d3.select(svgElement);
+  // useEffect(() => {
+  //   console.log("useEffect: simulation");
+  //   let initialX = 0;
+  //   let initialY = 0;
+  //   // if (!hoveredNodes && !hoveredNode && !root && !svgElement) return;
+  //   const svg = d3.select(svgElement);
 
-    if (
-      hoveredNodes &&
-      hoveredNode &&
-      root &&
-      svgElement &&
-      hoveredNodesNames
-    ) {
-      console.log(hoveredNodesNames); // Log hoveredNodesNames
-      // initializeSimulation(hoveredNodes);
-      initializeSimulation();
+  //   if (
+  //     hoveredNodes &&
+  //     hoveredNode &&
+  //     root &&
+  //     svgElement &&
+  //     hoveredNodesNames
+  //   ) {
+  //     console.log(hoveredNodesNames); // Log hoveredNodesNames
+  //     // initializeSimulation(hoveredNodes);
+  //     initializeSimulation();
 
-      // .nodes(hoveredNodes)
-      // console.log(`simulation.nodes(hoveredNodes): ${simulation?.nodes()}`);
-      simulation?.nodes(hoveredNodes).on("tick", () => {
-        // const svgSelection = svg
-        console.log(`in simulation?.on("tick")`);
-        svg
-          // .selectAll("node")
-          .selectAll(".mycircle")
-          .filter((d: any, i: number, groups: ArrayLike<d3.BaseType>) => {
-            console.log(`groups: ${groups}`);
-            const circle = groups[i] as SVGSVGElement;
-            const className = circle.getAttribute("class")?.split(" ")[1];
-            // console.log(className ? className : ""); // Log className
-            const bbox = circle.getBBox();
-            initialX = bbox.x - bbox.width / 2;
-            initialY = bbox.y - bbox.height / 2;
-            return hoveredNodesNames.includes(className ? className : "");
-          })
-          .data(hoveredNodes)
-          .join("mycircle")
-          .on("mouseover", handleMouseOver)
-          .on("mouseout", handleMouseOut)
-          .attr("cx", (d) => d.x)
-          .attr("cy", (d) => d.y);
-          // .attr("cx", (d) => d.x)
-          // .attr("cy", (d) => d.y);
-        // .attr("cx", (d: any) => {
-        //   boundNodesToParent(d);
-        //   return d.x;
-        // })
-        // .attr("cy", (d: any) => {
-        //   boundNodesToParent(d);
-        //   return d.y;
-        // });
-      });
-      // simulation?.restart();
-    }
+  //     // .nodes(hoveredNodes)
+  //     // console.log(`simulation.nodes(hoveredNodes): ${simulation?.nodes()}`);
+  //     simulation?.nodes(hoveredNodes).on("tick", () => {
+  //       // const svgSelection = svg
+  //       console.log(`in simulation?.on("tick")`);
+  //       svg
+  //         // .selectAll("node")
+  //         .selectAll(".mycircle")
+  //         .filter((d: any, i: number, groups: ArrayLike<d3.BaseType>) => {
+  //           console.log(`groups: ${groups}`);
+  //           const circle = groups[i] as SVGSVGElement;
+  //           const className = circle.getAttribute("class")?.split(" ")[1];
+  //           // console.log(className ? className : ""); // Log className
+  //           const bbox = circle.getBBox();
+  //           initialX = bbox.x - bbox.width / 2;
+  //           initialY = bbox.y - bbox.height / 2;
+  //           return hoveredNodesNames.includes(className ? className : "");
+  //         })
+  //         .data(hoveredNodes)
+  //         .join("mycircle")
+  //         .on("mouseover", handleMouseOver)
+  //         .on("mouseout", handleMouseOut)
+  //         .attr("cx", (d) => d.x)
+  //         .attr("cy", (d) => d.y);
+  //         // .attr("cx", (d) => d.x)
+  //         // .attr("cy", (d) => d.y);
+  //       // .attr("cx", (d: any) => {
+  //       //   boundNodesToParent(d);
+  //       //   return d.x;
+  //       // })
+  //       // .attr("cy", (d: any) => {
+  //       //   boundNodesToParent(d);
+  //       //   return d.y;
+  //       // });
+  //     });
+  //     // simulation?.restart();
+  //   }
 
-    return () => {
-      // Clean up the on("tick") event handler
-      simulation?.on("tick", null);
-      simulation?.restart().stop();
-    };
-  }, [hoveredNodes, hoveredNode, hoveredNodesNames, root, svgElement]);
+  //   return () => {
+  //     // Clean up the on("tick") event handler
+  //     simulation?.on("tick", null);
+  //     simulation?.restart().stop();
+  //   };
+  // }, [hoveredNodes, hoveredNode, hoveredNodesNames, root, svgElement]);
 
   const colorScale = d3
     .scaleOrdinal()
