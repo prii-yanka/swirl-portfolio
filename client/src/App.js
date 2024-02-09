@@ -6,41 +6,41 @@ import { useEffect, useState } from "react";
 import LoadingComponent from "./components/LoadingComponent";
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    // setLoading(true);
-    if (document.readyState === "complete") {
-      setLoading(false);
-    } else {
-      document.addEventListener(
-        "load",
-        function () {
-          // loaded
-          setLoading(false);
-        },
-        false
-      );
-    }
-    // const mainElement = document.getElementsByClassName("mainElement")
-    // mainElement.onload = (event) => {
-    //   setLoading(false);
-    // };
-  }, []);
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   // setLoading(true);
+  //   if (document.readyState === "complete") {
+  //     setLoading(false);
+  //   } else {
+  //     document.addEventListener(
+  //       "load",
+  //       function () {
+  //         // loaded
+  //         setLoading(false);
+  //       },
+  //       false
+  //     );
+  //   }
+  //   // const mainElement = document.getElementsByClassName("mainElement")
+  //   // mainElement.onload = (event) => {
+  //   //   setLoading(false);
+  //   // };
+  // }, []);
 
   return (
     <div className="appContainer">
       <NavProvider>
-        {loading && (
+        {/* {loading && (
           <div className="loading">
             <LoadingComponent />
           </div>
-        )}
-        {!loading && (
+        )} */}
+        {/* {!loading && ( */}
           <div>
             <Nav />
             <Main />
           </div>
-        )}
+        {/* )} */}
       </NavProvider>
     </div>
   );
