@@ -15,14 +15,15 @@ app.use(cors({
 app.use(express.json());
 app.use(require("./routes/project"));
 app.use(require("./routes/contact"));
-app.use(function (req, res, next) {
-  if (! ('JSONResponse' in res) ) {
-    return next();
-  }
+// app.use(function (req, res, next) {
+//   if (! ('JSONResponse' in res) ) {
+//     return next();
+//   }
 
-  res.set('Cache-Control', 'no-store,no-cache, must-revalidate');
-  res.json(res.JSONResponse);
-})
+//   res.set('Cache-Control', 'no-store,no-cache, must-revalidate');
+//   res.json(res.JSONResponse);
+// })
+
 // get driver connection
 // const dbo = require("./db/conn");
 if (process.env.NODE_ENV === 'production') {
