@@ -5,7 +5,7 @@ interface BaseNode {
   x?: number;
   y?: number;
   r?: number; // Radius for circular packing
-  // parent?: BaseNode; // Optional parent reference
+  parent?: BaseNode; // Optional parent reference
 }
 
 export interface TreeNode extends BaseNode {

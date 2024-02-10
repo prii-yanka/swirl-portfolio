@@ -3,68 +3,14 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
 import { Tree, TreeLeaf, TreeNode, data } from "./skillsData";
 import { useMediaQuery } from "@mui/material";
+import RecursiveCircleGroup from "./RecurciveCircleGroup";
+import { HierarchyCircularNode } from "./HierarchyCircularNode";
 
 type CircularPackingProps = {
   width: number;
   height: number;
   data: Tree;
 };
-
-class HierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
-  data: Tree;
-  x: number;
-  y: number;
-  r: number; // Assuming you have a radius for circular packing
-  component?: React.ReactNode; // Optional, since not all nodes will have a component
-  value: number;
-  depth: number;
-  vx: number;
-  vy: number;
-  name: string;
-  parent: Tree | null;
-  type: string;
-  children?: Tree[];
-  descendants: () => HierarchyCircularNode<Tree>[]; // Declare as a function type
-  ancestors: () => HierarchyCircularNode<Tree>[]; // Declare as a function type
-
-  // each: any;
-  // index: number;
-
-  constructor(node: d3.HierarchyCircularNode<Tree>) {
-    this.data = node.data;
-    this.x = node.x;
-    this.y = node.y;
-    this.r = node.r; // Radius for circular layout
-    this.value = node.value ?? 0;
-    this.depth = node.depth;
-    this.type = node.data.type;
-    this.parent = node.ancestors().length > 1 ? node.ancestors()[1].data : null;
-    this.vx = 5;
-    this.vy = 5;
-    this.name = node.data.name;
-    this.children =
-      "children" in node.data ? (node.data.children as Tree[]) : undefined;
-    this.descendants = () => {
-      const descendantsArray: HierarchyCircularNode<Tree>[] = [];
-      node.descendants().forEach((descendant) => {
-        descendantsArray.push(new HierarchyCircularNode<Tree>(descendant));
-      });
-      return descendantsArray;
-    }; // Assign the value of node.descendants() to this.descendants
-		this.ancestors = () => {
-      const descendantsArray: HierarchyCircularNode<Tree>[] = [];
-      node.ancestors().forEach((ancestor) => {
-        descendantsArray.push(new HierarchyCircularNode<Tree>(ancestor));
-      });
-      return descendantsArray;
-    };
-    // this.each = node.each;
-    // this.index = 0;
-    if ("component" in node.data) {
-      this.component = node.data.component; // Only set if component exists in data
-    }
-  }
-}
 
 const MARGIN = 3;
 const nodePadding = 2.5;
@@ -596,70 +542,70 @@ export const NestedCircularPackingWForce = ({
   };
 
   // const allCircles = root?.descendants().map((d: any) => {
-  const allCircles = nodes.map((d: any) => {
-    // Create an instance of HierarchyCircularNode
-    if (!d) return null;
-    const node = new HierarchyCircularNode<Tree>(d);
+  // const allCircles = nodes.map((d: any) => {
+  //   // Create an instance of HierarchyCircularNode
+  //   if (!d) return null;
+  //   const node = new HierarchyCircularNode<Tree>(d);
 
-    // console.log(`node.r, d.data.name: ${node.r}, ${node.data.name}`);
-    // Create an arc for the text
-    // createtextarc number can be adjusted based on how far from the circle you want the text
-    const { pathId, arcPath, circumference } = createTextArc(d, -3);
-    return (
-      <g key={d.data.name} className={`mygroup ${d.name}`}>
-        <circle
-          className={`mycircle ${d.name}`}
-          cx={node.x}
-          cy={node.y}
-          r={node.r}
-          fill={colorScale(String(d.depth % colors.length)) as string}
-          onClick={() => handleClick(node)}
-          onMouseEnter={() => handleMouseEnter(node)}
-          onMouseOut={() => handleMouseOut(node)}
-        />
-        {/* Render the component if it exists */}
-        {node.component && (
-          <foreignObject
-            transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`} // Update the transform property
-            x={node.x - node.r}
-            y={node.y - node.r}
-            width={node.r * 2}
-            height={node.r * 2}
-            // You might need to adjust the style to center the content
-            style={{
-              overflow: "visible",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {node.component}
-          </foreignObject>
-        )}
-        <g transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`}>
-          {" "}
-          {/* Update the transform property */}
-          {/* Arc path for the text */}
-          <path id={pathId} d={arcPath} fill="none" stroke="none" />
-          {/* Text along the arc path */}
-          <AnimatedText
-            color="black"
-            fontSize={matches ? 5 : 10}
-            textAnchor="middle"
-            alignmentBaseline="middle"
-          >
-            <textPath
-              xlinkHref={`#${pathId}`}
-              startOffset={matches ? "5%" : "10%"}
-              style={{ textAnchor: "start" }}
-            >
-              {d.data.name}
-            </textPath>
-          </AnimatedText>
-        </g>
-      </g>
-    );
-  });
+  //   // console.log(`node.r, d.data.name: ${node.r}, ${node.data.name}`);
+  //   // Create an arc for the text
+  //   // createtextarc number can be adjusted based on how far from the circle you want the text
+  //   const { pathId, arcPath, circumference } = createTextArc(d, -3);
+  //   return (
+  //     <g key={d.data.name} className={`mygroup ${d.name}`}>
+  //       <circle
+  //         className={`mycircle ${d.name}`}
+  //         cx={node.x}
+  //         cy={node.y}
+  //         r={node.r}
+  //         fill={colorScale(String(d.depth % colors.length)) as string}
+  //         onClick={() => handleClick(node)}
+  //         onMouseEnter={() => handleMouseEnter(node)}
+  //         onMouseOut={() => handleMouseOut(node)}
+  //       />
+  //       {/* Render the component if it exists */}
+  //       {node.component && (
+  //         <foreignObject
+  //           transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`} // Update the transform property
+  //           x={node.x - node.r}
+  //           y={node.y - node.r}
+  //           width={node.r * 2}
+  //           height={node.r * 2}
+  //           // You might need to adjust the style to center the content
+  //           style={{
+  //             overflow: "visible",
+  //             display: "flex",
+  //             alignItems: "center",
+  //             justifyContent: "center",
+  //           }}
+  //         >
+  //           {node.component}
+  //         </foreignObject>
+  //       )}
+  //       <g transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`}>
+  //         {" "}
+  //         {/* Update the transform property */}
+  //         {/* Arc path for the text */}
+  //         <path id={pathId} d={arcPath} fill="none" stroke="none" />
+  //         {/* Text along the arc path */}
+  //         <AnimatedText
+  //           color="black"
+  //           fontSize={matches ? 5 : 10}
+  //           textAnchor="middle"
+  //           alignmentBaseline="middle"
+  //         >
+  //           <textPath
+  //             xlinkHref={`#${pathId}`}
+  //             startOffset={matches ? "5%" : "10%"}
+  //             style={{ textAnchor: "start" }}
+  //           >
+  //             {d.data.name}
+  //           </textPath>
+  //         </AnimatedText>
+  //       </g>
+  //     </g>
+  //   );
+  // });
 
   return (
     <div ref={skillsPackContainerRef} style={{ width: "100%", height: "100%" }}>
@@ -671,47 +617,19 @@ export const NestedCircularPackingWForce = ({
         className="skillsSvg"
         // viewBox is not managed by React state anymore
       >
-        {allCircles}
+        {/* {allCircles} */}
+				<RecursiveCircleGroup
+					node={root as unknown as HierarchyCircularNode<Tree>}
+					colorScale={colorScale}
+					handleClick={handleClick}
+					handleMouseEnter={handleMouseEnter}
+					handleMouseLeave={handleMouseOut}
+					matches={matches}
+				/>
       </svg>
     </div>
   );
 };
-
-// const HierarchyNode = ({ node, onNodeClick, colorScale }) => {
-//   // Function to create text arc paths for labels
-//   const createTextArcPath = (d) => {
-//     // Implementation of createTextArc similar to your existing one
-//   };
-
-//   // Click handler
-//   const handleClick = () => {
-//     onNodeClick(node);
-//   };
-
-//   return (
-//     <g 
-//       key={node.data.name} 
-//       className={`mygroup ${node.data.name}`}
-//       transform={`translate(${node.x},${node.y})`}
-//       onClick={handleClick}
-//     >
-//       <circle
-//         className={`mycircle ${node.data.name}`}
-//         r={node.r}
-//         fill={colorScale(node.depth % colorScale.domain().length)}
-//       />
-//       {node.children && node.children.map((child) => (
-//         <HierarchyNode 
-//           key={child.data.name} 
-//           node={child} 
-//           onNodeClick={onNodeClick} 
-//           colorScale={colorScale}
-//         />
-//       ))}
-//       {/* Additional elements like foreignObject and textPath can be added here */}
-//     </g>
-//   );
-// };
 
 const AnimatedText = ({
   x,
