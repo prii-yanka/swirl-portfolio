@@ -1,33 +1,58 @@
-import React, { useEffect } from "react";
+import React, { useEffect, createContext, useContext, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
-import { HierarchyCircularNode } from "./HierarchyCircularNode";
+import { MyHierarchyCircularNode } from "./MyHierarchyCircularNode";
 import { Tree } from "./skillsData";
+import { HoveredNodeContext } from "./MyHoveredNodeContext";
 
 interface NodeProps {
-  node: HierarchyCircularNode<Tree>;
+  node: MyHierarchyCircularNode<Tree>;
   colorScale: (depth: string) => any;
-  handleClick: (node: HierarchyCircularNode<Tree>) => void;
-  handleMouseEnter: (node: HierarchyCircularNode<Tree>) => void;
-  handleMouseLeave: (node: HierarchyCircularNode<Tree>) => void;
+  handleClick: (node: MyHierarchyCircularNode<Tree>) => void;
+  // handleMouseEnter: (node: HierarchyCircularNode<Tree>) => void;
+  // setHoveredNode: (node: HierarchyCircularNode<Tree>) => void;
+  setHoveredId: (id: string | null) => void;
+  // handleMouseLeave: (node: HierarchyCircularNode<Tree>) => void;
   matches: boolean;
+  // setHoveredNode: React.Dispatch<React.SetStateAction<HierarchyCircularNode<Tree> | null>>;
 }
 
 const colors = ["#EF8181", "#8FE1F3", "#fed46e"];
+
+// const HoveredNodeContext = createContext<HierarchyCircularNode<Tree> | null>(
+//   null
+// );
 
 const RecursiveCircleGroup: React.FC<NodeProps> = ({
   node,
   colorScale,
   handleClick,
-  handleMouseEnter,
-  handleMouseLeave,
+  // handleMouseEnter,
+  // setHoveredNode,
+  // handleMouseLeave,
   matches,
+  setHoveredId,
+  // setHoveredNode,
 }) => {
   if (!node) return;
   const { x, y, r, data, children } = node;
   const { name } = data;
-
+  // const context = useContext(HoveredNodeContext);
+  // if (!context) {
+  //   console.error(
+  //     "RecursiveCircleGroup must be used within a HoveredNodeContext.Provider"
+  //   );
+  //   return null;
+  // }
+  // const { hoveredNode, setHoveredNode } = context as unknown as {
+  //   hoveredNode: HierarchyCircularNode<Tree> | null;
+  //   setHoveredNode: (node: HierarchyCircularNode<Tree>) => void;
+  // };
   // Define the transform property for the foreignObject and additional groups
   const transform = `translate(${x - r}px, ${y - r}px)`;
+
+  // useEffect(() => {
+  //   hoveredNode && console.log(`hoveredNode.context: ${hoveredNode}`);
+  // }, [hoveredNode]);
 
   // Create an arc for the text
   const createTextArc = (d: any, radiusOffset: any) => {
@@ -47,11 +72,26 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
     return { pathId, arcPath, circumference };
   };
   useEffect(() => {
-    console.log(`node.component: ${node.component}`);
+    if (!node) {
+      console.error("Node is undefined");
+      // return null; // Or handle appropriately
+    }
+    if (node) {
+      console.log(`node.component: ${node.component}`);
+      console.log(`node.name: ${node.name}`);
+    }
+    // if(imageLeafComponent) {
+    // 	console.log(`imageLeafComponent: ${imageLeafComponent}`);
+    // }
   }, [node]);
   const { pathId, arcPath } = createTextArc(node, -3);
+  // const [hoveredNode, setHoveredNode] =
+  // useState<HierarchyCircularNode<Tree> | null>(null);
+  const handleMouseEnter = (id: string) => setHoveredId(id);
+  const handleMouseOut = () => setHoveredId(null);
 
   return (
+    // <HoveredNodeContext.Provider value={hoveredNode}>
     <g
       key={name}
       className={`mygroup ${name}`}
@@ -63,19 +103,27 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
         cy={y}
         r={r}
         onClick={() => handleClick(node)}
-        onMouseEnter={() => handleMouseEnter(node)}
-        onMouseLeave={() => handleMouseLeave(node)}
+        onMouseEnter={() => handleMouseEnter(node.name)} // Fix: Pass a function reference instead of invoking the function directly
+        onMouseOut={handleMouseOut}
         fill={colorScale(String(node.depth % colors.length)) as string}
       />
       {/* Render the component if it exists */}
-      <g>
+      <g
+        // style={{
+        //   display: "flex",
+        //   alignItems: "center",
+        //   justifyContent: "center",
+				// 	width: "100%",
+				// 	height: "100%",
+        // }}
+      >
         {node.component && (
           <foreignObject
             transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`} // Update the transform property
             x={node.x - node.r}
             y={node.y - node.r}
-            width={node.r * 1.5}
-            height={node.r * 1.5}
+            width={node.r * 2}
+            height={node.r * 2}
             // You might need to adjust the style to center the content
             style={{
               overflow: "visible",
@@ -112,17 +160,21 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
         children.map((child) => (
           <RecursiveCircleGroup
             key={child.name}
-            node={child as HierarchyCircularNode<Tree>}
+            node={child as MyHierarchyCircularNode<Tree>}
             colorScale={colorScale}
             handleClick={handleClick}
-            handleMouseEnter={handleMouseEnter}
-            handleMouseLeave={handleMouseLeave}
+            // handleMouseEnter={handleMouseEnter}
+            // setHoveredNode={setHoveredNode}
+            // handleMouseLeave={handleMouseLeave}
             matches={matches}
+            setHoveredId={setHoveredId}
+            // setHoveredNode={setHoveredNode}
           />
         ))}
       {/* Assuming component rendering and text rendering goes here */}
       {/* Remember to apply the appropriate transformations and rendering logic */}
     </g>
+    // </HoveredNodeContext.Provider>
   );
 };
 
@@ -151,3 +203,4 @@ const AnimatedText = ({
 };
 
 export default RecursiveCircleGroup;
+// HoveredNodeContext;

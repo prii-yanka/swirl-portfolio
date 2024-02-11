@@ -1,10 +1,18 @@
 import * as d3 from "d3";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  createContext,
+  useContext,
+} from "react";
 import { animated, useSpring } from "@react-spring/web";
 import { Tree, TreeLeaf, TreeNode, data } from "./skillsData";
 import { useMediaQuery } from "@mui/material";
 import RecursiveCircleGroup from "./RecurciveCircleGroup";
-import { HierarchyCircularNode } from "./HierarchyCircularNode";
+import { MyHierarchyCircularNode } from "./MyHierarchyCircularNode";
+import { HoveredNodeContext } from "./MyHoveredNodeContext";
 
 type CircularPackingProps = {
   width: number;
@@ -20,6 +28,38 @@ const colors = ["#EF8181", "#8FE1F3", "#fed46e"];
 const simulationHashMap = new Map<string, any>();
 const initialXYHashMap = new Map<string, { x: number; y: number }>();
 
+const defaultNode: MyHierarchyCircularNode<TreeNode | TreeLeaf> = {
+  data: {
+    name: "Default Node",
+    type: "node",
+    value: 0, // Add the 'value' property with a default value
+    component: <div>Default Component</div>,
+  },
+  x: 100,
+  y: 100,
+  r: 10, // Example radius
+  depth: 0,
+  height: 0,
+  parent: null, // No parent for a root node
+  vx: 0, // Add the 'vx' property and initialize it to 0
+  vy: 0, // Add the 'vy' property and initialize it to 0
+  // value: 1,
+  name: "Default Node",
+  // type: "node",
+  value: 0, // Add the 'value' property with a default value
+  descendants: function() {
+    return []; // Assuming no descendants for a default node
+  },
+  ancestors: function() {
+    return [this]; // Assuming only self as ancestor for simplicity
+  },
+  // Add other methods and properties as needed to match d3's HierarchyCircularNode
+};
+
+// Create a default node instance
+// ts-ignore
+// const defaultNode = new MyHierarchyCircularNode<TreeNode | TreeLeaf>(defaultNode);
+
 export const NestedCircularPackingWForce = ({
   width,
   height,
@@ -29,15 +69,17 @@ export const NestedCircularPackingWForce = ({
   const matches = useMediaQuery("(max-aspect-ratio : 3/4)");
   const [containerHeight, setContainerHeight] = useState<any>(700);
   const [containerWidth, setContainerWidth] = useState<any>(500);
-  const [nodes, setNodes] = useState<HierarchyCircularNode<Tree | TreeLeaf>[]>(
+  const [nodes, setNodes] = useState<MyHierarchyCircularNode<Tree | TreeLeaf>[]>(
     []
   );
   const [hoveredNodes, setHoveredNodes] = useState<
-    HierarchyCircularNode<Tree | TreeLeaf>[]
+    MyHierarchyCircularNode<Tree | TreeLeaf>[]
   >([]);
   const [hoveredNode, setHoveredNode] =
-    useState<HierarchyCircularNode<Tree> | null>(null);
-  const [root, setRoot] = useState<d3.HierarchyCircularNode<Tree> | null>(null);
+    useState<MyHierarchyCircularNode<Tree> | null>(null);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [root, setRoot] = useState<MyHierarchyCircularNode<Tree>>(defaultNode);
+  // let root: HierarchyCircularNode<Tree>;
   const [svgElement, setSvgElement] = useState<SVGSVGElement | null>(null);
   const svgRef = useCallback((node: SVGSVGElement) => {
     if (node !== null) {
@@ -48,10 +90,19 @@ export const NestedCircularPackingWForce = ({
   const [svg, setSvg] = useState<any>();
   const [simulation, setSimulation] = useState<any>();
   const [hoveredNodesNames, setHoveredNodesNames] = useState<string[]>([]);
-  const packGenerator = d3
-    .pack<Tree>()
-    .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
-    .padding(matches ? 5 : 12);
+  // const hoveredNodeFromContext = useContext<HierarchyCircularNode<Tree> | null>(
+  //   HoveredNodeContext as unknown as React.Context<HierarchyCircularNode<Tree> | null>
+  // );
+
+  function transformToMyHierarchyCircularNode(d3Node: d3.HierarchyCircularNode<Tree>): MyHierarchyCircularNode<Tree> {
+    const myNode = new MyHierarchyCircularNode<Tree>(d3Node as any); // You might need to adjust the constructor or cast appropriately
+  
+    if (d3Node.children) {
+      myNode.children = d3Node.children.map(transformToMyHierarchyCircularNode);
+    }
+  
+    return myNode;
+  }
 
   // const forceContainChildren = () => {
   //   return (alpha: number) => {
@@ -184,7 +235,7 @@ export const NestedCircularPackingWForce = ({
   // const initializeSimulation = (hoveredNodes: HierarchyCircularNode<Tree>[]) =>
   const initializeSimulation = (name: string) => {
     const simulation = d3
-      .forceSimulation<HierarchyCircularNode<Tree>>()
+      .forceSimulation<MyHierarchyCircularNode<Tree>>()
       .force("center", d3.forceCenter(width / 2, height / 2)) // Center the nodes in the SVG
       // .force(
       //   "collide",
@@ -234,18 +285,18 @@ export const NestedCircularPackingWForce = ({
     setContainerWidth(widestSlide);
   };
 
-  const handleMouseEnter = (node: HierarchyCircularNode<Tree>) => {
-    if (node.name !== hoveredNode?.name) {
-      setHoveredNode(node);
-    }
-    // controls.start("visible");
-  };
+  // const handleMouseEnter = (node: HierarchyCircularNode<Tree>) => {
+  //   // if (node.name !== hoveredNode?.name) {
+  //     setHoveredNode(node);
+  //   // }
+  //   // controls.start("visible");
+  // };
 
   function sanitizeName(name: string) {
     return name.replace(/[^a-z0-9]/gi, "_").toLowerCase();
   }
 
-  const handleMouseOut = (node: HierarchyCircularNode<Tree>) => {
+  const handleMouseOut = (node: MyHierarchyCircularNode<Tree>) => {
     setHoveredNode(null);
     const initialPos = initialXYHashMap.get(node.name);
 
@@ -326,28 +377,36 @@ export const NestedCircularPackingWForce = ({
     }
   }, []);
 
+  // useEffect(() => {
+  //   setHoveredNode(hoveredNodeFromContext);
+  // }, [hoveredNodeFromContext]);
+
   useEffect(() => {
     const hierarchy = d3
-      .hierarchy(data)
+      .hierarchy<Tree>(data)
       .sum((d) => d.value)
       .sort((a, b) => b.value! - a.value!);
 
-    // const packGenerator = d3
-    //   .pack<Tree>()
-    //   .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
-    //   .padding(matches ? 5 : 12);
+    const packGenerator = d3
+      .pack<Tree>()
+      .size([(containerWidth * width) / 100, (containerHeight * height) / 100])
+      .padding(matches ? 5 : 12);
+
     const root = packGenerator(hierarchy);
-    setRoot(root);
+    if (root) {
+      const myRoot = transformToMyHierarchyCircularNode(root as unknown as d3.HierarchyCircularNode<Tree>);
+      setRoot(myRoot);
+    }
   }, [data, containerHeight, containerWidth, matches]);
 
   useEffect(() => {
-    // console.log(`root: ${root}`);
-    let tempNodes: HierarchyCircularNode<Tree>[] = [];
+    console.log(`root: ${root?.name}`);
+    let tempNodes: MyHierarchyCircularNode<Tree>[] = [];
     const stack = new Set();
 
     if (root) {
-      root.each((descendant) => {
-        const myDescendant = new HierarchyCircularNode<Tree>(descendant);
+      root.descendants().forEach((descendant : MyHierarchyCircularNode<Tree>) => {
+        const myDescendant = descendant;
         // console.log(myDescendant.data.name);
         if (stack.has(myDescendant.data.name)) {
           // do not process this again
@@ -380,8 +439,15 @@ export const NestedCircularPackingWForce = ({
   }, [svgElement]);
 
   useEffect(() => {
+    console.log(`hoveredId: ${hoveredId}`);
+    const hoveredNode = nodes.find((node) => node.name === hoveredId);
+    if(hoveredNode) 
+      setHoveredNode(hoveredNode);
+  }, [hoveredId]);
+
+  useEffect(() => {
     console.log(`hoveredNode: ${hoveredNode?.name}`);
-    let tempNodes: HierarchyCircularNode<Tree>[] = [];
+    let tempNodes: MyHierarchyCircularNode<Tree>[] = [];
     let hoveredNodesNames: string[] = [];
     const stack = new Set();
 
@@ -395,7 +461,7 @@ export const NestedCircularPackingWForce = ({
 
       // console.log(`hoveredNode.descendants(): ${hoveredNode.descendants()}`);
       hoveredHierarchy.descendants().forEach((descendant: any) => {
-        const myDescendant = new HierarchyCircularNode<Tree>(descendant);
+        const myDescendant = new MyHierarchyCircularNode<Tree>(descendant);
         // console.log(
         //   `hoveredNode: ${hoveredNode?.name}: hoveredNodes myDescendant.data.name: ${myDescendant.name}`
         // );
@@ -524,133 +590,60 @@ export const NestedCircularPackingWForce = ({
       );
   };
 
-  const createTextArc = (d: any, radiusOffset: any) => {
-    const effectiveRadius = Math.max(d.r + radiusOffset, 1); // Ensure the effective radius doesn't go below 0
-    const circumference = 2 * Math.PI * effectiveRadius;
-
-    // Define the arc as an SVG path
-    const arcPath = `
-      M${d.x - effectiveRadius},${d.y}
-      a${effectiveRadius},${effectiveRadius} 0 1,1 ${2 * effectiveRadius},0
-      a${effectiveRadius},${effectiveRadius} 0 1,1 ${-2 * effectiveRadius},0
-    `;
-
-    // Define the id for the path (to link with textPath)
-    const pathId = `arcPath-${d.data.name.replace(/\s+/g, "-")}-${d.depth}`;
-
-    return { pathId, arcPath, circumference };
-  };
-
-  // const allCircles = root?.descendants().map((d: any) => {
-  // const allCircles = nodes.map((d: any) => {
-  //   // Create an instance of HierarchyCircularNode
-  //   if (!d) return null;
-  //   const node = new HierarchyCircularNode<Tree>(d);
-
-  //   // console.log(`node.r, d.data.name: ${node.r}, ${node.data.name}`);
-  //   // Create an arc for the text
-  //   // createtextarc number can be adjusted based on how far from the circle you want the text
-  //   const { pathId, arcPath, circumference } = createTextArc(d, -3);
-  //   return (
-  //     <g key={d.data.name} className={`mygroup ${d.name}`}>
-  //       <circle
-  //         className={`mycircle ${d.name}`}
-  //         cx={node.x}
-  //         cy={node.y}
-  //         r={node.r}
-  //         fill={colorScale(String(d.depth % colors.length)) as string}
-  //         onClick={() => handleClick(node)}
-  //         onMouseEnter={() => handleMouseEnter(node)}
-  //         onMouseOut={() => handleMouseOut(node)}
-  //       />
-  //       {/* Render the component if it exists */}
-  //       {node.component && (
-  //         <foreignObject
-  //           transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`} // Update the transform property
-  //           x={node.x - node.r}
-  //           y={node.y - node.r}
-  //           width={node.r * 2}
-  //           height={node.r * 2}
-  //           // You might need to adjust the style to center the content
-  //           style={{
-  //             overflow: "visible",
-  //             display: "flex",
-  //             alignItems: "center",
-  //             justifyContent: "center",
-  //           }}
-  //         >
-  //           {node.component}
-  //         </foreignObject>
-  //       )}
-  //       <g transform={`translate(${node.x - node.r}px, ${node.y - node.r}px)`}>
-  //         {" "}
-  //         {/* Update the transform property */}
-  //         {/* Arc path for the text */}
-  //         <path id={pathId} d={arcPath} fill="none" stroke="none" />
-  //         {/* Text along the arc path */}
-  //         <AnimatedText
-  //           color="black"
-  //           fontSize={matches ? 5 : 10}
-  //           textAnchor="middle"
-  //           alignmentBaseline="middle"
-  //         >
-  //           <textPath
-  //             xlinkHref={`#${pathId}`}
-  //             startOffset={matches ? "5%" : "10%"}
-  //             style={{ textAnchor: "start" }}
-  //           >
-  //             {d.data.name}
-  //           </textPath>
-  //         </AnimatedText>
-  //       </g>
-  //     </g>
-  //   );
-  // });
-
-  return (
-    <div ref={skillsPackContainerRef} style={{ width: "100%", height: "100%" }}>
-      <svg
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        ref={svgRef}
-        width={`${width}%`}
-        height={`${height}%`}
-        className="skillsSvg"
-        // viewBox is not managed by React state anymore
+  if (root) {
+    return (
+      <div
+        ref={skillsPackContainerRef}
+        style={{ width: "100%", height: "100%" }}
       >
-        {/* {allCircles} */}
-				<RecursiveCircleGroup
-					node={root as unknown as HierarchyCircularNode<Tree>}
-					colorScale={colorScale}
-					handleClick={handleClick}
-					handleMouseEnter={handleMouseEnter}
-					handleMouseLeave={handleMouseOut}
-					matches={matches}
-				/>
-      </svg>
-    </div>
-  );
+        <svg
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          ref={svgRef}
+          width={`${width}%`}
+          height={`${height}%`}
+          className="skillsSvg"
+          // viewBox is not managed by React state anymore
+        >
+          {/* {allCircles} */}
+          {/* <HoveredNodeContext.Provider value={{ hoveredNode, setHoveredNode }}> */}
+          <RecursiveCircleGroup
+            node={root}
+            colorScale={colorScale}
+            handleClick={handleClick}
+            // handleMouseEnter={handleMouseEnter}
+            // setHoveredNode={setHoveredNode}
+            // handleMouseLeave={handleMouseOut}
+            matches={matches}
+            setHoveredId={setHoveredId}
+            // setHoveredNode={setHoveredNode}
+          />
+          {/* </HoveredNodeContext.Provider> */}
+        </svg>
+      </div>
+    );
+  }
 };
 
-const AnimatedText = ({
-  x,
-  y,
-  ...props
-}: React.SVGAttributes<SVGTextElement>) => {
-  const animatedProps = useSpring({
-    x,
-    y,
-  });
-  return (
-    <animated.text
-      {...props}
-      // dy='10'
-      x={animatedProps.x as any}
-      y={animatedProps.y as any}
-      letterSpacing="0.25"
-      style={{
-        pointerEvents: "none",
-        // transform: `translateY(-${20}%)`
-      }}
-    />
-  );
-};
+// const AnimatedText = ({
+//   x,
+//   y,
+//   ...props
+// }: React.SVGAttributes<SVGTextElement>) => {
+//   const animatedProps = useSpring({
+//     x,
+//     y,
+//   });
+//   return (
+//     <animated.text
+//       {...props}
+//       // dy='10'
+//       x={animatedProps.x as any}
+//       y={animatedProps.y as any}
+//       letterSpacing="0.25"
+//       style={{
+//         pointerEvents: "none",
+//         // transform: `translateY(-${20}%)`
+//       }}
+//     />
+//   );
+// };

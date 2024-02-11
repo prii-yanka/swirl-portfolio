@@ -13,6 +13,7 @@ export interface TreeNode extends BaseNode {
   name: string;
   value: number;
   children?: Tree[]; 
+  component?: React.ReactNode; // Optional, since not all nodes will have a component
 }
 
 export interface TreeLeaf extends BaseNode {
@@ -123,3 +124,66 @@ export const data: Tree = {
     },
   ],
 };
+
+// export const data: Tree = {
+//   type: "node",
+//   name: "skills",
+//   value: 100,
+//   children: [
+//     {
+//       type: "node",
+//       name: "Frontend_Engineering",
+//       value: 90,
+//       children: [
+//         {
+//           type: "node",
+//           name: "JavaScript_FE",
+//           value: 95,
+//           children: [
+//             { type: "leaf", name: "React.js", value: 90, component: <LeafImage/>},
+//             { type: "leaf", name: "Redux", value: 70, component: <LeafImage/>},
+//             { type: "leaf", name: "Material UI", value: 98, component: <LeafImage/>},
+//             { type: "leaf", name: "Bootstrap", value: 63, component: <LeafImage/>},
+//             { type: "leaf", name: "Three.js", value: 84, component: <LeafImage />},
+//             { type: "leaf", name: "D3", value: 84, component: <LeafImage />},
+//             { type: "leaf", name: "Typescript", value: 76, component: <LeafImage />},
+//           ],
+//         },
+//         { type: "leaf", name: "HTML", value: 95, component: <LeafImage />},
+//         { type: "leaf", name: "CSS", value: 90, component: <LeafImage />},
+//         { type: "leaf", name: "SASS", value: 84, component: <LeafImage />},
+//       ],
+//     },
+//     {
+//       type: "node",
+//       name: "Backend_Engineering",
+//       value: 90,
+//       children: [
+//         {
+//           type: "node",
+//           name: "JavaScript_BE",
+//           value: 95,
+//           children: [
+//             { type: "leaf", name: "Node.js", value: 90, component: <LeafImage />},
+//             { type: "leaf", name: "Express.js", value: 70, component: <LeafImage />},
+//           ],
+//         },
+//         { type: "leaf", name: "Python", value: 95, component: <LeafImage />},
+//         { type: "leaf", name: "Java", value: 90, component: <LeafImage />},
+//         { type: "leaf", name: "AWS", value: 84, component: <LeafImage />},
+//         { type: "leaf", name: "REST", value: 90, component: <LeafImage />},
+//         { type: "leaf", name: "gRPC", value: 90, component: <LeafImage />},
+//         {
+//           type: "node",
+//           name: "Databases",
+//           value: 95,
+//           children: [
+//             { type: "leaf", name: "MongoDB", value: 90, component: <LeafImage />},
+//             { type: "leaf", name: "MySQL", value: 70, component: <LeafImage />},
+//             { type: "leaf", name: "PostgreSQL", value: 70, component: <LeafImage />},
+//           ],
+//         },
+//       ],
+//     },
+//   ],
+// };
