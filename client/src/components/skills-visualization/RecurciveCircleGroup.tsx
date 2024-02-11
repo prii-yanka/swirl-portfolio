@@ -11,7 +11,7 @@ interface NodeProps {
   // handleMouseEnter: (node: HierarchyCircularNode<Tree>) => void;
   // setHoveredNode: (node: HierarchyCircularNode<Tree>) => void;
   setHoveredId: (id: string | null) => void;
-  // handleMouseLeave: (node: HierarchyCircularNode<Tree>) => void;
+  // handleMouseOut: (node: MyHierarchyCircularNode<Tree>) => void;
   matches: boolean;
   // setHoveredNode: React.Dispatch<React.SetStateAction<HierarchyCircularNode<Tree> | null>>;
 }
@@ -28,7 +28,7 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
   handleClick,
   // handleMouseEnter,
   // setHoveredNode,
-  // handleMouseLeave,
+  // handleMouseOut,
   matches,
   setHoveredId,
   // setHoveredNode,
@@ -88,7 +88,7 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
   // const [hoveredNode, setHoveredNode] =
   // useState<HierarchyCircularNode<Tree> | null>(null);
   const handleMouseEnter = (id: string) => setHoveredId(id);
-  const handleMouseOut = () => setHoveredId(null);
+  // const handleMouseOut = () => setHoveredId(null);
 
   return (
     // <HoveredNodeContext.Provider value={hoveredNode}>
@@ -104,7 +104,7 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
         r={r}
         onClick={() => handleClick(node)}
         onMouseEnter={() => handleMouseEnter(node.name)} // Fix: Pass a function reference instead of invoking the function directly
-        onMouseOut={handleMouseOut}
+        // onMouseOut={() => handleMouseOut(node)}
         fill={colorScale(String(node.depth % colors.length)) as string}
       />
       {/* Render the component if it exists */}
@@ -165,7 +165,7 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
             handleClick={handleClick}
             // handleMouseEnter={handleMouseEnter}
             // setHoveredNode={setHoveredNode}
-            // handleMouseLeave={handleMouseLeave}
+            // handleMouseOut={handleMouseOut}
             matches={matches}
             setHoveredId={setHoveredId}
             // setHoveredNode={setHoveredNode}

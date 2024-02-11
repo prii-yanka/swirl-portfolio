@@ -236,7 +236,7 @@ export const NestedCircularPackingWForce = ({
   const initializeSimulation = (name: string) => {
     const simulation = d3
       .forceSimulation<MyHierarchyCircularNode<Tree>>()
-      .force("center", d3.forceCenter(width / 2, height / 2)) // Center the nodes in the SVG
+      // .force("center", d3.forceCenter(width / 2, height / 2)) // Center the nodes in the SVG
       // .force(
       //   "collide",
       //   d3.forceCollide().radius((d: any) => d.r * 10)
@@ -318,19 +318,19 @@ export const NestedCircularPackingWForce = ({
     // simulation?.tick();
   };
 
-  function onMouseOver(d: any) {
-    console.log(`************* in onMouseOver *************`);
-    simulation.restart();
-    // simulation?.tick();
-    // Additional mouseover actions
-  }
+  // function onMouseOver(d: any) {
+  //   console.log(`************* in onMouseOver *************`);
+  //   // simulation.restart();
+  //   // simulation?.tick();
+  //   // Additional mouseover actions
+  // }
 
-  function onMouseLeave(d: any, svg: any) {
-    console.log(`************* in onMouseLeave *************`);
-    // simulation.restart().stop();
-    // Additional mouseout actions
-    // Retrieve the initial position from the hashmap
-  }
+  // function onMouseLeave(d: any, svg: any) {
+  //   console.log(`************* in onMouseLeave *************`);
+  //   // simulation.restart().stop();
+  //   // Additional mouseout actions
+  //   // Retrieve the initial position from the hashmap
+  // }
 
   useEffect(() => {
     console.log("useEffect: set container height and width");
@@ -540,8 +540,8 @@ export const NestedCircularPackingWForce = ({
             })
             .data(hoveredNodes)
             .join("mygroup")
-            .on("mouseover", onMouseOver)
-            .on("mouseleave", onMouseLeave)
+            // .on("mouseover", onMouseOver)
+            // .on("mouseleave", onMouseLeave)
             .attr("transform", (d: any) => `translate(${d.x},${d.y})`);
           // .attr("cx", (d) => d.x)
           // .attr("cy", (d) => d.y);
@@ -556,14 +556,14 @@ export const NestedCircularPackingWForce = ({
         });
     }
 
-    return () => {
-      // Clean up the on("tick") event handler
-      simulationHashMap.get(hoveredNode?.name || "")?.on("tick", null);
-      simulationHashMap
-        .get(hoveredNode?.name || "")
-        ?.restart()
-        .stop();
-    };
+    // return () => {
+    //   // Clean up the on("tick") event handler
+    //   simulationHashMap.get(hoveredNode?.name || "")?.on("tick", null);
+    //   simulationHashMap
+    //     .get(hoveredNode?.name || "")
+    //     ?.restart()
+    //     .stop();
+    // };
   }, [hoveredNodes, hoveredNode, hoveredNodesNames, root, svgElement]);
 
   const colorScale = d3
@@ -612,7 +612,7 @@ export const NestedCircularPackingWForce = ({
             handleClick={handleClick}
             // handleMouseEnter={handleMouseEnter}
             // setHoveredNode={setHoveredNode}
-            // handleMouseLeave={handleMouseOut}
+            // handleMouseOut={() => handleMouseOut(root)}
             matches={matches}
             setHoveredId={setHoveredId}
             // setHoveredNode={setHoveredNode}
