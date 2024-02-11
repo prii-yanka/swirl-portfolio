@@ -2,7 +2,6 @@ import React, { useEffect, createContext, useContext, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
 import { MyHierarchyCircularNode } from "./MyHierarchyCircularNode";
 import { Tree } from "./skillsData";
-import { HoveredNodeContext } from "./MyHoveredNodeContext";
 
 interface NodeProps {
   node: MyHierarchyCircularNode<Tree>;
@@ -36,17 +35,7 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
   if (!node) return;
   const { x, y, r, data, children } = node;
   const { name } = data;
-  // const context = useContext(HoveredNodeContext);
-  // if (!context) {
-  //   console.error(
-  //     "RecursiveCircleGroup must be used within a HoveredNodeContext.Provider"
-  //   );
-  //   return null;
-  // }
-  // const { hoveredNode, setHoveredNode } = context as unknown as {
-  //   hoveredNode: HierarchyCircularNode<Tree> | null;
-  //   setHoveredNode: (node: HierarchyCircularNode<Tree>) => void;
-  // };
+
   // Define the transform property for the foreignObject and additional groups
   const transform = `translate(${x - r}px, ${y - r}px)`;
 
@@ -71,19 +60,18 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
 
     return { pathId, arcPath, circumference };
   };
-  useEffect(() => {
-    if (!node) {
-      console.error("Node is undefined");
-      // return null; // Or handle appropriately
-    }
-    if (node) {
-      console.log(`node.component: ${node.component}`);
-      console.log(`node.name: ${node.name}`);
-    }
-    // if(imageLeafComponent) {
-    // 	console.log(`imageLeafComponent: ${imageLeafComponent}`);
-    // }
-  }, [node]);
+	
+  // useEffect(() => {
+  //   if (!node) {
+  //     console.error("Node is undefined");
+  //     // return null; // Or handle appropriately
+  //   }
+  //   if (node) {
+  //     console.log(`node.component: ${node.component}`);
+  //     console.log(`node.name: ${node.name}`);
+  //   }
+  // }, [node]);
+
   const { pathId, arcPath } = createTextArc(node, -3);
   // const [hoveredNode, setHoveredNode] =
   // useState<HierarchyCircularNode<Tree> | null>(null);

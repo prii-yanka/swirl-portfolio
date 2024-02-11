@@ -52,7 +52,7 @@ export class MyHierarchyCircularNode<Tree extends TreeNode | TreeLeaf> {
     // this.each = node.each;
     // this.index = 0;
     if ("component" in node.data && node.data.component) {
-      console.log(`node.component constructor: ${node.data.component}`);
+      // console.log(`node.component constructor: ${node.data.component}`);
       this.component = node.data.component; // Only set if component exists in data
     } 
     else {
