@@ -60,7 +60,7 @@ const RecursiveCircleGroup: React.FC<NodeProps> = ({
 
     return { pathId, arcPath, circumference };
   };
-	
+
   // useEffect(() => {
   //   if (!node) {
   //     console.error("Node is undefined");
