@@ -83,7 +83,7 @@ const Contact = (props) => {
             </div>
             <div className="link-container">
               <a
-                href="Priyanka_Jain.pdf"
+                href="Priyanka_Jain_Resume.pdf"
                 target="_blank"
                 rel="noreferrer noopener"
               >
