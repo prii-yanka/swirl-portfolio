@@ -1,4 +1,4 @@
-# swirl-portfolio · Priyanka Jain
+# Swirl Portfolio · Priyanka Jain
 
 > **Temporarily offline.** This site was previously deployed with earlier work. I'm rebuilding it to better reflect the systems context and engineering tradeoffs, at the platform and user-experience level, behind my recent work (LiveRamp + Kaleshi Art LLC).
 
@@ -8,14 +8,15 @@
 
 ## About the original site
 
-Built when I was focused on front-end development, and UX and UI Design, the site was designed around four principles:
+Built when I was focused on front-end development, and UX and UI Design, building as much from scratch as possible.
+The site was designed around four principles:
 
 - **Fast:** quick load times and lag-free interaction
 - **Dynamic:** pages that come to life instead of staying static
 - **Responsive:** layouts that work on any device, big or small
 - **Intuitive:** easy-to-use, intuitive UX/UI
 
-**Stack:** STACK (MongoDB, Express.js, React.js, Node.js, Framer Motion, personal frameworks, open source libraries)
+**Stack:** MongoDB, Express.js, React.js, Node.js, Framer Motion, personal frameworks, open source libraries
 
 ## What's changing in the rebuild
 
@@ -30,5 +31,5 @@ The rebuild will reflect that work: less about what a page looks like, more abou
 ```bash
 git clone REPO_URL
 cd REPO_NAME
-# install / start commands
+# node install / start commands in  both client and api directories
 ```
